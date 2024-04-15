@@ -2,7 +2,7 @@ import SideNavBar from "../../component/sidenav/SideNavBar"
 import React, { useEffect, useRef, useState } from 'react'
 import ApiCalls from '../../ApiCalls/ApiCalls'
 import { useNavigate } from 'react-router-dom'
-import Editor from "../../component/editor/Editor"
+import Editor from "../../component/Editor"
 import Nav from "../../component/nav/Nav"
 import Api from "../../Api/Api"
 
@@ -20,7 +20,7 @@ const AddTopLinks = () => {
         console.log(inputs);
 
         try {
-            const response = await fetch('http://localhost:5000/api/toplinks', {
+            const response = await fetch('https://news-backend-production.up.railway.app/api/toplinks', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -39,7 +39,6 @@ const AddTopLinks = () => {
         } catch (error) {
             console.error('Error sending data:', error);
         }
-
     }
 
     const handleChange = (event) => {
@@ -58,11 +57,8 @@ const AddTopLinks = () => {
         <main>
             <div className="wrapper">
 
-                
-
 
                 <div className="content-wrapper">
-
 
                     <section className="content mt-4">
                         <div className="container-fluid">

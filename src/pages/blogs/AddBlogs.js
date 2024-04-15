@@ -1,6 +1,6 @@
 import SideNavBar from "../../component/sidenav/SideNavBar"
 import React, { useEffect, useState } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate, useParams } from 'react-router-dom'
 import Nav from "../../component/nav/Nav"
 import ApiCalls from "../../ApiCalls/ApiCalls"
 import { useRef, useMemo } from 'react';
@@ -8,181 +8,217 @@ import JoditEditor from 'jodit-react';
 import Select from 'react-select';
 
 const AddBlogs = () => {
-    const navigate = useNavigate()
+
+    const params = useParams()
+    const position = params.position
     const [image1, setimage1] = useState({})
     const [image2, setimage2] = useState({})
     const [video, setVideo] = useState([])
     const [audio, setAudio] = useState([])
     const [selectedValue, setSelectedValue] = useState([]);
-    const [isChecked, setIsChecked] = useState(false);
-    const [blogsSelect, setBlogsSelect] = useState([])
     const [selectedOption, setSelectedOption] = useState(null);
     const [selectedcategories, setSelectedcategories] = useState(null);
     const [muti, setMult] = useState([])
 
+
     const options = [
-        ...muti.map((item) => ({ value: item.link, label: item.name })),
-        // Add more options as needed
+        ...muti.map((item) => ({ value: item.SectionName, label: item.SectionName })),
     ];
+
     const categoriesoptions = [
-        ...selectedValue.map((item) => ({ value: item.CategoryName, label: item.CategoryName })),
-        // Add more options as needed
+        ...selectedValue.map((item) => ({ value: item.StateName, label: item.StateName })),
     ];
 
     const editor = useRef(null);
     const [content, setContent] = useState('');
-    const [IsHomevalue, setIsHomevalue] = useState('')
-    console.log(IsHomevalue)
     const [inputs, setInputs] = useState({})
+    const [top, setTop] = useState([])
+
+
 
     const getdata = () => {
-        ApiCalls('categories').then((response) => {
-            setSelectedValue(response);
-            console.log(response)
+        setTop([
+            { Link: 'TopKhabare', Name: 'TopKhabare' },
+            { Link: 'primenews', Name: 'प्रमुख समाचार' },
+            { Link: 'mainnews', Name: 'बड़ी ख़बर' },
+            { Link: 'idharbhi', Name: 'जरा इधर भी' }
+        ]);
+        console.warn(top)
+
+        ApiCalls('blogdisplay').then((response) => {
+            const mergedData = position === 'all' ? response : selectedValue.concat(response);
+            // setSelectedValue(
+            //     response.map((item) => ({ value: item.SectionName, label: item.SectionName }))
+            // );
+            setSelectedValue((prevSelectedValue) => [
+                ...prevSelectedValue, // Previous state values
+                ...response.map((item) => ({ value: item.SectionName, label: item.SectionName }))    // New state values
+            ]);
+
+            // setMult(response.reverse());
+            // console.warn(response)
+            // console.warn(selectedValue)
+            // console.log(response)
         })
             .catch((error) => {
                 // Handle error
             });
-        ApiCalls('toplinks').then((response) => {
-            setMult(response);
-            console.log(response)
+
+
+        ApiCalls('rajiya').then((response) => {
+            // setSelectedOption(response.reverse());
+            // setSelectedValue(response)
+            // setSelectedValue(
+            //     response.map((item) => ({ value: item.StateName, label: item.StateName }))
+            // );
+            setSelectedValue((prevSelectedValue) => [
+                ...prevSelectedValue, // Previous state values
+                ...response.map((item) => ({ value: item.StateName, label: item.StateName }))    // New state values
+            ]);
+            // setSelectedOption(response)
+            console.warn(response)
         })
             .catch((error) => {
                 // Handle error
             });
-        ApiCalls('blogs').then((response) => {
-            setBlogsSelect(response);
-            console.log(response)
-        })
-            .catch((error) => {
-                // Handle error
-            });
+
     }
-    const handleCheckboxChange = () => {
-        setIsChecked(!isChecked);
-    };
 
     useEffect(() => {
-        getdata();
+        setSelectedValue((prevSelectedValue) => [
+            ...prevSelectedValue, // Previous state values
+            ...top.map((item) => ({ value: item.Link, label: item.Name })),
+        ]);
+    }, [top])
 
+    useEffect(() => {
+
+        getdata();
     }, [])
-    console.log(selectedValue)
-    const SelecthandleChange = (event) => {
-        setSelectedValue(event.target.value);
-        console.log(selectedValue);
+
+    // Add this useEffect to update the input fields when inputs state changes
+    useEffect(() => {
+        // Update input fields with current inputs state
+        document.querySelectorAll('input').forEach((input) => {
+            input.value = inputs[input.name] || '';
+        });
+    }, [inputs]);
+
+
+    const resetInputs = () => {
+        setInputs({});
+        setContent('')
     };
 
     async function FormSubmit(event) {
 
-
         event.preventDefault();
-        console.log(inputs);
-        console.log(isChecked);
+        // console.log(position);
+
+        console.warn(inputs)
 
         const formData = await new FormData();
         // formData.append('Category', selectedcategories);
-        formData.append('StateName', inputs.StateName);
-        formData.append('ReporterName', inputs.reportername);
-        formData.append('Designation', inputs.designation);
-        formData.append('DatePlace', inputs.place);
-        formData.append('Heading', inputs.heading);
-        formData.append('Capton', inputs.Capton);
-        formData.append('Subheading', inputs.subheading);
+        // formData.append('Position', JSON.stringify(position));
+        // formData.append('StateName', inputs.StateName);
+
+        // if (inputs.reportername && inputs.reportername.length > 0) {
+        //     formData.append('ReporterName', inputs.reportername);
+        // }
+
+        if (inputs.reportername && inputs.reportername.length > 0) {
+            formData.append('ReporterName', inputs.reportername);
+        }
+        if (inputs.designation && inputs.designation.length > 0) {
+            formData.append('Designation', inputs.designation);
+        }
+        if (inputs.place && inputs.place.length > 0) {
+            formData.append('DatePlace', inputs.place);
+        }
+
+        if (inputs.heading && inputs.heading.length > 0) {
+            formData.append('Heading', inputs.heading);
+        }
+
+        if (inputs.capton) {
+            formData.append('Capton', inputs.capton);
+        }
+
+        if (inputs.subheading) {
+            formData.append('Subheading', inputs.subheading);
+        }
+        if (inputs.tajasamachar) {
+            formData.append('tajasamachar', inputs.tajasamachar);
+        }
+
+        // formData.append('Designation', inputs.designation);
+        // formData.append('DatePlace', inputs.place);
+        // formData.append('Heading', inputs.heading);
+        // formData.append('Capton', inputs.Capton);
+        // formData.append('Subheading', inputs.subheading);
         formData.append('Image1', image1[0]);
         formData.append('Image2', image2[0]);
         formData.append('Video', video[0]);
         formData.append('Audio', audio[0]);
-        formData.append('Matter', content);
+        if (content) {
+            // formData.append('Subheading', inputs.subheading);
+            formData.append('Matter', content);
+        }
+        console.log("FormData:", formData);
 
-        // Serialize the Position field properly
-        if (selectedOption) {
+
+
+        if (position === 'rajiya') {
+            // console.warn()
+            // formData.append('Category', inputs.CategoryName);
+            if (selectedcategories) {
+                const categoryValues = selectedcategories.map(option => option.value);
+                console.warn(categoryValues);
+                formData.append('Category', JSON.stringify(categoryValues));
+            }
+
+            if (selectedcategories.length > 0) {
+                selectedcategories.forEach(option => {
+                    formData.append('selectedValue[]', option.value);
+                    // console.warn(categoryValues);
+                });
+                // console.warn(selectedcategories);
+            }
+        }
+        if (Array.isArray(selectedOption)) {
             const positionValues = selectedOption.map(option => option.value);
-            console.warn(positionValues)
-            formData.append('Position', JSON.stringify(positionValues));
+            console.warn(positionValues);
+            formData.append('Category', JSON.stringify(positionValues));
         }
 
-        if (selectedValue.length > 0) {
+        if (Array.isArray(selectedValue) && selectedValue.length > 0) {
             selectedValue.forEach(option => {
                 formData.append('selectedValue[]', option.value);
             });
+            // console.warn(selectedValue);
         }
-
-        if (selectedcategories) {
-            const categeryValues = selectedcategories.map(option => option.value);
-            console.warn(categeryValues)
-            formData.append('Category', JSON.stringify(categeryValues));
-        }
-
-        if (selectedcategories.length > 0) {
-            selectedcategories.forEach(option => {
-                formData.append('selectedValue[]', option.value);
-            });
-        }
-
-
+        // }
         let newres = await ApiCalls('blogs', 'POST', formData).then(() => {
             alert("data add successfully")
             // navigate('/');
-        })
+            resetInputs();
 
+        })
     }
 
     const handleChange = (event) => {
+
         const name = event.target.name;
         const value = event.target.value;
+        const checked = event.target.checked;
         setInputs({ ...inputs, [name]: value })
-        console.log(inputs)
+
+        if (name === "tajasamachar") {
+            setInputs({ ...inputs, [name]: checked }); // Update the checkbox state only if its name is "isHeader"
+        }
+        console.warn(inputs)
     }
 
-
-    const IsHome = () => {
-
-        return (
-            <div className="row">
-                <div className="col-md-3">
-                    <div class="form-group">
-                        <label for="exampleSelectRounded0">New First</label>
-                        <select class="custom-select rounded-0" name="newfirst" value={inputs.newfirst} id="exampleSelectRounded0" onChange={handleChange}>
-                            {
-                                blogsSelect.map((item) => <option value={item._id}>{item.Heading}</option>)
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div className="col-md-3">
-                    <div class="form-group">
-                        <label for="exampleSelectRounded0">New Second</label>
-                        <select class="custom-select rounded-0" name="newsecond" value={inputs.newsecond} id="exampleSelectRounded0" onChange={handleChange}>
-                            {
-                                blogsSelect.map((item) => <option value={item._id}>{item.Heading}</option>)
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div className="col-md-3">
-                    <div class="form-group">
-                        <label for="exampleSelectRounded0">New Third</label>
-                        <select class="custom-select rounded-0" name="newthird" value={inputs.newthird} id="exampleSelectRounded0" onChange={handleChange}>
-                            {
-                                blogsSelect.map((item) => <option value={item._id}>{item.Heading}</option>)
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div className="col-md-3">
-                    <div class="form-group">
-                        <label for="exampleSelectRounded0">New Four</label>
-                        <select class="custom-select rounded-0" name="newfour" value={inputs.newfour} id="exampleSelectRounded0" onChange={handleChange}>
-                            {
-                                blogsSelect.map((item) => <option value={item._id}>{item.Heading}</option>)
-                            }
-                        </select>
-                    </div>
-                </div>
-            </div>
-        )
-
-    }
 
     const nhandleChange = (selectedOption) => {
         setSelectedOption(selectedOption);
@@ -190,20 +226,11 @@ const AddBlogs = () => {
     };
     const categorieshandleChange = (selectedOption) => {
         setSelectedcategories(selectedOption);
-        console.warn(selectedOption)
+        // console.warn(selectedOption)
     };
 
-    const indianStates = [
-        "Andaman and Nicobar Islands", "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar",
-        "Chandigarh", "Chhattisgarh", "Dadra and Nagar Haveli", "Daman and Diu", "Delhi",
-        "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jammu and Kashmir", "Jharkhand",
-        "Karnataka", "Kerala", "Ladakh", "Lakshadweep", "Madhya Pradesh", "Maharashtra",
-        "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Puducherry", "Punjab",
-        "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh",
-        "Uttarakhand", "West Bengal"
-    ];
-    return (
 
+    return (
         <>
             <main>
                 <div className="wrapper">
@@ -214,13 +241,13 @@ const AddBlogs = () => {
                                     <div className="col-md-12">
                                         <div className="card card-primary">
                                             <div className="card-header">
-                                                <h3 className="card-title">Khabare</h3>
+                                                <h3 className="card-title">Add Khabare</h3>
                                             </div>
                                             <form onSubmit={() => FormSubmit} action="/post" method="POST" encType="multipart/form-data">
                                                 <div className="card-body">
 
                                                     <div className="row">
-                                                        <div className="col-md-12">
+                                                        {/* <div className="col-md-12">
                                                             <div class="form-group">
                                                                 <label htmlFor="Position">Position Name</label>
 
@@ -234,20 +261,84 @@ const AddBlogs = () => {
                                                                 />
 
                                                             </div>
-                                                        </div>
-                                                        <div className="col-md-12">
-                                                            <div class="form-group">
-                                                                <label for="exampleSelectRounded0">Select Rajiya</label>
-                                                                <select class="custom-select rounded-0" name="StateName" value={inputs.StateName} id="exampleSelectRounded0" onChange={handleChange}>
-                                                                    <option selected disabled>Please Select</option>
-                                                                    {indianStates.map(state => (
-                                                                        <option key={state} value={state}>{state}</option>
-                                                                    ))}
-                                                                </select>
-                                                            </div>
-                                                        </div>
+                                                        </div> */}
+                                                        {
+                                                            position == 'all' ? <>
+                                                                <div className="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label for="exampleSelectRounded0">Select Location for Display Khabar</label>
+                                                                        <Select
+                                                                            id="selectOption"
+                                                                            name="Position"
+                                                                            // value={selectedcategories}
+                                                                            onChange={nhandleChange}
+                                                                            options={selectedValue}
+                                                                            isMulti
+                                                                        />
+                                                                    </div>
+                                                                </div>
 
-                                                        <div className="col-md-12">
+                                                            </> : <></>
+                                                        }
+                                                        {
+                                                            position == 'rajiya' ? <div className="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="exampleSelectRounded0">Select Rajiya</label>
+
+                                                                    <Select
+                                                                        id="selectOption"
+                                                                        name="Position"
+                                                                        value={selectedcategories}
+                                                                        onChange={categorieshandleChange}
+                                                                        options={categoriesoptions}
+                                                                        isMulti
+                                                                    />
+                                                                </div>
+                                                            </div> : <></>
+                                                        }
+                                                        {
+                                                            position == 'block' ? <div className="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="exampleSelectRounded0">Select Block</label>
+                                                                    <Select
+                                                                        id="selectOption"
+                                                                        name="Position" // Adding the name attribute
+                                                                        // value={selectedOption}
+                                                                        onChange={nhandleChange}
+                                                                        options={options}
+                                                                        isMulti
+                                                                    />
+                                                                </div>
+                                                            </div> : <></>
+                                                        }
+                                                        {/* {
+                                                            position == 'rajiya' ? <div className="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="exampleSelectRounded0">Select Rajiya</label>
+                                                                    <select class="custom-select rounded-0" name="CategoryName" value={inputs.StateName} id="exampleSelectRounded0" onChange={handleChange}>
+                                                                        <option selected disabled>Please Select</option>
+                                                                        {indianStates.map(state => (
+                                                                            <option key={state} value={state}>{state}</option>
+                                                                        ))}
+                                                                    </select>
+                                                                </div>
+                                                            </div> : <></>
+                                                        }
+                                                        {
+                                                            position == 'block' ? <div className="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="exampleSelectRounded0">Select Block</label>
+                                                                    <select class="custom-select rounded-0" name="CategoryName" value={inputs.StateName} id="exampleSelectRounded0" onChange={handleChange}>
+                                                                        <option selected disabled>Please Select</option>
+                                                                        {blockdata.map(state => (
+                                                                            <option key={state} value={state.SectionName}>{state.SectionName}</option>
+                                                                        ))}
+                                                                    </select>
+                                                                </div>
+                                                            </div> : <></>
+                                                        } */}
+
+                                                        {/* <div className="col-md-12">
                                                             <div class="form-group">
                                                                 <label htmlFor="CategoryName">Categorie's Name</label>
                                                                 <Select
@@ -260,7 +351,7 @@ const AddBlogs = () => {
                                                                 />
 
                                                             </div>
-                                                        </div>
+                                                        </div> */}
 
                                                         <div className="col-md-12">
                                                             <div class="form-group">
@@ -285,6 +376,7 @@ const AddBlogs = () => {
                                                                     onChange={handleChange}
                                                                     name="reportername"
                                                                     type="text"
+                                                                    value={inputs.reportername}
                                                                     class="form-control"
                                                                     placeholder="Enter Your Name"
                                                                 />
@@ -436,6 +528,19 @@ const AddBlogs = () => {
                                                             onChange={newContent => { }}
                                                             required
                                                         />
+                                                    </div>
+
+                                                    <div className="col-md-12">
+                                                        <div class="form-check">
+                                                            <input type="checkbox"
+                                                                name="tajasamachar"
+                                                                onChange={handleChange}
+                                                                value={inputs.tajasamachar}
+                                                                checked={inputs.tajasamachar}
+                                                                class="form-check-input"
+                                                                id="exampleCheck1" />
+                                                            <label for="exampleCheck1">Menu</label>
+                                                        </div>
                                                     </div>
 
 

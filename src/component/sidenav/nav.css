@@ -1,0 +1,11 @@
+.sidenav {
+    text-align: center;
+    min-height: 800px;
+    a {
+        text-decoration: none;
+    }
+}
+li{
+    font-size: 18px;
+    /* font-weight: 500; */
+}

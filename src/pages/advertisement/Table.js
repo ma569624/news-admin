@@ -8,7 +8,27 @@ const Table = ({ categories }) => {
 
     const [bannerdata, setbannerdata] = useState([])
     console.log(categories)
-    const [id, setid] = useState("");
+
+    const [isVisible, setIsVisible] = useState({});
+    
+
+    const toggleVisibility = async (id, status) => {
+        if (status == 'active') {
+            setIsVisible('inactive');
+        }
+        else{
+            setIsVisible('active');
+        }
+        const formData = await new FormData();
+        console.warn(status)
+        console.warn(isVisible)
+        formData.append('Status', isVisible);
+        let newres = await ApiCalls(`advert/${id}`, 'PUT', formData).then(() => {
+            alert("data add successfully")
+            getdata()
+        })
+    };
+
     const getdata = () => {
         ApiCalls(`advert`).then((response) => {
             setbannerdata(response);
@@ -16,32 +36,32 @@ const Table = ({ categories }) => {
             .catch((error) => {
                 // Handle error
             });
-        // ApiCalls(`blogs?Category=${categories}`).then((response) => {
-        //     setbannerdata(response);
-
-        // })
-        //     .catch((error) => {
-        //         // Handle error
-        //     });
     }
 
 
     useEffect(() => {
         getdata();
-
     }, [categories])
     console.log(bannerdata);
 
+
     const Delethandler = (id) => {
-        ApiCalls(`advert/${id}`, 'DELETE').then((response) => {
-            getdata()
-            console.warn('sucessfully delete', id)
-        })
-            .catch((error) => {
 
-            });
+        const confirmDelete = window.confirm('Are you sure you want to delete?');
 
-    }
+        if (confirmDelete) {
+            ApiCalls(`advert/${id}`, 'DELETE')
+                .then((response) => {
+                    alert('Successfully deleted');
+                    getdata();
+                })
+                .catch((error) => {
+                    console.error('Error deleting:', error);
+                    // Handle error, show error message, etc.
+                });
+        }
+    };
+
     return (
         <div className="content-wrapper">
             <section className="content-header">
@@ -65,40 +85,53 @@ const Table = ({ categories }) => {
                         </div>
                     </div>
                     <div className="card-body p-0">
-                        <table className="table table-striped projects">
+                        <table className="table projects">
                             <thead>
                                 <tr>
 
-
+                                    <th style={{ width: "15%" }}>
+                                        <div class="form-check mb-0">
+                                            <input type="checkbox"
+                                                name="tajasamachar"
+                                                style={{ border: '2px solid red' }}
+                                                class="form-check-input me-1"
+                                                id="exampleCheck1" />
+                                            <label for="exampleCheck1" className='mb-0'>All Select</label>
+                                        </div>
+                                    </th>
                                     <th style={{ width: "1%" }}>#</th>
                                     <th style={{ width: "10%" }}>Location</th>
                                     <th style={{ width: "7%" }}>Url</th>
-                                    <th style={{ width: "10%" }}>ImageFirst</th>
-                                    <th style={{ width: "10%" }}>ImageFirst</th>
+                                    <th style={{ width: "15%" }}>First Image</th>
+                                    <th style={{ width: "15%" }}>Second Image</th>
 
-                                    <th style={{ width: "5%" }} className="text-center">
-                                        Status
-                                    </th>
-                                    
                                 </tr>
                             </thead>
                             <tbody>
                                 {
                                     bannerdata.map((item, key) =>
-                                        <tr key={key}>
-                                            <td>{key + 1}</td>
+                                    <tr key={key} className={item.Status == 'active' ? 'table-light' : 'table-primary'}>
+                                        <td>
+                                                <div class="form-check">
+                                                    <input type="checkbox"
+                                                        name="tajasamachar"
+                                                        style={{ border: '2px solid red' }}
+                                                        class="form-check-input"
+                                                        id="exampleCheck1" />
+                                                </div>
+                                            </td>
+                                            <td><strong>{key + 1}</strong></td>
                                             <td>
-
-                                                <small>{item.location}</small>
+                                                <strong>{item.location}</strong>
                                             </td>
                                             <td>
-                                                <small>{item.url}</small>
+                                                <strong>{item.url}</strong>
                                             </td>
                                             <td>
                                                 <ul className="list-inline">
                                                     <li className="list-inline-item">
                                                         <img
-                                                            alt="Avatar"
+                                                            alt="pic"
                                                             className="table-avatar"
                                                             src={item.Image1}
                                                         />
@@ -110,7 +143,7 @@ const Table = ({ categories }) => {
                                                 <ul className="list-inline">
                                                     <li className="list-inline-item">
                                                         <img
-                                                            alt="Avatar"
+                                                            alt="pic"
                                                             className="table-avatar"
                                                             src={item.Image2}
                                                             width="80px"
@@ -119,19 +152,21 @@ const Table = ({ categories }) => {
 
                                                 </ul>
                                             </td>
+
                                             
-                                            <td className="project-state">
-                                                <span className="badge badge-success">active</span>
-                                            </td>
 
                                             <td className="project-actions text-right">
-
-                                                <NavLink to={`/edit-advert/${item._id}`} className="btn btn-info btn-sm">
-                                                    <i className="fas fa-pencil-alt"></i>
-
+                                                <NavLink to={''} className={`btn me-3 fw-bold btn-sm ${item.Status == 'active' ? 'btn-primary' : 'btn-success'}`} onClick={() => toggleVisibility(item._id, item.Status)}>
+                                                    {/* {isVisible ? 'Hide' : 'Show'} */}
+                                                    {item.Status == 'active' ? 'Hide' : 'Show'}
                                                 </NavLink>
-                                                <NavLink className="btn btn-danger btn-sm" onClick={() => Delethandler(item._id)}>
-                                                    <i className="fas fa-trash"></i>
+
+                                                <NavLink to={`/edit-advert/${item._id}`} className="btn btn-info btn-sm fw-bold">
+                                                    Edit
+                                                </NavLink>
+
+                                                <NavLink className="btn btn-danger btn-sm ms-2 fw-bold" onClick={() => Delethandler(item._id)}>
+                                                    Delete
                                                 </NavLink>
                                             </td>
                                         </tr>

@@ -10,8 +10,9 @@ const EditTopLinks = () => {
     console.log(selectedValue)
 
     const [inputs, setInputs] = useState({})
-    const navigate = useNavigate()
-    const [data, setdata] = useState([])
+    // const navigate = useNavigate()
+    const [image1, setimage1] = useState({})
+
     const params = useParams()
 
     const [id, setid] = useState("");
@@ -30,8 +31,6 @@ const EditTopLinks = () => {
             .catch((error) => {
                 // Handle error
             });
-
-
     }
     console.log(inputs)
     useEffect(() => {
@@ -42,30 +41,68 @@ const EditTopLinks = () => {
     async function FormSubmit(event) {
 
         event.preventDefault();
-        console.log(inputs);
+        // console.log(position);
 
+        console.warn(inputs)
+
+        const formData = await new FormData();
+
+        // if (inputs.name && inputs.name.length > 0) {
+            formData.append('name', inputs.name);
+        // }
+
+        // if (inputs.background) {
+            formData.append('background', inputs.background);
+        // }
+        formData.append('Image1', image1[0]);
+
+        // let newres = await ApiCalls('blogs', 'PUT', formData).then(() => {
+        //     alert("data add successfully")
+        // })
         try {
-            const response = await fetch(`http://localhost:5000/api/toplinks/${params.id}`, {
+            const response = await fetch(`https://news-backend-production.up.railway.app/api/toplinks/${params.id}`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(inputs)
+                body: formData // Pass the FormData object directly
             });
-
+    
             if (!response.ok) {
                 throw new Error('Network response was not ok');
-
             }
-
+    
             const responseData = await response.json();
             console.log('Data sent successfully:', responseData);
-            navigate('/top-links')
+            // navigate('/top-links')
         } catch (error) {
             console.error('Error sending data:', error);
         }
-
     }
+    // async function FormSubmit(event) {
+    //     // const params = useParams()
+    //     event.preventDefault();
+    //     console.log(inputs);
+
+    //     try {
+    //         const response = await fetch(`https://news-backend-production.up.railway.app/api/toplinks/${params.id}`, {
+    //             method: 'PUT',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify(inputs)
+    //         });
+
+    //         if (!response.ok) {
+    //             throw new Error('Network response was not ok');
+    //         }
+
+    //         const responseData = await response.json();
+    //         console.log('Data sent successfully:', responseData);
+    //         navigate('/top-links')
+    //     } catch (error) {
+    //         console.error('Error sending data:', error);
+    //     }
+
+    // }
+
 
 
     const handleChange = (event) => {
@@ -74,11 +111,22 @@ const EditTopLinks = () => {
         setInputs({ ...inputs, [name]: value })
     }
 
-    const imagehandler = (event) => {
-        const value = event.target.files[0];
-        const name = event.target.name;
-        setInputs({ ...inputs, [name]: value })
-    }
+    const [localImage, setLocalImage] = useState(null);
+    const [apiImage, setApiImage] = useState(null);
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            setLocalImage(reader.result);
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    };
+
 
     return (
         <main>
@@ -95,7 +143,7 @@ const EditTopLinks = () => {
                                         <div className="card-header">
                                             <h3 className="card-title">Top Khabare</h3>
                                         </div>
-                                        <form onSubmit={() => FormSubmit} action="/post" method="POST" encType="multipart/form-data">
+                                        <form onSubmit={() => FormSubmit}>
                                             <div className="card-body">
 
 
@@ -110,8 +158,41 @@ const EditTopLinks = () => {
                                                         placeholder="Enter Your Name"
                                                     />
                                                 </div>
-                                                {/*<div className="form-group">
-                                                    <label htmlFor="exampleInputEmail1">Links's Name</label>
+                                                <div className="form-group">
+                                                    <label htmlFor="exampleInputEmail1">Background Color</label>
+                                                    <input
+                                                        onChange={handleChange}
+                                                        name="background"
+                                                        type="color"
+                                                        value={inputs.background}
+                                                        class="form-control"
+                                                        placeholder="Enter Your Name"
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="exampleInputEmail1">Select A logo</label>
+
+                                                    <input
+                                                        onChange={(e) => setimage1(e.target.files)}
+                                                        name="file"
+                                                        type="file"
+                                                        class="form-control"
+                                                        placeholder="Enter Your Name"
+                                                        id="reporterimage"
+                                                        size={60}
+                                                        maxLength={70}
+                                                    />
+                                                </div>
+
+                                                {/* <div>
+                                                    <input type="file" accept="image/*" onChange={handleFileChange} />
+                                                    <button onClick={fetchApiImage}>Fetch API Image</button>
+                                                    {localImage && <img src={localImage} alt="Local Image" />}
+                                                    {apiImage && <img src={apiImage} alt="API Image" />}
+                                                </div> */}
+
+                                                {/* <div className="form-group">
+                                                    <label htmlFor="exampleInputEmail1">Links's</label>
                                                     <input
                                                         onChange={handleChange}
                                                         name="link"
@@ -120,7 +201,7 @@ const EditTopLinks = () => {
                                                         class="form-control"
                                                         placeholder="Enter Your Name"
                                                     />
-                                                </div>*/}
+                                                </div> */}
 
                                             </div>
 

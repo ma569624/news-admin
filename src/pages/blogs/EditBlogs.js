@@ -7,172 +7,141 @@ import Select from 'react-select';
 
 
 const EditBlogs = () => {
+    // const params = useParams()
     const params = useParams()
+    const id = params.id
+    const category = params.category
+    const navigate = useNavigate()
     const editor = useRef(null);
     const [content, setContent] = useState('');
-    const [IsHomevalue, setIsHomevalue] = useState('')
-    const [selectedOption, setSelectedOption] = useState(null);
-    const [selectedcategories, setSelectedcategories] = useState([]);
     const [video, setVideo] = useState([])
     const [audio, setAudio] = useState([])
 
-    const [inputs, setInputs] = useState({})
-    const navigate = useNavigate()
+    const [selectedValue, setSelectedValue] = useState([]);
+    const [selectedOption, setSelectedOption] = useState(null);
+
+    const [inputs, setInputs] = useState({
+        ReporterName: ''
+    })
     const [image1, setimage1] = useState({})
     const [image2, setimage2] = useState({})
-    const [selectedValue, setSelectedValue] = useState([]);
-    const [isChecked, setIsChecked] = useState(false);
-    const [blogsSelect, setBlogsSelect] = useState([])
-    const [muti, setMult] = useState([])
-
-    const options = [
-        ...muti.map((item) => ({ value: item.link, label: item.name })),
-    ];
-
-    const categoriesoptions = [
-        ...selectedValue.map((item) => ({ value: item.CategoryName, label: item.CategoryName })),
-    ];
-
-    const [selectedPostionArray, setSelectedPostionArray] = useState([]);
-    const [selectedCategoryArray, setSelectedCategoryArray] = useState([]);
+    const [top, setTop] = useState([])
 
     // Run the effect whenever 'muti' changes
 
     const getdata = async () => {
+        setTop([
+            { Link: 'TopKhabare', Name: 'TopKhabare' },
+            { Link: 'primenews', Name: 'प्रमुख समाचार' },
+            { Link: 'mainnews', Name: 'बड़ी ख़बर' },
+            { Link: 'idharbhi', Name: 'जरा इधर भी' }
+        ]);
+        ApiCalls(`blogs?&_id=${id}`).then((response) => {
+            setInputs(response.data[0]);
+            console.warn(response.data[0])
+            console.warn(response.data[0].Matter)
+            setContent(response.data[0].Matter);
 
-        ApiCalls(`blogs?_id=${params.id}`).then((response) => {
-            setInputs(response[0]);
-            const Category = JSON.parse(response[0].Category);
-            const position = JSON.parse(response[0].Position[0]);
-            console.warn(Category);
-            setSelectedPostionArray(position);
-            setSelectedCategoryArray(Category)
-
-            const res = Category.forEach((val) => ({ value: val, label: val }))
-            // console.warn(res);
-
-
-            // Check if position is an array before joining
-            if (Array.isArray(position)) {
-                // Using Array.join()
-                const singleValue = position.join(', '); // Joins array elements into a single string separated by ', '
-                console.log(singleValue);
-                // setSelectedValue(singleValue)
-            } else {
-                console.log('position is not an array');
-            }
-
-            setContent(response[0].Matter);
         })
             .catch((error) => {
                 // Handle error
             });
-        ApiCalls('categories').then((response) => {
-            setSelectedValue(response);
-            // console.log(response)
-        })
-            .catch((error) => {
-                // Handle error
-            });
-        ApiCalls('toplinks').then((response) => {
-            setMult(response);
-            // console.log(response)
-        })
-            .catch((error) => {
-                // Handle error
-            });
-        ApiCalls('blogs').then((response) => {
-            setBlogsSelect(response);
-            // console.log(response)
+
+        ApiCalls('blogdisplay').then((response) => {
+
+            setSelectedValue((prevSelectedValue) => [
+                ...prevSelectedValue, // Previous state values
+                ...response.map((item) => ({ value: item.SectionName, label: item.SectionName }))    // New state values
+            ]);
         })
             .catch((error) => {
                 // Handle error
             });
 
 
+        ApiCalls('rajiya').then((response) => {
+
+            setSelectedValue((prevSelectedValue) => [
+                ...prevSelectedValue, // Previous state values
+                ...response.map((item) => ({ value: item.StateName, label: item.StateName }))    // New state values
+            ]);
+
+        })
+            .catch((error) => {
+                // Handle error
+            });
     }
-    const handleCheckboxChange = () => {
-        setIsChecked(!isChecked);
-    };
+
+    useEffect(() => {
+        setSelectedValue((prevSelectedValue) => [
+            ...prevSelectedValue, // Previous state values
+            ...top.map((item) => ({ value: item.Link, label: item.Name })),
+        ]);
+    }, [top])
 
     useEffect(() => {
         getdata();
     }, [])
 
-    useEffect(() => {
-
-        // Perform filtering and mapping operations
-        const filteredOptions = muti.filter(item => selectedPostionArray.includes(item.link))
-            .map(item => ({ value: item.link, label: item.name }));
-        console.warn(filteredOptions)
-        // Update the state with the filtered options
-        // setSelectedCategoriesArray(filteredOptions);
-        setSelectedOption(filteredOptions);
-    }, [muti]);
-
-    useEffect(() => {
-
-        // Perform filtering and mapping operations
-        const filteredOptions = selectedValue.filter(item => selectedCategoryArray.includes(item.CategoryName))
-            .map(item => ({ value: item.CategoryName, label: item.CategoryName }));
-        console.warn(filteredOptions)
-        setSelectedcategories(filteredOptions)
-        // setSelectedOption(filteredOptions);
-    }, [selectedValue]);
-
-
-
-    const SelecthandleChange = (event) => {
-        setSelectedValue(event.target.value);
-    };
-
     async function FormSubmit(event) {
         event.preventDefault();
-
         const formData = await new FormData();
-        formData.append('ReporterName', inputs.ReporterName);
-        formData.append('Designation', inputs.Designation);
-        formData.append('DatePlace', inputs.DatePlace);
-        formData.append('Heading', inputs.Heading);
-        formData.append('Subheading', inputs.Subheading);
+
+        if (inputs.ReporterName && inputs.ReporterName.length > 0) {
+            formData.append('ReporterName', inputs.ReporterName);
+        }
+
+        if (inputs.Designation && inputs.Designation.length > 0) {
+            formData.append('Designation', inputs.Designation);
+        }
+        if (inputs.DatePlace && inputs.DatePlace.length > 0) {
+            formData.append('DatePlace', inputs.DatePlace);
+        }
+
+        if (inputs.Heading && inputs.Heading.length > 0) {
+            formData.append('Heading', inputs.Heading);
+        }
+
+        if (inputs.Capton && inputs.Capton.length > 0) {
+            formData.append('Capton', inputs.Capton);
+        }
+
+        if (inputs.Subheading && inputs.Subheading.length > 0) {
+            formData.append('Subheading', inputs.Subheading);
+        }
+
+
+
+
+      
+
+        if (Array.isArray(selectedOption)) {
+            const positionValues = selectedOption.map(option => option.value);
+            console.warn(positionValues);
+            formData.append('Category', JSON.stringify(positionValues));
+        }
+
+        if (Array.isArray(selectedValue) && selectedValue.length > 0) {
+            selectedValue.forEach(option => {
+                formData.append('selectedValue[]', option.value);
+            });
+            // console.warn(selectedValue);
+        }
+
         formData.append('Image1', image1[0]);
         formData.append('Image2', image2[0]);
         formData.append('Video', video[0]);
         formData.append('Audio', audio[0]);
         formData.append('Matter', content);
 
-        // Serialize the Position field properly
-        if (selectedOption) {
-            const positionValues = selectedOption.map(option => option.value);
-            console.warn(positionValues)
-            formData.append('Position', JSON.stringify(positionValues));
-        }
-
-        if (selectedValue.length > 0) {
-            selectedValue.forEach(option => {
-                formData.append('selectedValue[]', option.value);
-            });
-        }
-
-        if (selectedcategories) {
-            const categeryValues = selectedcategories.map(option => option.value);
-            console.warn(categeryValues)
-            formData.append('Category', JSON.stringify(categeryValues));
-        }
-
-        if (selectedcategories.length > 0) {
-            selectedcategories.forEach(option => {
-                formData.append('selectedValue[]', option.value);
-            });
-        }
-
-
-        let newres = await ApiCalls(`blogs/${params.id}`, 'PUT', formData).then(() => {
+        let newres = await ApiCalls(`blogs/${id}`, 'PUT', formData).then(() => {
             alert("data add successfully")
+            navigate(`/blogs/${category}`);
         })
 
-    }
+        console.log("FormData:", formData);
 
+    }
 
 
     const handleChange = (event) => {
@@ -181,21 +150,10 @@ const EditBlogs = () => {
         setInputs({ ...inputs, [name]: value })
         console.log(inputs)
     }
-
-
-
-
     const nhandleChange = (selectedOption) => {
         setSelectedOption(selectedOption);
         console.warn(selectedOption)
     };
-    const categorieshandleChange = (selectedOption) => {
-        setSelectedcategories(selectedOption);
-        console.warn(selectedOption)
-        console.warn(selectedcategories)
-
-    };
-
     return (
         <main>
             <div className="wrapper">
@@ -212,37 +170,20 @@ const EditBlogs = () => {
                                             <div className="card-body">
 
                                                 <div className="row">
-
-
                                                     <div className="col-md-12">
                                                         <div class="form-group">
-                                                            <label htmlFor="Position">Position Name</label>
-
-                                                            <Select
-                                                                id="selectOption"
-                                                                name="Position" // Adding the name attribute
-                                                                value={selectedOption}
-                                                                onChange={nhandleChange}
-                                                                options={options}
-                                                                isMulti
-                                                            />
-
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-12">
-                                                        <div class="form-group">
-                                                            <label htmlFor="CategoryName">Categorie's Name</label>
+                                                            <label for="exampleSelectRounded0">Select Location for Display Khabar</label>
                                                             <Select
                                                                 id="selectOption"
                                                                 name="Position"
-                                                                value={selectedcategories}
-                                                                onChange={categorieshandleChange}
-                                                                options={categoriesoptions}
-                                                                isMulti
+                                                                // value={selectedcategories}
+                                                                onChange={nhandleChange}
+                                                                options={selectedValue}
+                                                            isMulti
                                                             />
-
                                                         </div>
                                                     </div>
+
                                                     <div className="col-md-12">
                                                         <div class="form-group">
                                                             <label for="exampleInputFile">Reporter Image</label>
@@ -259,20 +200,21 @@ const EditBlogs = () => {
                                                             </div>
                                                         </div>
                                                     </div>
+
                                                     <div className="col-md-12">
                                                         <div className="form-group">
                                                             <label htmlFor="exampleInputEmail1">Reporter's Name</label>
                                                             <input
                                                                 onChange={handleChange}
                                                                 name="ReporterName"
-                                                                value={inputs.ReporterName}
+                                                                // value={inputs.ReporterName }
+                                                                value={inputs && inputs.ReporterName ? inputs.ReporterName : ''}
                                                                 type="text"
                                                                 class="form-control"
                                                                 placeholder="Enter Your Name"
                                                             />
                                                         </div>
                                                     </div>
-
 
                                                 </div>
                                                 <div className="row">
@@ -282,7 +224,8 @@ const EditBlogs = () => {
                                                             <input
                                                                 onChange={handleChange}
                                                                 name="Designation"
-                                                                value={inputs.Designation}
+                                                                // value={inputs.Designation}
+                                                                value={inputs && inputs.Designation ? inputs.Designation : ''}
                                                                 type="text"
                                                                 class="form-control"
                                                                 placeholder="Enter Your Designation"
@@ -294,8 +237,9 @@ const EditBlogs = () => {
                                                             <label htmlFor="exampleInputPassword1">Date/Place</label>
                                                             <input
                                                                 onChange={handleChange}
-                                                                name="Place"
-                                                                value={inputs.Place}
+                                                                name="DatePlace"
+                                                                // value={inputs.DatePlace}
+                                                                value={inputs && inputs.DatePlace ? inputs.DatePlace : ''}
                                                                 type="text"
                                                                 class="form-control"
                                                                 placeholder="Enter Your Date/Place"
@@ -309,7 +253,9 @@ const EditBlogs = () => {
                                                             <input
                                                                 onChange={handleChange}
                                                                 name="Heading"
-                                                                value={inputs.Heading}
+                                                                // value={inputs.Heading}
+                                                                value={inputs && inputs.Heading ? inputs.Heading : ''}
+
                                                                 class="form-control"
                                                                 placeholder="Enter Your Heading"
                                                                 required
@@ -322,7 +268,8 @@ const EditBlogs = () => {
                                                             <input
                                                                 onChange={handleChange}
                                                                 name="Subheading"
-                                                                value={inputs.Subheading}
+                                                                // value={inputs.Subheading}
+                                                                value={inputs && inputs.Subheading ? inputs.Subheading : ''}
                                                                 type="text"
                                                                 class="form-control"
                                                                 placeholder="Enter Your subheading"
@@ -387,6 +334,7 @@ const EditBlogs = () => {
                                                             <input
                                                                 onChange={handleChange}
                                                                 name="Capton"
+                                                                value={inputs && inputs.Capton ? inputs.Capton : ''}
                                                                 class="form-control"
                                                                 placeholder="Enter Your Heading"
                                                                 required

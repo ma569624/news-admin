@@ -1,36 +1,15 @@
-import SideNavBar from "../../component/sidenav/SideNavBar"
 import React, { useEffect, useState } from 'react'
 import ApiCalls from '../../ApiCalls/ApiCalls'
-import { useNavigate, useParams } from 'react-router-dom'
-import Nav from "../../component/nav/Nav"
+import { useNavigate } from 'react-router-dom'
 import Api from "../../Api/Api"
 
 
-const EditRajiya = () => {
+const AddHome = () => {
 
     const [inputs, setInputs] = useState({})
     const [image1, setimage1] = useState({})
     const [image2, setimage2] = useState({})
 
-    const params = useParams()
-    const { id } = params;
-    console.log(id)
-
-    const getdata = () => {
-
-        ApiCalls(`rajiya?_id=${id}`).then((response) => {
-            setInputs(response[0]);
-            console.warn(response)
-            // console.log(response)
-        })
-            .catch((error) => {
-                // Handle error
-            });
-    }
-
-    useEffect(() => {
-        getdata();
-    }, [])
     
 
     async function FormSubmit(event) {
@@ -41,36 +20,36 @@ const EditRajiya = () => {
         const formData = await new FormData();
 
         // if (inputs.name && inputs.name.length > 0) {
-        formData.append('StateName', inputs.StateName);
+        formData.append('SectionName', inputs.SectionName);
         // }
-        formData.append('FirstLink', inputs.FirstLink);
+        formData.append('SecondSection', inputs.SecondSection);
 
 
-        // if (inputs.background) {
-            if (inputs.background1) {
-                formData.append('background1', inputs.background1);
-            }
-            
-            // Check if 'inputs.background2' exists
-            if (inputs.background2) {
-                formData.append('background2', inputs.background2);
-            }
-            
-            // Check if 'image1' array has data
-            if (image1.length > 0) {
-                formData.append('Image1', image1[0]);
-            }
-            
-            // Check if 'image2' array has data
-            if (image2.length > 0) {
-                formData.append('Image2', image2[0]);
-            }
+        if (inputs.background1) {
+            formData.append('background1', inputs.background1);
+        }
+        
+        // Check if 'inputs.background2' exists
+        if (inputs.background2) {
+            formData.append('background2', inputs.background2);
+        }
+        
+        // Check if 'image1' array has data
+        if (image1.length > 0) {
+            formData.append('Image1', image1[0]);
+        }
+        
+        // Check if 'image2' array has data
+        if (image2.length > 0) {
+            formData.append('Image2', image2[0]);
+        }
 
-        let newres = await ApiCalls(`rajiya/${id}`, 'PUT', formData).then(() => {
+        let newres = await ApiCalls(`blogdisplay`, 'POST', formData).then(() => {
             alert("data add successfully")
         })
+        
         // try {
-        //     const response = await fetch(`http://localhost:5000/api/rajiya/${params.id}`, {
+        //     const response = await fetch(`https://news-backend-production.up.railway.app/api/blogdisplay/${params.id}`, {
         //         method: 'PUT',
         //         body: formData // Pass the FormData object directly
         //     });
@@ -81,6 +60,7 @@ const EditRajiya = () => {
 
         //     const responseData = await response.json();
         //     console.log('Data sent successfully:', responseData);
+        //     alert("data add successfully")
         //     // navigate('/top-links')
         // } catch (error) {
         //     console.error('Error sending data:', error);
@@ -128,14 +108,14 @@ const EditRajiya = () => {
                                                 <div className="row">
                                                     <div className="col-md-12">
                                                         <div class="form-group">
-                                                            <label>Rajiya Name</label>
+                                                            <label>Section Name</label>
                                                             <input
-                                                                name='StateName'
+                                                                name='SectionName'
                                                                 type="text"
                                                                 class="form-control"
                                                                 placeholder="Enter Your Section Name"
                                                                 onChange={handleChange}
-                                                                value={inputs.StateName}
+                                                                value={inputs.SectionName}
                                                             />
                                                         </div>
                                                     </div>
@@ -167,26 +147,37 @@ const EditRajiya = () => {
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    
+                                                   
                                                     <div className="row">
                                                         <div className="col-md-12">
                                                             <h5>other</h5>
                                                         </div>
                                                         <div className="col-md-12">
                                                             <div class="form-group">
-                                                                <label for="exampleSelectRounded0">other Name</label>
+                                                                <label for="exampleSelectRounded0">Section Name</label>
                                                                 <input
-                                                                    name="FirstLink"
+                                                                    name="SecondSection"
                                                                     type="text"
                                                                     class="form-control"
                                                                     placeholder="Enter Your Section Name"
                                                                     onChange={handleChange}
-                                                                    value={inputs.FirstLink}
+                                                                    value={inputs.SecondSection}
                                                                 />
 
                                                             </div>
                                                         </div>
-                                                        
+                                                        <div className="col-md-12">
+                                                            <div class="form-check">
+                                                                <input type="checkbox"
+                                                                    name="isHeader"
+                                                                    onChange={handleChange}
+                                                                    value={inputs.isHeader}
+                                                                    checked={inputs.isHeader}
+                                                                    class="form-check-input"
+                                                                    id="exampleCheck1" />
+                                                                <label for="exampleCheck1">Menu</label>
+                                                            </div>
+                                                        </div>
                                                         <div className="form-group">
                                                             <label htmlFor="exampleInputEmail1">Background Color change</label>
                                                             <input
@@ -236,4 +227,4 @@ const EditRajiya = () => {
     )
 }
 
-export default EditRajiya
+export default AddHome

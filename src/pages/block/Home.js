@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import ApiCalls from '../../ApiCalls/ApiCalls';
+import { Link } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 
-const Rajiya = () => {
-
+const Home = () => {
     const [bannerdata, setbannerdata] = useState([])
     const [blogs, setBlogs] = useState([])
     const [category, setCategory] = useState([])
-    const [isVisible, setIsVisible] = useState('');
+
+
+    const [isVisible, setIsVisible] = useState({});
 
 
     const toggleVisibility = async (id, status) => {
@@ -21,43 +23,34 @@ const Rajiya = () => {
         console.warn(status)
         console.warn(isVisible)
         formData.append('Status', isVisible);
-        let newres = await ApiCalls(`rajiya/${id}`, 'PUT', formData).then(() => {
+        let newres = await ApiCalls(`blogdisplay/${id}`, 'PUT', formData).then(() => {
             alert("data add successfully")
             getdata()
         })
     };
 
+    const [id, setid] = useState("");
     const getdata = () => {
-        ApiCalls('blogs').then((response) => {
-            setBlogs(response);
 
-        })
-            .catch((error) => {
-                // Handle error
-            });
-
-        ApiCalls('rajiya').then((response) => {
+        ApiCalls('blogdisplay').then((response) => {
             setbannerdata(response);
         })
             .catch((error) => {
                 // Handle error
             });
-
     }
 
     useEffect(() => {
         getdata();
     }, [])
 
-
     const Delethandler = (id) => {
-
         const confirmDelete = window.confirm('Are you sure you want to delete?');
 
         if (confirmDelete) {
-            ApiCalls(`rajiya/${id}`, 'DELETE')
+            ApiCalls(`blogdisplay/${id}`, 'DELETE')
                 .then((response) => {
-                    getdata();
+                    window.location.reload();
                     alert('Successfully deleted');
                 })
                 .catch((error) => {
@@ -66,11 +59,8 @@ const Rajiya = () => {
                 });
         }
     };
-
     const [selectedItems, setSelectedItems] = useState([]);
-    console.warn(selectedItems)
 
-    // Function to handle checkbox change
     const handleCheckboxChange = (itemId) => {
         if (selectedItems.includes(itemId)) {
             setSelectedItems(selectedItems.filter(id => id !== itemId));
@@ -87,7 +77,7 @@ const Rajiya = () => {
         // Check if user confirmed the deletion
         if (isConfirmed) {
             try {
-                const response = await fetch('http://localhost:5000/api/rajiya', {
+                const response = await fetch('http://localhost:5000/api/blogdisplay', {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'
@@ -116,7 +106,7 @@ const Rajiya = () => {
     
         if (isConfirmed) {
             try {
-                const response = await fetch('http://localhost:5000/api/rajiya', {
+                const response = await fetch('http://localhost:5000/api/blogdisplay', {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -137,16 +127,14 @@ const Rajiya = () => {
             }
         }
     };
-    
-    
-
+   
     return (
         <div className="content-wrapper">
             <section className="content-header">
                 <div className="container-fluid">
                     <div className="row mb-2">
                         <div className="col-sm-6">
-                            <h1>Rajiyo</h1>
+                            <h1>Home</h1>
                         </div>
                     </div>
                 </div>
@@ -167,15 +155,15 @@ const Rajiya = () => {
                         </div>
                     </div>
                     <div className="card-body p-0">
-                        <table className="table  projects">
+                        <table className="table projects">
                             <thead>
                                 <tr>
                                     <th style={{ width: "15%" }}>
-                                        <div class="form-check">
+                                        <div class="form-check mb-0">
                                             <input type="checkbox"
                                                 name="tajasamachar"
                                                 style={{ border: '2px solid red' }}
-                                                class="form-check-input"
+                                                class="form-check-input me-1"
                                                 onChange={() => {
                                                     if (selectedItems.length === bannerdata.length) {
                                                         setSelectedItems([]);
@@ -184,14 +172,13 @@ const Rajiya = () => {
                                                     }
                                                 }}
                                                 checked={selectedItems.length === bannerdata.length}
-                                            />
-                                           
+                                                id="exampleCheck1" />
                                             <label for="exampleCheck1" className='mb-0'>All Select</label>
                                         </div>
                                     </th>
+
                                     <th style={{ width: "5%" }}>Sr no</th>
-                                    <th style={{ width: "20%" }}>StateName</th>
-                                    <th style={{ width: "20%" }}>StateName</th>
+                                    <th style={{ width: "40%" }}>Section Name</th>
                                     {/* <th style={{ width: "40%" }}>FirstLink</th> */}
                                     <th style={{ width: "20%" }} className="text-center">
                                         Status
@@ -209,17 +196,17 @@ const Rajiya = () => {
                                                         style={{ border: '2px solid red' }}
                                                         class="form-check-input"
                                                         checked={selectedItems.includes(item._id)}
-                                                        onChange={() => handleCheckboxChange(item._id)} />
+                                                        onChange={() => handleCheckboxChange(item._id)}
+                                                        id="exampleCheck1" />
                                                 </div>
                                             </td>
                                             <td><strong>{key + 1}</strong></td>
-                                            <td><strong>{item.StateName}</strong></td>
-                                            <td><strong>{item.FirstLink}</strong></td>
-                                            {/* <News id={item.FirstLink} /> */}
+                                            <td>
+                                                <strong>{item.SectionName}</strong>
+                                            </td>
 
-                                            {/* <td className="project-state">
-                                                <span className="badge badge-success">active</span>
-                                            </td> */}
+
+
 
                                             <td className="project-actions text-right">
                                                 <NavLink to={''} className={`btn me-3 fw-bold btn-sm ${item.Status == 'active' ? 'btn-primary' : 'btn-success'}`} onClick={() => toggleVisibility(item._id, item.Status)}>
@@ -227,10 +214,11 @@ const Rajiya = () => {
                                                     {item.Status == 'active' ? 'Hide' : 'Show'}
                                                 </NavLink>
 
-                                                <NavLink to={`/rajiya/${item._id}`} className="fw-bold btn btn-info btn-sm">
+                                                <NavLink to={`/home/${item._id}`} className="btn btn-info btn-sm fw-bold">
                                                     Edit
                                                 </NavLink>
-                                                <NavLink className="fw-bold btn btn-danger btn-sm ms-2" onClick={() => Delethandler(item._id)}>
+
+                                                <NavLink className="btn btn-danger btn-sm ms-2 fw-bold" onClick={() => Delethandler(item._id)}>
                                                     Delete
                                                 </NavLink>
                                             </td>
@@ -246,4 +234,4 @@ const Rajiya = () => {
     )
 }
 
-export default Rajiya
+export default Home

@@ -2,19 +2,27 @@ import React, { useEffect, useState } from 'react'
 import ApiCalls from './../../ApiCalls/ApiCalls';
 import { Link } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-const Table = ({categories}) => {
 
+
+const Table = ({categories}) => {
+    
     const [bannerdata, setbannerdata] = useState([])
-    // console.log(categories) 
+    console.log(categories) 
     const [id, setid] = useState("");
     const getdata = () => {
-        ApiCalls(`poll`).then((response) => {
+        ApiCalls(`founder`).then((response) => {
             setbannerdata(response);
-
         })
             .catch((error) => {
                 // Handle error
             });
+            // ApiCalls(`blogs?Category=${categories}`).then((response) => {
+            //     setbannerdata(response);
+    
+            // })
+            //     .catch((error) => {
+            //         // Handle error
+            //     });
     }
 
 
@@ -25,7 +33,7 @@ const Table = ({categories}) => {
     console.log(bannerdata);
 
     const Delethandler = (id) => {
-        ApiCalls(`poll/${id}`, 'DELETE').then((response) => {
+        ApiCalls(`founder/${id}`, 'DELETE').then((response) => {
             getdata()
             console.warn('sucessfully delete', id)
         })
@@ -40,32 +48,26 @@ const Table = ({categories}) => {
                 <div className="container-fluid">
                     <div className="row mb-2">
                         <div className="col-sm-6">
-                            <h1>{categories}</h1>
+                            <h1>Founder Details</h1>
                         </div>
                     </div>
                 </div>
             </section>
             <section className="content">
                 <div className="card">
-                    <div className="card-header">
-                        <h3 className="card-title">{categories}</h3>
-                        <div class="card-tools">
-                            <NavLink to={`/add-poll`} className="btn bg-primary btn-sm px-2 py-1">
-                                <i className="fas fa-folder me-2"></i>
-                                Add {categories}
-                            </NavLink>
-                        </div>
-                    </div>
+                    
                     <div className="card-body p-0">
                         <table className="table table-striped projects">
                             <thead>
                                 <tr>
 
-
-                                    <th style={{ width: "5%" }}>#</th>
-                                    <th style={{ width: "40%" }}>Heading</th>
+                                    <th style={{ width: "1%" }}>#</th>
+                                    <th style={{ width: "10%" }}>Heading</th>
+                                    <th style={{ width: "7%" }}>Image</th>
+                                    <th style={{ width: "10%" }}>Name</th>
                                     
-                                    <th style={{ width: "15%" }} className="text-center">
+                                   
+                                    <th style={{ width: "5%" }} className="text-center">
                                         Status
                                     </th>
                                     
@@ -80,16 +82,29 @@ const Table = ({categories}) => {
 
                                                 <small>{item.heading}</small>
                                             </td>
-                                            
-                                            
-                                            
-                                            <td className="project-state">
-                                                <span className="badge badge-success">active</span>
+                                            <td>
+                                                <ul className="list-inline">
+                                                    <li className="list-inline-item">
+                                                        <img
+                                                            alt="Avatar"
+                                                            className="table-avatar"
+                                                            src={item.Image1}
+                                                        />
+                                                    </li>
+
+                                                </ul>
+                                            </td>
+                                          
+                                            <td className="project_progress">
+
+                                                <small>{item.Detail}</small>
                                             </td>
                                             
                                             <td className="project-actions text-right">
-                                                
-                                                <NavLink to={`/edit-poll/${item._id}`} className="btn btn-info btn-sm">
+                                                <NavLink to={``} className="btn me-3 btn-warning btn-sm">
+                                                    Hide
+                                                </NavLink>
+                                                <NavLink to={`/edit-founder/${item._id}`} className="btn btn-info btn-sm">
                                                     Edit
                                                 </NavLink>
                                                 <NavLink className="btn btn-danger btn-sm ms-2" onClick={() => Delethandler(item._id)}>
