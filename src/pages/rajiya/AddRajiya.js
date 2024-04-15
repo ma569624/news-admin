@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import ApiCalls from '../../ApiCalls/ApiCalls'
-import { useNavigate } from 'react-router-dom'
-import Api from "../../Api/Api"
 
 
 const AddRajiya = () => {

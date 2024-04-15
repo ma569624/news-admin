@@ -1,14 +1,12 @@
-// import React from 'react'
-// const baseurl = "https://news-backend-production.up.railway.app";
-const baseurl = "http://localhost:5000";
+import { useContext } from "react";
+import { ApiContext } from "../Context/ApiContext";
 
 const Api = async (params = "", methods = 'GET', value = null) => {
-  try {
-    // const baseurl = "https://news-backend-production.up.railway.app";
-    const baseurl = "http://localhost:5000";
+  const API = useContext(ApiContext);
 
-    const url = `${baseurl} ${params}`;
-    // const resdata = await fetch(`http://localhost:5000${params}`, {
+  try {
+
+    const url = `${API} ${params}`;
     const resdata = await fetch(url, {
       method: methods,
       headers: {

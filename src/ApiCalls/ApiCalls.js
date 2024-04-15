@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
-// const baseurl = "https://news-backend-production.up.railway.app"
-const baseurl = "http://localhost:5000"
+import { useContext } from "react";
+import { ApiContext } from "../Context/ApiContext";
 
 const ApiCalls = async (params, method = 'GET', value) => {
+  const API = useContext(ApiContext);
+
     try {
-        const resdata = await fetch(`${baseurl}/api/${params}`, {
+        const resdata = await fetch(`${API}/api/${params}`, {
             method: method,
             body: value,
         })

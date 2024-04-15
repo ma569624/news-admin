@@ -1,14 +1,14 @@
 import SideNavBar from "../../component/sidenav/SideNavBar"
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 
 import ApiCalls from "../../ApiCalls/ApiCalls"
 import { useRef, useMemo } from 'react';
-import JoditEditor from 'jodit-react';
-import Api from "../../Api/Api"
+import { ApiContext } from "../../Context/ApiContext";
 
 
 const EditTagline = () => {
+    const {API} = useContext(ApiContext)
     const navigate = useNavigate()
     const [image1, setimage1] = useState({})
 
@@ -22,9 +22,6 @@ const EditTagline = () => {
 
         ApiCalls(`tagline?_id=6602a87711e47f88c9059347`).then((response) => {
             setInputs(response[0]);
-            // console.warn(response[0])
-            // setContent(response[0].CompleteAddress);
-            // setContent2(response[0].OtherDetails);
         })
             .catch((error) => {
                 // Handle error
@@ -44,7 +41,7 @@ const EditTagline = () => {
         setInputs({ ...inputs, ['CompleteAddress']: content })
         console.warn(inputs);
 
-        fetch('http://localhost:5000/api/tagline/6602a87711e47f88c9059347', {
+        fetch(`${API}/api/tagline/6602a87711e47f88c9059347`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json'

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ApiCalls from '../../ApiCalls/ApiCalls'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useRef, useMemo } from 'react';
 import JoditEditor from 'jodit-react';
 import Select from 'react-select';
+import { ApiContext } from '../../Context/ApiContext';
 
 
 const EditAdverd = () => {
@@ -14,8 +15,7 @@ const EditAdverd = () => {
     const [selectedValue, setSelectedValue] = useState([]);
     const [isChecked, setIsChecked] = useState(false);
     const [selectedcategories, setSelectedcategories] = useState(null);
-    const API = 'http://localhost:5000'
-
+    const {API} = useContext(ApiContext)
 
     const params = useParams()
     const { id } = params;

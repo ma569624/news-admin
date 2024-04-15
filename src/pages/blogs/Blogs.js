@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ApiCalls from './../../ApiCalls/ApiCalls';
 import { NavLink, useParams } from 'react-router-dom';
+import { ApiContext } from '../../Context/ApiContext';
 
 const Blogs = () => {
+    const {API} = useContext(ApiContext);
     const params = useParams()
-    const API = "https://news-backend-production.up.railway.app"
     const [bannerdata, setbannerdata] = useState([])
     const [blockdata, setBlockdata] = useState([])
     const PositionName = params.categories;

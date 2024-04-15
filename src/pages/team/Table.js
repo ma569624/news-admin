@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import ApiCalls from './../../ApiCalls/ApiCalls';
-import { Link } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 
 
@@ -16,13 +15,6 @@ const Table = ({categories}) => {
             .catch((error) => {
                 // Handle error
             });
-            // ApiCalls(`blogs?Category=${categories}`).then((response) => {
-            //     setbannerdata(response);
-    
-            // })
-            //     .catch((error) => {
-            //         // Handle error
-            //     });
     }
 
 

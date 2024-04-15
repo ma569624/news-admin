@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import ApiCalls from '../../ApiCalls/ApiCalls'
-import { useNavigate } from 'react-router-dom'
-import Api from "../../Api/Api"
 
 
 const AddHome = () => {
@@ -19,9 +17,8 @@ const AddHome = () => {
 
         const formData = await new FormData();
 
-        // if (inputs.name && inputs.name.length > 0) {
         formData.append('SectionName', inputs.SectionName);
-        // }
+
         formData.append('SecondSection', inputs.SecondSection);
 
 
@@ -29,17 +26,14 @@ const AddHome = () => {
             formData.append('background1', inputs.background1);
         }
         
-        // Check if 'inputs.background2' exists
         if (inputs.background2) {
             formData.append('background2', inputs.background2);
         }
         
-        // Check if 'image1' array has data
         if (image1.length > 0) {
             formData.append('Image1', image1[0]);
         }
         
-        // Check if 'image2' array has data
         if (image2.length > 0) {
             formData.append('Image2', image2[0]);
         }

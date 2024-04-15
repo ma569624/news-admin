@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ApiCalls from '../../ApiCalls/ApiCalls';
 import { NavLink } from 'react-router-dom';
+import { ApiContext } from '../../Context/ApiContext';
 
 const Rajiya = () => {
-
+    const {API} = useContext(ApiContext)
     const [bannerdata, setbannerdata] = useState([])
     const [blogs, setBlogs] = useState([])
     const [category, setCategory] = useState([])
@@ -87,7 +88,7 @@ const Rajiya = () => {
         // Check if user confirmed the deletion
         if (isConfirmed) {
             try {
-                const response = await fetch('http://localhost:5000/api/rajiya', {
+                const response = await fetch(`${API}/api/rajiya`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'
@@ -116,7 +117,7 @@ const Rajiya = () => {
     
         if (isConfirmed) {
             try {
-                const response = await fetch('http://localhost:5000/api/rajiya', {
+                const response = await fetch('${API}/api/rajiya', {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'

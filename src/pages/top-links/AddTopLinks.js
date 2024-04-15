@@ -1,16 +1,11 @@
-import SideNavBar from "../../component/sidenav/SideNavBar"
-import React, { useEffect, useRef, useState } from 'react'
-import ApiCalls from '../../ApiCalls/ApiCalls'
+
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Editor from "../../component/Editor"
-import Nav from "../../component/nav/Nav"
-import Api from "../../Api/Api"
+import { ApiContext } from '../../Context/ApiContext'
 
 
 const AddTopLinks = () => {
-
-   
-
+    const {API} = useContext(ApiContext)
     const [inputs, setInputs] = useState({})
     const navigate = useNavigate()
 
@@ -20,7 +15,7 @@ const AddTopLinks = () => {
         console.log(inputs);
 
         try {
-            const response = await fetch('https://news-backend-production.up.railway.app/api/toplinks', {
+            const response = await fetch(`${API}/api/toplinks`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

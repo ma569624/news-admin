@@ -35,13 +35,11 @@ const EditTopLinks = () => {
     console.log(inputs)
     useEffect(() => {
         getdata();
-
     }, [])
 
     async function FormSubmit(event) {
 
         event.preventDefault();
-        // console.log(position);
 
         console.warn(inputs)
 

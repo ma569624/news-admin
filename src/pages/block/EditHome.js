@@ -2,8 +2,6 @@ import SideNavBar from "../../component/sidenav/SideNavBar"
 import React, { useEffect, useState } from 'react'
 import ApiCalls from '../../ApiCalls/ApiCalls'
 import { useNavigate, useParams } from 'react-router-dom'
-import Nav from "../../component/nav/Nav"
-import Api from "../../Api/Api"
 
 
 const EditHome = () => {
@@ -22,7 +20,6 @@ const EditHome = () => {
         ApiCalls(`blogdisplay?_id=${id}`).then((response) => {
             setInputs(response[0]);
             console.warn(response)
-            // console.log(response)
         })
             .catch((error) => {
                 // Handle error

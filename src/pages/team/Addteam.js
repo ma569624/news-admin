@@ -1,11 +1,8 @@
-import SideNavBar from "../../component/sidenav/SideNavBar"
 import React, { useEffect, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
-import Nav from "../../component/nav/Nav"
 import ApiCalls from "../../ApiCalls/ApiCalls"
 import { useRef, useMemo } from 'react';
 import JoditEditor from 'jodit-react';
-import Select from 'react-select';
 
 const AddRashiFal = () => {
     const [image1, setimage1] = useState({})
