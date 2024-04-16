@@ -9,7 +9,7 @@ const Blogs = () => {
     const [bannerdata, setbannerdata] = useState([])
     const [blockdata, setBlockdata] = useState([])
     const PositionName = params.categories;
-    console.warn(PositionName);
+
     const [categories, setcategories] = useState('');
 
     const [isVisible, setIsVisible] = useState({});
@@ -37,12 +37,14 @@ const Blogs = () => {
         setcategories(params.categories);
     }, [params])
 
+    console.warn(bannerdata)
+
 
     useEffect(() => {
         if (PositionName == 'tajasamachar') {
             ApiCalls(`blogs?page=1&limit=17&tajasamachar=true`).then((response) => {
                 setbannerdata(response.data)
-                console.warn(bannerdata)
+                console.warn(response.data)
             })
                 .catch((error) => {
                     // Handle error
@@ -51,7 +53,7 @@ const Blogs = () => {
         else {
             ApiCalls(`blogs?page=1&limit=17&Category=${PositionName}`).then((response) => {
                 setbannerdata(response.data)
-                console.warn(bannerdata)
+                console.warn(response)
             })
                 .catch((error) => {
                     // Handle error
@@ -135,7 +137,7 @@ const Blogs = () => {
         // Check if user confirmed the deletion
         if (isConfirmed) {
             try {
-                const response = await fetch('http://localhost:5000/api/blogs', {
+                const response = await fetch(`${API}/api/blogs`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'
@@ -164,7 +166,7 @@ const Blogs = () => {
 
         if (isConfirmed) {
             try {
-                const response = await fetch('http://localhost:5000/api/blogs', {
+                const response = await fetch(`${API}/api/blogs`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'

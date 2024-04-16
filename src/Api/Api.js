@@ -2,7 +2,8 @@ import { useContext } from "react";
 import { ApiContext } from "../Context/ApiContext";
 
 const Api = async (params = "", methods = 'GET', value = null) => {
-  const API = useContext(ApiContext);
+  // const API = useContext(ApiContext);
+  const API = 'https://api.techdeveloper.in'
 
   try {
 
