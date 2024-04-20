@@ -1,20 +1,21 @@
-import { Outlet, useNavigate, Navigate } from "react-router-dom"
+import { useContext, useEffect, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import { ApiContext, AppProvider } from "../Context/ApiContext";
 
 const Producted = () => {
     const navigate = useNavigate();
-    // const [isAuthenticated, setisAuthenticated] = useState(false)
-    // Check if user is authenticated (example condition)
-    const isAuthenticated =  localStorage.getItem('isAuthenticated') ; // Replace with your authentication logic
-    // console.log(isAuthenticated)
+    const { isAuthenticated  } = useContext(ApiContext);
+    useEffect(() => {
+        if (!isAuthenticated) {
+            navigate('/login');
+        }
+      }, []);
+
     if (!isAuthenticated) {
-        return <Outlet />;
-    } else {
-        // Redirect to the login page
-        // navigate('/login');
-        // Return null (or a loading indicator) since there's nothing to render while redirecting
-        // return <Navigate to="/login" />;
-        return <Outlet />;
+        return navigate('/login');
     }
-}
+
+    return <Outlet />;
+};
 
 export default Producted;

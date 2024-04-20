@@ -58,8 +58,6 @@ const EditFounder = () => {
 
 
     return (
-        <main>
-        <div className="wrapper">
             <div className="content-wrapper">
                 <section className="content mt-4">
                     <div className="container-fluid">
@@ -179,10 +177,6 @@ const EditFounder = () => {
                 </section>
 
             </div>
-        </div>
-
-
-    </main>
     )
 }
 

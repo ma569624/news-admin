@@ -43,8 +43,6 @@ const AddRashiFal = () => {
 
     return (
         <>
-            <main>
-                <div className="wrapper">
                     <div className="content-wrapper">
                         <section className="content mt-4">
                             <div className="container-fluid">
@@ -161,10 +159,7 @@ const AddRashiFal = () => {
                         </section>
 
                     </div>
-                </div>
-
-            </main>
-            <Outlet />
+                
         </>
     )
 }

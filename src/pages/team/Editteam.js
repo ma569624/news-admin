@@ -7,9 +7,9 @@ import Select from 'react-select';
 
 
 const EditRashiFal = () => {
+    
     const params = useParams()
     const [content, setContent] = useState('');
-
     const [inputs, setInputs] = useState({})
     const [image1, setimage1] = useState({})
     const editor = useRef(null);
@@ -67,8 +67,6 @@ const EditRashiFal = () => {
    
 
     return (
-        <main>
-                <div className="wrapper">
                     <div className="content-wrapper">
                         <section className="content mt-4">
                             <div className="container-fluid">
@@ -189,9 +187,6 @@ const EditRashiFal = () => {
                         </section>
 
                     </div>
-                </div>
-
-            </main>
     )
 }
 

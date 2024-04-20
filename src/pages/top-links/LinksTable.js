@@ -5,7 +5,6 @@ import { NavLink } from 'react-router-dom';
 const LinkTable = () => {
 
     const [data, setdata] = useState([])
-
     const getdata = () => {
         ApiCalls('toplinks').then((response) => {
             setdata(response);
@@ -36,37 +35,29 @@ const LinkTable = () => {
     return (
 
         <div className="content-wrapper">
-            <section className="content-header">
-                <div className="container-fluid">
-                    <div className="row mb-2">
-                        <div className="col-sm-6">
-                            <h1>Links Manger</h1>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            
             <section className="content">
                 <div className="card">
                     <div className="card-header">
-                        <h3 className="card-title">Links Manger</h3>
-                        <div class="card-tools">
+                        <h4 className="card-title">Master Links Manger</h4>
+                        {/* <div class="card-tools">
                             <NavLink to={'/add-top-links'} className="btn bg-primary btn-sm px-2 py-1">
                                 <i className="fas fa-folder me-2"></i>
                                 Add Top Links
                             </NavLink>
-                        </div>
+                        </div> */}
                     </div>
                     <div className="card-body p-0">
                         <table className="table table-striped projects">
                             <thead>
                                 <tr>
 
-                                    <th style={{ width: "1%" }}>#</th>
-                                    <th style={{ width: "20%" }}> Name</th>
+                                    <th style={{ width: "10%" }}>#</th>
+                                    <th style={{ width: "70%" }}> Name</th>
                                     {/* <th style={{ width: "20%" }}>Link</th> */}
                                     {/* <th style={{ width: "20%" }}>Position</th> */}
 
-                                    <th className='text-end'>Action</th>
+                                    <th className=''>Action</th>
                                 </tr>
                             </thead>
                             <tbody>

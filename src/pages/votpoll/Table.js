@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ApiCalls from './../../ApiCalls/ApiCalls';
 import { Link } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
+import { ApiContext } from '../../Context/ApiContext';
 const Table = ({categories}) => {
-
+    const {access, type} = useContext(ApiContext)
     const [bannerdata, setbannerdata] = useState([])
     // console.log(categories) 
     const [id, setid] = useState("");
@@ -49,18 +50,12 @@ const Table = ({categories}) => {
                 <div className="card">
                     <div className="card-header">
                         <h3 className="card-title">{categories}</h3>
-                        <div class="card-tools">
-                            <NavLink to={`/add-poll`} className="btn bg-primary btn-sm px-2 py-1">
-                                <i className="fas fa-folder me-2"></i>
-                                Add {categories}
-                            </NavLink>
-                        </div>
+                        
                     </div>
                     <div className="card-body p-0">
                         <table className="table table-striped projects">
                             <thead>
                                 <tr>
-
 
                                     <th style={{ width: "5%" }}>#</th>
                                     <th style={{ width: "40%" }}>Heading</th>
@@ -68,7 +63,6 @@ const Table = ({categories}) => {
                                     <th style={{ width: "15%" }} className="text-center">
                                         Status
                                     </th>
-                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -92,9 +86,10 @@ const Table = ({categories}) => {
                                                 <NavLink to={`/edit-poll/${item._id}`} className="btn btn-info btn-sm">
                                                     Edit
                                                 </NavLink>
+                                                {access === true || type === 'admin' ? (
                                                 <NavLink className="btn btn-danger btn-sm ms-2" onClick={() => Delethandler(item._id)}>
                                                     Delete
-                                                </NavLink>
+                                                </NavLink>): null }
                                             </td>
                                         </tr>
                                     )

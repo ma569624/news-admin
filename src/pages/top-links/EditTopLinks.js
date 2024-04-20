@@ -1,12 +1,12 @@
-import SideNavBar from "../../component/sidenav/SideNavBar"
-import React, { useEffect, useState } from 'react'
+
+import React, { useContext, useEffect, useState } from 'react'
 import ApiCalls from '../../ApiCalls/ApiCalls'
 import { useNavigate, useParams } from 'react-router-dom'
-import Nav from "../../component/nav/Nav"
+import { ApiContext } from "../../Context/ApiContext"
 
 const EditTopLinks = () => {
     const [selectedValue, setSelectedValue] = useState([]);
-
+    const {API} = useContext(ApiContext)
     console.log(selectedValue)
 
     const [inputs, setInputs] = useState({})
@@ -58,7 +58,7 @@ const EditTopLinks = () => {
         //     alert("data add successfully")
         // })
         try {
-            const response = await fetch(`https://news-backend-production.up.railway.app/api/toplinks/${params.id}`, {
+            const response = await fetch(`${API}/api/toplinks/${params.id}`, {
                 method: 'PUT',
                 body: formData // Pass the FormData object directly
             });
@@ -127,8 +127,7 @@ const EditTopLinks = () => {
 
 
     return (
-        <main>
-            <div className="wrapper">
+       
 
                 <div className="content-wrapper">
 
@@ -219,8 +218,7 @@ const EditTopLinks = () => {
                     </section>
 
                 </div>
-            </div>
-        </main>
+        
     )
 }
 

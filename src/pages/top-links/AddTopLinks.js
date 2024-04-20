@@ -49,10 +49,7 @@ const AddTopLinks = () => {
     }
 
     return (
-        <main>
-            <div className="wrapper">
-
-
+       
                 <div className="content-wrapper">
 
                     <section className="content mt-4">
@@ -117,10 +114,7 @@ const AddTopLinks = () => {
                     </section>
 
                 </div>
-            </div>
-
-
-        </main>
+            
     )
 }
 

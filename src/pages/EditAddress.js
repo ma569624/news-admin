@@ -63,8 +63,7 @@ const EditAddress = () => {
 
     return (
         <>
-            <main>
-                <div className="wrapper">
+            
                     <div className="content-wrapper">
                         <section className="content mt-4">
                             <div className="container-fluid">
@@ -127,11 +126,7 @@ const EditAddress = () => {
                         </section>
 
                     </div>
-                </div>
-
-
-            </main>
-            <Outlet />
+                
         </>
     )
 }

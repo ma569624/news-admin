@@ -1,0 +1,20 @@
+.navbar .nav-link.dropdown-toggle {
+  color: #000;
+  font-size: 18px;
+  font-weight: 800;
+  text-shadow: 3px 3px #db65bc;
+}
+.navbar .nav-link {
+  color: #000;
+  font-size: 18px;
+  font-weight: 800;
+  text-shadow: 3px 3px #db65bc;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block !important;
+}
+
+.logout {
+  cursor: pointer;
+}

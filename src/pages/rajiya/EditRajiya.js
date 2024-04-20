@@ -107,8 +107,7 @@ const EditRajiya = () => {
 
 
     return (
-        <main>
-            <div className="wrapper">
+       
                 <div className="content-wrapper">
                     <section className="content mt-4">
                         <div className="container-fluid">
@@ -116,7 +115,7 @@ const EditRajiya = () => {
                                 <div className="col-md-12">
                                     <div className="card card-primary">
                                         <div className="card-header">
-                                            <h3 className="card-title">Add Blog</h3>
+                                            <h3 className="card-title">Edit State</h3>
                                         </div>
                                         <form onSubmit={() => FormSubmit} >
 
@@ -227,9 +226,7 @@ const EditRajiya = () => {
                         </div>
                     </section>
                 </div>
-            </div>
-
-        </main>
+           
     )
 }
 

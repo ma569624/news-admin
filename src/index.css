@@ -1,15 +1,67 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  min-height: 100vh;
+  background-color: green;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
-@import 'bootstrap/dist/css/bootstrap.min.css';
+body>div {
+  /* margin: auto; */
+  flex-shrink: 0;
+  flex-grow: 1;
+  /* flex-basis: 0%;   */
+
+}
+.card-title{
+  text-align: center;
+}
+
+.content-wrapper {
+  max-width: 1280px;
+  margin: auto;
+}
+
+.wrapper {
+  max-width: 1280px;
+  margin: auto;
+}
+.login-box {
+  margin-top: 80px !important;
+}
+.login-box .card{
+  box-shadow:
+    inset 0 -3em 3em rgba(161, 169, 161, 0.3),
+    0 0 0 2px white,
+    0.3em 0.3em 1em rgba(128, 105, 105, 0.6);
+    border: 5px solid #000;
+    border-radius: 10px;
+}
+.login-box .card-body img {
+  background-color: rgb(224, 61, 88);
+  border-radius: 12px;
+}
+
+.register-box,
+.login-box {
+  flex-shrink: 1;
+  padding-top: 20px;
+  max-width: 400px;
+  margin: auto;
+}
+.login-box label{
+  font-size: 17px;
+  margin-bottom: 10px;
+  font-weight: 600
+}
+
+@import "bootstrap/dist/css/bootstrap.min.css";
