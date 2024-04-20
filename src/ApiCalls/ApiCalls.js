@@ -3,7 +3,7 @@ import { ApiContext } from "../Context/ApiContext";
 
 const ApiCalls = async (params, method = 'GET', value) => {
 //   const API = useContext(ApiContext);
-const API = 'https://api.techdeveloper.in'
+const API = 'http://localhost:5000'
 
     try {
         const resdata = await fetch(`${API}/api/${params}`, {

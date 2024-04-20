@@ -8,6 +8,7 @@ const RashiFal = () => {
     useEffect(() => {
         setcategories(params.categories);
     }, [params])
+    
     return (
         <Table categories={categories} />
     )
