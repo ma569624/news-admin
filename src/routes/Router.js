@@ -46,7 +46,7 @@ const Router = () => {
         <div className="wrapper">
           <div className="content-wrapper">
             <Routes>
-              <Route path="/*" element={<Working />} />
+              <Route path="/*" element={<></>} />
               <Route element={<Producted />}>
                 <Route path="/blogs/:categories" element={<Blogs />} />
                 <Route path="/" element={<Welcome />} />

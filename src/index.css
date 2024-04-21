@@ -46,9 +46,22 @@ body>div {
     border: 5px solid #000;
     border-radius: 10px;
 }
+
 .login-box .card-body img {
   background-color: rgb(224, 61, 88);
   border-radius: 12px;
+}
+.register-box .card{
+  background-color: #d3eb21;
+}
+.login-box-msg{
+  text-align: center;
+  font-size: 18px;
+  color: blue;
+}
+.register-box .card label {
+  font-size: 17px;
+  font-weight: 700;
 }
 
 .register-box,
@@ -58,10 +71,31 @@ body>div {
   max-width: 400px;
   margin: auto;
 }
+.login-box .card{
+  background-color: rgba(191, 191, 201, 0.744);
+}
+.login-box .card label{
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+}
 .login-box label{
   font-size: 17px;
   margin-bottom: 10px;
   font-weight: 600
+}
+.content .card form{
+  background-color: aliceblue
+}
+.content .card form label{
+   font-size: 20px;
+   font-weight: 600;
+   margin-bottom: 10px
+}
+.taja-space{
+  display: flex;
+  justify-content: space-between;
+  gap: 62px
 }
 
 @import "bootstrap/dist/css/bootstrap.min.css";

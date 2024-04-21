@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ApiCalls from "../../ApiCalls/ApiCalls";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRef, useMemo } from "react";
 import JoditEditor from "jodit-react";
 import Select from "react-select";
+import { ApiContext } from "../../Context/ApiContext";
 
 const EditBlogs = () => {
   // const params = useParams()
   const params = useParams();
   const id = params.id;
+  const {API} = useContext(ApiContext)
   const category = params.category;
   const navigate = useNavigate();
   const editor = useRef(null);
@@ -38,8 +40,7 @@ const EditBlogs = () => {
     ApiCalls(`blogs?&_id=${id}`)
       .then((response) => {
         setInputs(response.data[0]);
-        console.warn(response.data[0]);
-        console.warn(response.data[0].Matter);
+       
         setContent(response.data[0].Matter);
       })
       .catch((error) => {
@@ -85,6 +86,7 @@ const EditBlogs = () => {
   useEffect(() => {
     getdata();
   }, []);
+  console.warn(inputs)
 
   async function FormSubmit(event) {
     event.preventDefault();
@@ -134,7 +136,7 @@ const EditBlogs = () => {
 
     let newres = await ApiCalls(`blogs/${id}`, "PUT", formData).then(() => {
       alert("data add successfully");
-      navigate(`/blogs/${category}`);
+      navigate(`/blogs/${category}?nfsn`);
     });
 
     console.log("FormData:", formData);
@@ -300,6 +302,10 @@ const EditBlogs = () => {
                           />
                         </div>
                       </div>
+                      <div className="col-md-12">
+                        <img className="mt-2" style={{width: '100px', height: '80px'}} src={`${API}${inputs.Image}`} alt="" />
+                      </div>
+
                       <div className="col-md-4">
                         <div className="form-group">
                           <label htmlFor="exampleInputFile">Image</label>

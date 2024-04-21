@@ -87,7 +87,7 @@ const Login = () => {
                 </div>
               </div>
               <div>
-                <label>Enter User Name</label>
+                <label>Enter Password</label>
                 <div className="input-group mb-3">
                   <input
                     type="password"

@@ -1,20 +1,44 @@
 .navbar .nav-link.dropdown-toggle {
-  color: #000;
-  font-size: 18px;
-  font-weight: 800;
-  text-shadow: 3px 3px #db65bc;
+  color: #ffffff;
+  font-size: 19px;
+  font-weight: 600;
+  text-shadow: 2px 1px 1px #db65bc;
 }
 .navbar .nav-link {
-  color: #000;
-  font-size: 18px;
-  font-weight: 800;
-  text-shadow: 3px 3px #db65bc;
+  color: #ffffff;
+  font-size: 19px;
+  font-weight: 600;
+  text-shadow: 2px 1px 1px #db65bc;
+}
+.bg-top-nav{
+  background-color: #cb2414;
+  border-radius: 20px;
 }
 
+ .nav-link.active {
+  color: #cb2414;
+}
 .dropdown:hover .dropdown-menu {
   display: block !important;
 }
+.dropdown:hover .dropdown-menu a{
+  font-weight: 600;
+}
 
+.table {
+  background-color: #FFFFCC;
+  border-collapse: collapse;
+}
+.table b, strong{
+  color: #0000FF !important;
+}
+.card-header{
+  background-color: #794737cc;
+  color: #ffffff;
+}
+.card-title {
+  font-weight: 700;
+}
 .logout {
   cursor: pointer;
 }

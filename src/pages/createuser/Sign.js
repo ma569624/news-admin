@@ -4,7 +4,7 @@ import { ApiContext } from "../../Context/ApiContext";
 const Sign = () => {
   const [user, setUser] = useState({});
   const [imageSrc, setImageSrc] = useState("");
-  const {API} = useContext(ApiContext)
+  const { API } = useContext(ApiContext);
 
   const changefileHandle = (e) => {
     const file = e.target.files[0];
@@ -35,7 +35,6 @@ const Sign = () => {
     });
   };
 
-
   const SubmitHandler = async (event) => {
     console.warn(user);
     event.preventDefault();
@@ -48,7 +47,6 @@ const Sign = () => {
     console.warn(user);
 
     try {
-
       const response = await fetch(`${API}/api/signup`, {
         method: "POST",
         headers: {
@@ -61,7 +59,7 @@ const Sign = () => {
         throw new Error("Failed to create user");
       }
       if (response.ok) {
-        alert('user successfully created')
+        alert("user successfully created");
       }
 
       const data = await response.json();
@@ -95,17 +93,26 @@ const Sign = () => {
               </div>
               <div className="row">
                 <div className="input-group mb-3 col">
+                  <label
+                    className="rounded"
+                    htmlFor="filePicker"
+                    style={{ color: '#ffff', background: "info", padding: "5px 10px" }}
+                  >
+                    Upload Image
+                  </label>
                   <input
+                    id="filePicker"
+                    style={{ visibility: "hidden" }}
                     type="file"
                     className="form-control"
-                    name=""
+                    name="photo"
                     onChange={changefileHandle}
                     // required
                     placeholder="Employee profile"
                   />
                 </div>
                 <div class="mb-3">
-                <label htmlFor="">User name</label>
+                  <label htmlFor="">Employee Name</label>
                   <input
                     type="text"
                     className="form-control"
@@ -118,8 +125,8 @@ const Sign = () => {
                 </div>
               </div>
               <div className="row">
-              <div class="mb-3 col">
-                <label htmlFor="">number</label>
+                <div class="mb-3 col">
+                  <label htmlFor="">Mobile Number</label>
                   <input
                     type="number"
                     className="form-control"
@@ -132,7 +139,7 @@ const Sign = () => {
                 </div>
 
                 <div class="mb-3 col">
-                <label htmlFor="">email</label>
+                  <label htmlFor="">Email</label>
                   <input
                     type="text"
                     className="form-control"
@@ -145,8 +152,8 @@ const Sign = () => {
                 </div>
               </div>
               <div className="row">
-              <div class="mb-3 col">
-                <label htmlFor="">User_name</label>
+                <div class="mb-3 col">
+                  <label htmlFor="">User Name</label>
                   <input
                     type="text"
                     className="form-control"
@@ -159,7 +166,7 @@ const Sign = () => {
                 </div>
 
                 <div class="mb-3 col">
-                <label htmlFor="">password</label>
+                  <label htmlFor="">Password</label>
                   <input
                     name="password"
                     type="password"
@@ -172,9 +179,8 @@ const Sign = () => {
                 </div>
               </div>
 
-             
               <div class="mb-3">
-                <label htmlFor="">confirm_password</label>
+                <label htmlFor="">Confirm Password</label>
                 <input
                   name="confirm_password"
                   type="password"
@@ -184,7 +190,7 @@ const Sign = () => {
                   className="form-control"
                   placeholder="Confirm Password"
                 />
-                </div>
+              </div>
               {/* <div className="input-group mb-3">
                 <input
                   name="password_delete"

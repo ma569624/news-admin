@@ -8,7 +8,7 @@ const Nav = () => {
 
   return (
     <nav className="navbar navbar-expand-lg  mt-5">
-      <div className="container-fluid bg-info mx-5">
+      <div className="container-fluid bg-top-nav mx-5">
         {/* <a className="navbar-brand" href="#">
           Navbar
         </a> */}
@@ -151,6 +151,11 @@ const Nav = () => {
             <li className="nav-item dropdown">
               <NavLink className="nav-link dropdown-toggle">Multimedia</NavLink>
             </li>
+            <li className="nav-item">
+              <NavLink to={`/add-blogs/all`} className="nav-link">
+                Add News
+              </NavLink>
+            </li>
             <li className="nav-item dropdown">
               <NavLink className="nav-link dropdown-toggle">
                 Top New section Manger
@@ -240,11 +245,7 @@ const Nav = () => {
                 ) : null}
               </ul>
             </li>
-            <li className="nav-item">
-              <NavLink to={`/add-blogs/all`} className="nav-link">
-                Add News
-              </NavLink>
-            </li>
+            
 
             {/* <li className="nav-item dropdown">
                 <a

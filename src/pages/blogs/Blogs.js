@@ -204,7 +204,7 @@ const Blogs = () => {
                   className={`btn ms-2 me-2 fw-bold btn-sm btn-success`}
                   onClick={() => handleUpdateStatusSelected("active")}
                 >
-                  show
+                  Show
                 </NavLink>
                 <NavLink
                   to={""}
@@ -371,7 +371,7 @@ const Blogs = () => {
                         <></>
                       ) : (
                         <NavLink
-                          to={`/edit-blogs/${item._id}/${PositionName}`}
+                          to={`/edit-blogs/${item._id}/${PositionName}?dgd`}
                           className=" fw-bold btn btn-info btn-sm"
                         >
                           Edit
