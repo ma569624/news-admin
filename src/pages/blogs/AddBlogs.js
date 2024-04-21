@@ -153,8 +153,9 @@ const AddBlogs = () => {
     if (inputs.subheading) {
       formData.append("Subheading", inputs.subheading);
     }
-    if (inputs.tajasamachar) {
-      formData.append("tajasamachar", inputs.tajasamachar);
+    
+    if (inputs.Headline) {
+      formData.append("Headline", inputs.Headline);
     }
 
     // formData.append('Designation', inputs.designation);
@@ -215,10 +216,9 @@ const AddBlogs = () => {
     const checked = event.target.checked;
     setInputs({ ...inputs, [name]: value });
 
-    if (name === "tajasamachar") {
+    if (name === "Headline") {
       setInputs({ ...inputs, [name]: checked }); // Update the checkbox state only if its name is "isHeader"
     }
-    console.warn(inputs);
   };
 
   const nhandleChange = (selectedOption) => {
@@ -326,47 +326,7 @@ const AddBlogs = () => {
                             ) : (
                               <></>
                             )}
-                            {/* {
-                                                            position == 'rajiya' ? <div className="col-md-12">
-                                                                <div class="form-group">
-                                                                    <label for="exampleSelectRounded0">Select Rajiya</label>
-                                                                    <select class="custom-select rounded-0" name="CategoryName" value={inputs.StateName} id="exampleSelectRounded0" onChange={handleChange}>
-                                                                        <option selected disabled>Please Select</option>
-                                                                        {indianStates.map(state => (
-                                                                            <option key={state} value={state}>{state}</option>
-                                                                        ))}
-                                                                    </select>
-                                                                </div>
-                                                            </div> : <></>
-                                                        }
-                                                        {
-                                                            position == 'block' ? <div className="col-md-12">
-                                                                <div class="form-group">
-                                                                    <label for="exampleSelectRounded0">Select Block</label>
-                                                                    <select class="custom-select rounded-0" name="CategoryName" value={inputs.StateName} id="exampleSelectRounded0" onChange={handleChange}>
-                                                                        <option selected disabled>Please Select</option>
-                                                                        {blockdata.map(state => (
-                                                                            <option key={state} value={state.SectionName}>{state.SectionName}</option>
-                                                                        ))}
-                                                                    </select>
-                                                                </div>
-                                                            </div> : <></>
-                                                        } */}
-
-                            {/* <div className="col-md-12">
-                                                            <div class="form-group">
-                                                                <label htmlFor="CategoryName">Categorie's Name</label>
-                                                                <Select
-                                                                    id="selectOption"
-                                                                    name="Position" // Adding the name attribute
-                                                                    value={selectedcategories}
-                                                                    onChange={categorieshandleChange}
-                                                                    options={categoriesoptions}
-                                                                    isMulti
-                                                                />
-
-                                                            </div>
-                                                        </div> */}
+                            
 
                             <div className="col-md-12">
                               <div class="form-group">
@@ -444,10 +404,10 @@ const AddBlogs = () => {
                                     <div class="form-check">
                                       <input
                                         type="checkbox"
-                                        name="tajasamachar"
+                                        name="Headline"
                                         onChange={handleChange}
-                                        value={inputs.tajasamachar}
-                                        checked={inputs.tajasamachar}
+                                        value={inputs.Headline}
+                                        checked={inputs.Headline}
                                         class="form-check-input mt-2 border-3  border-danger"
                                         id="exampleCheck1"
                                       />

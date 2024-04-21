@@ -110,6 +110,9 @@ const EditBlogs = () => {
     if (inputs.Capton && inputs.Capton.length > 0) {
       formData.append("Capton", inputs.Capton);
     }
+   
+      formData.append("Headline", inputs.Headline);
+    
 
     if (inputs.Subheading && inputs.Subheading.length > 0) {
       formData.append("Subheading", inputs.Subheading);
@@ -145,9 +148,15 @@ const EditBlogs = () => {
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
+    const checked = event.target.checked;
     setInputs({ ...inputs, [name]: value });
-    console.log(inputs);
+
+    if (name === "Headline") {
+      setInputs({ ...inputs, [name]: checked }); // Update the checkbox state only if its name is "isHeader"
+    }
+    console.warn(inputs);
   };
+
   const nhandleChange = (selectedOption) => {
     setSelectedOption(selectedOption);
     console.warn(selectedOption);
@@ -267,6 +276,27 @@ const EditBlogs = () => {
                       </div>
                       <div className="col-md-12">
                         <div className="form-group">
+                        <div className="taja-space">
+                                  <label htmlFor="exampleInputPassword1">
+                                    Heading
+                                  </label>
+                                  <div className="col-md-12">
+                                    <div class="form-check">
+                                      <input
+                                        type="checkbox"
+                                        name="Headline"
+                                        onChange={handleChange}
+                                        value={inputs.Headline}
+                                        checked={inputs.Headline}
+                                        class="form-check-input mt-2 border-3  border-danger"
+                                        id="exampleCheck1"
+                                      />
+                                      <label for="exampleCheck1">
+                                        Taja Smachar
+                                      </label>
+                                    </div>
+                                  </div>
+                                </div>
                           <label htmlFor="exampleInputPassword1">Heading</label>
                           <input
                             onChange={handleChange}
