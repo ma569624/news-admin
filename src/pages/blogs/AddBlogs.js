@@ -153,7 +153,7 @@ const AddBlogs = () => {
     if (inputs.subheading) {
       formData.append("Subheading", inputs.subheading);
     }
-    
+
     if (inputs.Headline) {
       formData.append("Headline", inputs.Headline);
     }
@@ -326,16 +326,18 @@ const AddBlogs = () => {
                             ) : (
                               <></>
                             )}
-                            
 
                             <div className="col-md-12">
                               <div class="form-group">
                                 <label for="exampleInputFile">
                                   Reporter Image
                                 </label>
+
                                 <div>
                                   <input
-                                    onChange={(e) => setimage1(e.target.files)}
+                                    onChange={(e) =>
+                                      setimage1(e.target.files[0])
+                                    }
                                     name="file"
                                     type="file"
                                     className="TextArea"
@@ -446,7 +448,9 @@ const AddBlogs = () => {
                                 <label htmlFor="exampleInputFile">Image</label>
                                 <div className="input-group">
                                   <input
-                                    onChange={(e) => setimage2(e.target.files)}
+                                    onChange={(e) =>
+                                      setimage2(e.target.files[0])
+                                    }
                                     name="file"
                                     type="file"
                                     className="TextField"
@@ -457,7 +461,17 @@ const AddBlogs = () => {
                                   />
                                 </div>
                               </div>
+
+                              {image2 &&
+                                image2 instanceof Blob && ( // Check if image1 is a Blob or File object
+                                  <img
+                                    style={{ width: "82px", marginTop: "10px" }}
+                                    src={URL.createObjectURL(image2)}
+                                    alt=""
+                                  />
+                                )}
                             </div>
+                            
                             <div className="col-md-4">
                               <div className="form-group">
                                 <label htmlFor="exampleInputFile">Video</label>

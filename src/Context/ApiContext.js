@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-
+import  secureLocalStorage  from  "react-secure-storage";
 export const ApiContext = createContext();
 const API = "https://api.techdeveloper.in";
 export const AppProvider = ({ children }) => {
@@ -9,24 +9,25 @@ export const AppProvider = ({ children }) => {
   const [access, setAccess] = useState(false);
   const [name, setName] = useState("");
 
+
   const login = (userdata) => {
-    localStorage.setItem("isAuthenticated", true);
+    secureLocalStorage.setItem("isAuthenticated", true);
     console.warn(userdata);
-    localStorage.setItem("userinfo", JSON.stringify(userdata));
+    secureLocalStorage.setItem("userinfo", JSON.stringify(userdata));
     setIsAuthenticated(true);
   };
   const logout = () => {
-    localStorage.removeItem("isAuthenticated");
-    localStorage.removeItem("userinfo");
+    secureLocalStorage.removeItem("isAuthenticated");
+    secureLocalStorage.removeItem("userinfo");
     setIsAuthenticated(false);
   };
 
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem("isAuthenticated");
+    const isAuthenticated = secureLocalStorage.getItem("isAuthenticated");
     if (isAuthenticated) {
       setIsAuthenticated(true);
     }
-    const userinfoString = localStorage.getItem("userinfo");
+    const userinfoString = secureLocalStorage.getItem("userinfo");
     if (userinfoString) {
       const userinfoObject = JSON.parse(userinfoString);
       setUserInfo(userinfoObject);
