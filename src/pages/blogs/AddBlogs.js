@@ -39,66 +39,16 @@ const AddBlogs = () => {
   const [top, setTop] = useState([]);
 
   const getdata = () => {
-    setTop([
-      { Link: "TopKhabare", Name: "TopKhabare" },
-      { Link: "primenews", Name: "प्रमुख समाचार" },
-      { Link: "mainnews", Name: "बड़ी ख़बर" },
-      { Link: "idharbhi", Name: "जरा इधर भी" },
-    ]);
-    console.warn(top);
-
-    ApiCalls("blogdisplay")
-      .then((response) => {
-        const mergedData =
-          position === "all" ? response : selectedValue.concat(response);
-        // setSelectedValue(
-        //     response.map((item) => ({ value: item.SectionName, label: item.SectionName }))
-        // );
-        setSelectedValue((prevSelectedValue) => [
-          ...prevSelectedValue, // Previous state values
-          ...response.map((item) => ({
-            value: item.SectionName,
-            label: item.SectionName,
-          })), // New state values
-        ]);
-
-        // setMult(response.reverse());
-        // console.warn(response)
-        // console.warn(selectedValue)
-        // console.log(response)
-      })
-      .catch((error) => {
-        // Handle error
-      });
-
-    ApiCalls("rajiya")
-      .then((response) => {
-        // setSelectedOption(response.reverse());
-        // setSelectedValue(response)
-        // setSelectedValue(
-        //     response.map((item) => ({ value: item.StateName, label: item.StateName }))
-        // );
-        setSelectedValue((prevSelectedValue) => [
-          ...prevSelectedValue, // Previous state values
-          ...response.map((item) => ({
-            value: item.StateName,
-            label: item.StateName,
-          })), // New state values
-        ]);
-        // setSelectedOption(response)
-        console.warn(response);
-      })
-      .catch((error) => {
-        // Handle error
-      });
+    ApiCalls("categories").then((response) => {
+      setSelectedValue((prevSelectedValue) => [
+        ...prevSelectedValue, // Previous state values
+        ...response.map((item) => ({
+          value: item.category,
+          label: item.category,
+        })), // New state values
+      ]);
+    });
   };
-
-  useEffect(() => {
-    setSelectedValue((prevSelectedValue) => [
-      ...prevSelectedValue, // Previous state values
-      ...top.map((item) => ({ value: item.Link, label: item.Name })),
-    ]);
-  }, [top]);
 
   useEffect(() => {
     getdata();
@@ -119,18 +69,11 @@ const AddBlogs = () => {
 
   async function FormSubmit(event) {
     event.preventDefault();
-    // console.log(position);
 
     console.warn(inputs);
 
     const formData = await new FormData();
-    // formData.append('Category', selectedcategories);
-    // formData.append('Position', JSON.stringify(position));
-    // formData.append('StateName', inputs.StateName);
-
-    // if (inputs.reportername && inputs.reportername.length > 0) {
-    //     formData.append('ReporterName', inputs.reportername);
-    // }
+    
 
     if (inputs.reportername && inputs.reportername.length > 0) {
       formData.append("ReporterName", inputs.reportername);
@@ -158,11 +101,6 @@ const AddBlogs = () => {
       formData.append("Headline", inputs.Headline);
     }
 
-    // formData.append('Designation', inputs.designation);
-    // formData.append('DatePlace', inputs.place);
-    // formData.append('Heading', inputs.heading);
-    // formData.append('Capton', inputs.Capton);
-    // formData.append('Subheading', inputs.subheading);
     formData.append("Image1", image1[0]);
     formData.append("Image2", image2[0]);
     formData.append("Video", video[0]);
@@ -326,7 +264,21 @@ const AddBlogs = () => {
                             ) : (
                               <></>
                             )}
-
+                            <div className="col-md-12">
+                              <div class="form-group">
+                                <label for="exampleSelectRounded0">
+                                  Select Location for Display Khabar
+                                </label>
+                                <Select
+                                  id="selectOption"
+                                  name="Position"
+                                  // value={selectedcategories}
+                                  onChange={nhandleChange}
+                                  options={selectedValue}
+                                  isMulti
+                                />
+                              </div>
+                            </div>
                             <div className="col-md-12">
                               <div class="form-group">
                                 <label for="exampleInputFile">
@@ -471,7 +423,7 @@ const AddBlogs = () => {
                                   />
                                 )}
                             </div>
-                            
+
                             <div className="col-md-4">
                               <div className="form-group">
                                 <label htmlFor="exampleInputFile">Video</label>

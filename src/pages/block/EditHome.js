@@ -8,6 +8,7 @@ const EditHome = () => {
   const [image1, setimage1] = useState({});
   const [image2, setimage2] = useState({});
   const navigate = useNavigate();
+  const [selectedsection, SetSelctedsection] = useState("");
 
   const params = useParams();
   const { id } = params;
@@ -28,43 +29,76 @@ const EditHome = () => {
     getdata();
   }, []);
 
+  
+
   async function FormSubmit(event) {
     event.preventDefault();
     console.log(inputs);
 
     const formData = await new FormData();
 
-    // if (inputs.name && inputs.name.length > 0) {
-    formData.append("SectionName", inputs.SectionName);
-    // }
-    formData.append("SecondSection", inputs.SecondSection);
+    if (inputs.SectionName) {
+      formData.append("category", inputs.SectionName);
+    }
+
+    if (inputs.isHeader) {
+      formData.append("isHeader", inputs.isHeader);
+    }
+    if (selectedsection) {
+      formData.append("location", selectedsection);
+    }
+
+    if (inputs.SecondSection) {
+      formData.append("heading", inputs.SecondSection);
+    }
 
     if (inputs.background1) {
-      formData.append("background1", inputs.background1);
+      formData.append("categorybackground", inputs.background1);
     }
 
-    // Check if 'inputs.background2' exists
     if (inputs.background2) {
-      formData.append("background2", inputs.background2);
+      formData.append("headingbackground", inputs.background2);
     }
 
-    // Check if 'image1' array has data
     if (image1.length > 0) {
-      formData.append("Image1", image1[0]);
+      formData.append("categorylogo", image1[0]);
     }
 
     if (image2.length > 0) {
-      formData.append("Image2", image2[0]);
+      formData.append("headinglogo", image2[0]);
     }
 
-    let newres = await ApiCalls(
-      `blogdisplay/${params.id}`,
-      "PUT",
-      formData
-    ).then(() => {
+    let newres = await ApiCalls(`categories?location=${selectedsection}`, "PUT", formData).then(() => {
       alert("data add successfully");
     });
+
+    // try {
+    //   const response = await fetch(
+    //     `http://localhost:5000/api/categories?location=${selectedsection}`,
+    //     {
+    //       method: "PUT",
+    //       body: formData, // Pass the FormData object directly
+    //     }
+    //   );
+
+    //   if (!response.ok) {
+    //     throw new Error("Network response was not ok");
+    //   }
+
+    //   const responseData = await response.json();
+    //   console.log("Data sent successfully:", responseData);
+    //   alert("data add successfully");
+    //   // navigate('/top-links')
+    // } catch (error) {
+    //   console.error("Error sending data:", error);
+    // }
   }
+
+  const showsection = (e) => {
+    const section = e.target.value;
+    console.warn(section);
+    SetSelctedsection(section);
+  };
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -85,7 +119,7 @@ const EditHome = () => {
             <div className="col-md-12">
               <div className="card card-primary">
                 <div className="card-header">
-                  <h3 className="card-title">Edit Block </h3>
+                  <h3 className="card-title">Edit Block</h3>
                 </div>
                 <form onSubmit={() => FormSubmit}>
                   <div className="card-body">

@@ -1,15 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import ApiCalls from "../../ApiCalls/ApiCalls";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { ApiContext } from "../../Context/ApiContext";
 
 const Home = () => {
+  const params = useParams();
   const { API, access, type } = useContext(ApiContext);
   const [bannerdata, setbannerdata] = useState([]);
-  const [blogs, setBlogs] = useState([]);
-  const [category, setCategory] = useState([]);
-
+const [selectedsection, SetSelctedsection] = useState('')
   const [isVisible, setIsVisible] = useState({});
 
   const toggleVisibility = async (id, status) => {
@@ -30,22 +29,18 @@ const Home = () => {
     );
   };
 
-  const [id, setid] = useState("");
-  const containers = ["A", "B", "C"];
   const [parent, setParent] = useState(null);
+
   const getdata = () => {
-    ApiCalls("blogdisplay")
+    ApiCalls(`categories?location=${selectedsection}`)
       .then((response) => {
         setbannerdata(response);
+        console.warn(response);
       })
-      .catch((error) => {
-        // Handle error
-      });
+      .catch((error) => {});
   };
 
-  useEffect(() => {
-    getdata();
-  }, []);
+ 
 
   const Delethandler = (id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete?");
@@ -82,7 +77,7 @@ const Home = () => {
     // Check if user confirmed the deletion
     if (isConfirmed) {
       try {
-        const response = await fetch(`${API}/api/blogdisplay`, {
+        const response = await fetch(`${API}/api/categories`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -112,7 +107,7 @@ const Home = () => {
 
     if (isConfirmed) {
       try {
-        const response = await fetch("${API}/api/blogdisplay", {
+        const response = await fetch("${API}/api/categories", {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -134,14 +129,37 @@ const Home = () => {
     }
   };
 
+  const showsection = (e) => {
+    
+    const section = e.target.value
+    ApiCalls(`categories?location=${section}`)
+      .then((response) => {
+        setbannerdata(response);
+        console.warn(response);
+      })
+      .catch((error) => {});
+      SetSelctedsection(section)
+  };
+
   return (
     <div className="content-wrapper">
-
       <section className="content">
         <div className="card">
           <div className="card-header">
             <div className="card-title w-100 text-center">
-            <h4 className="text-center">Block Name Manager</h4>
+            <h4 className="text-center">Section Manager</h4>
+              <div className="d-grid mb-3">
+                <label htmlFor="" className="fs-4">
+                  Please Select Section
+                </label>
+                <select class="custom-select w-25 mx-auto"  onChange={showsection}>
+                <option disabled selected>Select</option>
+                  <option value="title">Top Section</option>
+                  <option value="block">Block</option>
+                  <option value="state">State</option>
+                </select>
+              </div>
+             
 
               <NavLink
                 to={""}
@@ -157,13 +175,14 @@ const Home = () => {
               >
                 Hide
               </NavLink>
-              {access === true || type === 'admin' ? (
-              <NavLink
-                className="fw-bold btn btn-danger btn-sm ms-2"
-                onClick={handleDeleteSelected}
-              >
-                Delete
-              </NavLink>):null} 
+              {access === true || type === "admin" ? (
+                <NavLink
+                  className="fw-bold btn btn-danger btn-sm ms-2"
+                  onClick={handleDeleteSelected}
+                >
+                  Delete
+                </NavLink>
+              ) : null}
             </div>
           </div>
           <div className="card-body p-0">
@@ -228,7 +247,7 @@ const Home = () => {
                       <strong>{key + 1}</strong>
                     </td>
                     <td>
-                      <strong>{item.SectionName}</strong>
+                      <strong>{item.category}</strong>
                     </td>
 
                     <td className="project-actions text-right">
@@ -251,7 +270,7 @@ const Home = () => {
                       >
                         Edit
                       </NavLink>
-                      {access === true || type === 'admin' ? (
+                      {access === true || type === "admin" ? (
                         <NavLink
                           className="btn btn-danger btn-sm ms-2 fw-bold"
                           onClick={() => Delethandler(item._id)}

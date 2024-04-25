@@ -113,14 +113,18 @@ const Nav = () => {
                 </ul>
               </li>
             )}
-            {type === "admin" ? (
-              <li>
-                <NavLink to={`/addrajiya`} className="nav-link">
-                  Colors Thems Manager
-                </NavLink>
-              </li>
-            ) : null}
-
+            <li className="nav-item dropdown">
+              <NavLink className="nav-link dropdown-toggle">Multimedia</NavLink>
+              <ul className="dropdown-menu ">
+                {type === "admin" ? (
+                  <li>
+                    <NavLink to={`/addrajiya`} className="dropdown-item">
+                      Colors Thems Manager
+                    </NavLink>
+                  </li>
+                ) : null}
+              </ul>
+            </li>
             <li className="nav-item dropdown">
               <NavLink className="nav-link dropdown-toggle">
                 Ads Block/ Poll Section
@@ -148,17 +152,15 @@ const Nav = () => {
                 </li>
               </ul>
             </li>
-            <li className="nav-item dropdown">
-              <NavLink className="nav-link dropdown-toggle">Multimedia</NavLink>
-            </li>
+           
             <li className="nav-item">
-              <NavLink to={`/add-blogs/all`} className="nav-link">
+              <NavLink to={`/add-blogs`} className="nav-link">
                 Add News
               </NavLink>
             </li>
             <li className="nav-item dropdown">
               <NavLink className="nav-link dropdown-toggle">
-                Top New section Manger
+                Link Manager
               </NavLink>
               <ul className="dropdown-menu">
                 <li>
@@ -166,24 +168,25 @@ const Nav = () => {
                     Header Tagline
                   </NavLink>
                 </li>
-                <li>
+                {/* <li>
                   <NavLink to={`/blogs/primenews`} className="dropdown-item">
                     Home News Manager
                   </NavLink>
-                </li>
+                </li> */}
                 {type === "admin" ? (
-                <li>
-                  <NavLink to={`/top-links`} className="dropdown-item">
-                    Master Link Manager
-                  </NavLink>
-                </li>):null}
-                <li>
-                  <NavLink to={`/blogs/TopKhabare`} className="dropdown-item">
+                  <li>
+                    <NavLink to={`/top-links`} className="dropdown-item">
+                      Master Link Manager
+                    </NavLink>
+                  </li>
+                ) : null}
+                {/* <li>
+                  <NavLink to={`/blogs`} className="dropdown-item">
                     Scroll News Manager
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to={`/blogs/idharbhi`} className="dropdown-item">
+                  <NavLink to={`/blogs`} className="dropdown-item">
                     Jara Idharbhi
                   </NavLink>
                 </li>
@@ -191,10 +194,10 @@ const Nav = () => {
                   <NavLink to={`/blogs/mainnews`} className="dropdown-item">
                     Badi Khabar
                   </NavLink>
-                </li>
+                </li> */}
               </ul>
             </li>
-            <li className="nav-item dropdown">
+            {/* <li className="nav-item dropdown">
               <NavLink className="nav-link dropdown-toggle">State News</NavLink>
               <ul className="dropdown-menu">
                 <li>
@@ -217,11 +220,11 @@ const Nav = () => {
                   </>
                 ) : null}
               </ul>
-            </li>
+            </li> */}
 
             <li className="nav-item dropdown">
               <NavLink className="nav-link dropdown-toggle">
-                Block Section
+                News Section
               </NavLink>
               <ul className="dropdown-menu">
                 <li>
@@ -233,19 +236,18 @@ const Nav = () => {
                   <>
                     <li>
                       <NavLink to={`/homeview`} className="dropdown-item">
-                        Add Block Name
+                        Add Section Block
                       </NavLink>
                     </li>
                     <li>
                       <NavLink to={`/home`} className="dropdown-item">
-                        Block Name Manger
+                        Section Manger
                       </NavLink>
                     </li>
                   </>
                 ) : null}
               </ul>
             </li>
-            
 
             {/* <li className="nav-item dropdown">
                 <a

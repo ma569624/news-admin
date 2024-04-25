@@ -30,63 +30,30 @@ const EditBlogs = () => {
 
   // Run the effect whenever 'muti' changes
 
-  const getdata = async () => {
-    setTop([
-      { Link: "TopKhabare", Name: "TopKhabare" },
-      { Link: "primenews", Name: "प्रमुख समाचार" },
-      { Link: "mainnews", Name: "बड़ी ख़बर" },
-      { Link: "idharbhi", Name: "जरा इधर भी" },
-    ]);
-    ApiCalls(`blogs?&_id=${id}`)
+  const getdata = () => {
+    
+    ApiCalls("categories")
       .then((response) => {
-        setInputs(response.data[0]);
-       
-        setContent(response.data[0].Matter);
-      })
-      .catch((error) => {
-        // Handle error
-      });
-
-    ApiCalls("blogdisplay")
-      .then((response) => {
+        
         setSelectedValue((prevSelectedValue) => [
           ...prevSelectedValue, // Previous state values
-          ...response.map((item) => ({
-            value: item.SectionName,
-            label: item.SectionName,
+          ...response.data.map((item) => ({
+            value: item.category,
+            label: item.category,
           })), // New state values
         ]);
-      })
-      .catch((error) => {
-        // Handle error
-      });
 
-    ApiCalls("rajiya")
-      .then((response) => {
-        setSelectedValue((prevSelectedValue) => [
-          ...prevSelectedValue, // Previous state values
-          ...response.map((item) => ({
-            value: item.StateName,
-            label: item.StateName,
-          })), // New state values
-        ]);
       })
       .catch((error) => {
         // Handle error
       });
   };
 
-  useEffect(() => {
-    setSelectedValue((prevSelectedValue) => [
-      ...prevSelectedValue, // Previous state values
-      ...top.map((item) => ({ value: item.Link, label: item.Name })),
-    ]);
-  }, [top]);
+  
 
   useEffect(() => {
     getdata();
   }, []);
-  console.warn(inputs)
 
   async function FormSubmit(event) {
     event.preventDefault();

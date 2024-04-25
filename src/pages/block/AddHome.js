@@ -1,220 +1,248 @@
-import React, { useEffect, useState } from 'react'
-import ApiCalls from '../../ApiCalls/ApiCalls'
-
+import React, { useEffect, useState } from "react";
+import ApiCalls from "../../ApiCalls/ApiCalls";
 
 const AddHome = () => {
+  const [inputs, setInputs] = useState({});
+  const [image1, setimage1] = useState({});
+  const [image2, setimage2] = useState({});
+  const [selectedsection, SetSelctedsection] = useState("");
 
-    const [inputs, setInputs] = useState({})
-    const [image1, setimage1] = useState({})
-    const [image2, setimage2] = useState({})
+  async function FormSubmit(event) {
+    event.preventDefault();
+    console.log(inputs);
+
+    const formData = await new FormData();
 
     
-
-    async function FormSubmit(event) {
-
-        event.preventDefault();
-        console.log(inputs);
-
-        const formData = await new FormData();
-
-        formData.append('SectionName', inputs.SectionName);
-
-        formData.append('SecondSection', inputs.SecondSection);
-
-
-        if (inputs.background1) {
-            formData.append('background1', inputs.background1);
-        }
-        
-        if (inputs.background2) {
-            formData.append('background2', inputs.background2);
-        }
-        
-        if (image1.length > 0) {
-            formData.append('Image1', image1[0]);
-        }
-        
-        if (image2.length > 0) {
-            formData.append('Image2', image2[0]);
-        }
-
-        let newres = await ApiCalls(`blogdisplay`, 'POST', formData).then(() => {
-            alert("data add successfully")
-        })
-        
-        // try {
-        //     const response = await fetch(`https://news-backend-production.up.railway.app/api/blogdisplay/${params.id}`, {
-        //         method: 'PUT',
-        //         body: formData // Pass the FormData object directly
-        //     });
-
-        //     if (!response.ok) {
-        //         throw new Error('Network response was not ok');
-        //     }
-
-        //     const responseData = await response.json();
-        //     console.log('Data sent successfully:', responseData);
-        //     alert("data add successfully")
-        //     // navigate('/top-links')
-        // } catch (error) {
-        //     console.error('Error sending data:', error);
-        // }
-
-        // let newres = await Api(`/api/blogdisplay/${id}`, 'PUT', inputs).then(() => {
-        //     alert("data add successfully")
-        //     // navigate('/');
-        // })
-
-
+    if (inputs.SectionName) {
+      formData.append("category", inputs.SectionName);
+    }
+    
+    if (inputs.isHeader) {
+      formData.append("isHeader", inputs.isHeader);
+    }
+    if(selectedsection){
+      formData.append("location", selectedsection);
     }
 
-    const handleChange = (event) => {
-
-        const name = event.target.name;
-        const value = event.target.value;
-        const checked = event.target.checked;
-        setInputs({ ...inputs, [name]: value })
-
-        if (name === "isHeader") {
-            setInputs({ ...inputs, [name]: checked }); // Update the checkbox state only if its name is "isHeader"
-        }
-        // console.warn(inputs)
+    if (inputs.SecondSection) {
+      formData.append("heading", inputs.SecondSection);
     }
 
+    if (inputs.background1) {
+      formData.append("categorybackground", inputs.background1);
+    }
 
+    if (inputs.background2) {
+      formData.append("headingbackground", inputs.background2);
+    }
 
-    return (
-                <div className="content-wrapper">
-                    <section className="content mt-4">
-                        <div className="container-fluid">
-                            <div className="row">
-                                <div className="col-md-12">
-                                    <div className="card card-primary">
-                                        <div className="card-header">
-                                            <h3 className="card-title">Add Block Manager</h3>
-                                        </div>
-                                        <form onSubmit={() => FormSubmit} >
+    if (image1.length > 0) {
+      formData.append("categorylogo", image1[0]);
+    }
 
-                                            <div className="card-body">
+    if (image2.length > 0) {
+      formData.append("headinglogo", image2[0]);
+    }
 
-                                                <div className="row">
-                                                    <div className="col-md-12">
-                                                        <div class="form-group">
-                                                            <label>Section Name</label>
-                                                            <input
-                                                                name='SectionName'
-                                                                type="text"
-                                                                class="form-control"
-                                                                placeholder="Enter Your Section Name"
-                                                                onChange={handleChange}
-                                                                value={inputs.SectionName}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="form-group">
-                                                        <label htmlFor="exampleInputEmail1">Background Color change</label>
-                                                        <input
-                                                            onChange={handleChange}
-                                                            name="background1"
-                                                            type="color"
-                                                            style={{maxWidth: '99px'}}
-                                                            value={inputs.background1}
-                                                            class="form-control"
-                                                            placeholder="Enter Your Name"
-                                                        />
-                                                    </div>
-                                                    <div className="form-group">
-                                                        <label htmlFor="exampleInputEmail1">Select A logo</label>
+    // let newres = await ApiCalls(`categories?location=${selectedsection}`, "POST", formData).then(() => {
+    //   alert("data add successfully");
+    // });
 
-                                                        <input
-                                                            onChange={(e) => setimage1(e.target.files)}
-                                                            name="file"
-                                                            type="file"
-                                                            class="form-control"
-                                                            placeholder="Enter Your Name"
-                                                            id="reporterimage"
-                                                            size={60}
-                                                            maxLength={70}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                   
-                                                    <div className="row">
-                                                        <div className="col-md-12">
-                                                            <h5>other</h5>
-                                                        </div>
-                                                        <div className="col-md-12">
-                                                            <div class="form-group">
-                                                                <label for="exampleSelectRounded0">Section Name</label>
-                                                                <input
-                                                                    name="SecondSection"
-                                                                    type="text"
-                                                                    class="form-control"
-                                                                    placeholder="Enter Your Section Name"
-                                                                    onChange={handleChange}
-                                                                    value={inputs.SecondSection}
-                                                                />
+    try {
+        const response = await fetch(`https://api.techdeveloper.in/api/categories?location=${selectedsection}`, {
+            method: 'POST',
+            body: formData // Pass the FormData object directly
+        });
 
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-md-12">
-                                                            <div class="form-check">
-                                                                <input type="checkbox"
-                                                                    name="isHeader"
-                                                                    onChange={handleChange}
-                                                                    value={inputs.isHeader}
-                                                                    checked={inputs.isHeader}
-                                                                    class="form-check-input"
-                                                                    id="exampleCheck1" />
-                                                                <label for="exampleCheck1">Menu</label>
-                                                            </div>
-                                                        </div>
-                                                        <div className="form-group">
-                                                            <label htmlFor="exampleInputEmail1">Background Color change</label>
-                                                            <input
-                                                                onChange={handleChange}
-                                                                name="background2"
-                                                                type="color"
-                                                                style={{maxWidth: '99px'}}
-                                                                value={inputs.background2}
-                                                                class="form-control"
-                                                                placeholder="Enter Your Name"
-                                                            />
-                                                        </div>
-                                                        <div className="form-group">
-                                                            <label htmlFor="exampleInputEmail1">Select A logo</label>
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
 
-                                                            <input
-                                                                onChange={(e) => setimage2(e.target.files)}
-                                                                name="file"
-                                                                type="file"
-                                                                class="form-control"
-                                                                placeholder="Enter Your Name"
-                                                                id="reporterimage"
-                                                                size={60}
-                                                                maxLength={70}
-                                                            />
-                                                        </div>
+        const responseData = await response.json();
+        console.log('Data sent successfully:', responseData);
+        alert("data add successfully")
+        // navigate('/top-links')
+    } catch (error) {
+        console.error('Error sending data:', error);
+    }
 
-                                                    </div>
-                                                </div>
+   
+  }
 
-                                            </div>
-                                            <div className="card-footer">
-                                                <button type="submit" onClick={FormSubmit} className="btn btn-primary">
-                                                    Submit
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
+  const showsection = (e) => {
+    const section = e.target.value;
+    console.warn(section)
+    SetSelctedsection(section);
+  };
+
+  const handleChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    const checked = event.target.checked;
+    setInputs({ ...inputs, [name]: value });
+
+    if (name === "isHeader") {
+      setInputs({ ...inputs, [name]: checked }); // Update the checkbox state only if its name is "isHeader"
+    }
+  };
+
+  return (
+    <div className="content-wrapper">
+      <section className="content mt-4">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-md-12">
+              <div className="card card-primary">
+                <div className="card-header">
+                  <h3 className="card-title">Add Section Block</h3>
                 </div>
-           
-    )
-}
+                <form onSubmit={() => FormSubmit}>
+                  <div className="card-body">
+                    <div className="row">
+                      <div className="col-md-12">
+                      <label htmlFor="" className="fs-4">
+                          Select Section
+                        </label>
+                        <select
+                          class="custom-select mx-auto form-control"
+                          onChange={showsection}
+                        >
+                          <option disabled selected>
+                            Select
+                          </option>
+                          <option value="block">Block</option>
+                          <option value="state">State</option>
+                        </select>
+                      </div>
+                      <div className="col-md-12">
+                        <div class="form-group">
+                          <label>{selectedsection} Name</label>
+                          <input
+                            name="SectionName"
+                            type="text"
+                            class="form-control"
+                            placeholder="Enter Your Section Name"
+                            onChange={handleChange}
+                            value={inputs.SectionName}
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="exampleInputEmail1">
+                          Background Color change
+                        </label>
+                        <input
+                          onChange={handleChange}
+                          name="background1"
+                          type="color"
+                          style={{ maxWidth: "99px" }}
+                          value={inputs.background1}
+                          class="form-control"
+                          placeholder="Enter Your Name"
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="exampleInputEmail1">
+                          Select A logo
+                        </label>
 
-export default AddHome
+                        <input
+                          onChange={(e) => setimage1(e.target.files)}
+                          name="file"
+                          type="file"
+                          class="form-control"
+                          placeholder="Enter Your Name"
+                          id="reporterimage"
+                          size={60}
+                          maxLength={70}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <div className="row">
+                        <div className="col-md-12">
+                          <h5>other</h5>
+                        </div>
+                        <div className="col-md-12">
+                          <div class="form-group">
+                            <label for="exampleSelectRounded0">
+                              {selectedsection} Name
+                            </label>
+                            <input
+                              name="SecondSection"
+                              type="text"
+                              class="form-control"
+                              placeholder="Enter Your Section Name"
+                              onChange={handleChange}
+                              value={inputs.SecondSection}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-md-12">
+                          <div class="form-check">
+                            <input
+                              type="checkbox"
+                              name="isHeader"
+                              onChange={handleChange}
+                              value={inputs.isHeader}
+                              checked={inputs.isHeader}
+                              class="form-check-input"
+                              id="exampleCheck1"
+                            />
+                            <label for="exampleCheck1">Menu</label>
+                          </div>
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="exampleInputEmail1">
+                            Background Color change
+                          </label>
+                          <input
+                            onChange={handleChange}
+                            name="background2"
+                            type="color"
+                            style={{ maxWidth: "99px" }}
+                            value={inputs.background2}
+                            class="form-control"
+                            placeholder="Enter Your Name"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="exampleInputEmail1">
+                            Select A logo
+                          </label>
+
+                          <input
+                            onChange={(e) => setimage2(e.target.files)}
+                            name="file"
+                            type="file"
+                            class="form-control"
+                            placeholder="Enter Your Name"
+                            id="reporterimage"
+                            size={60}
+                            maxLength={70}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-footer">
+                    <button
+                      type="submit"
+                      onClick={FormSubmit}
+                      className="btn btn-primary"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default AddHome;
