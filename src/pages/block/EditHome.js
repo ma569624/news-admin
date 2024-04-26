@@ -15,10 +15,10 @@ const EditHome = () => {
   console.log(id);
 
   const getdata = () => {
-    ApiCalls(`blogdisplay?_id=${id}`)
+    ApiCalls(`categories?id=${id}`)
       .then((response) => {
         setInputs(response[0]);
-        console.warn(response);
+        console.warn(response[0]);
       })
       .catch((error) => {
         // Handle error
@@ -37,29 +37,14 @@ const EditHome = () => {
 
     const formData = await new FormData();
 
-    if (inputs.SectionName) {
-      formData.append("category", inputs.SectionName);
+    for (const key in inputs) {
+      if (inputs.hasOwnProperty(key)) {
+        formData.append(key, inputs[key]);
+      }
     }
-
-    if (inputs.isHeader) {
-      formData.append("isHeader", inputs.isHeader);
-    }
-    if (selectedsection) {
-      formData.append("location", selectedsection);
-    }
-
-    if (inputs.SecondSection) {
-      formData.append("heading", inputs.SecondSection);
-    }
-
-    if (inputs.background1) {
-      formData.append("categorybackground", inputs.background1);
-    }
-
-    if (inputs.background2) {
-      formData.append("headingbackground", inputs.background2);
-    }
-
+    
+      // formData.append("location", selectedsection);
+    
     if (image1.length > 0) {
       formData.append("categorylogo", image1[0]);
     }
@@ -68,30 +53,30 @@ const EditHome = () => {
       formData.append("headinglogo", image2[0]);
     }
 
-    let newres = await ApiCalls(`categories?location=${selectedsection}`, "PUT", formData).then(() => {
-      alert("data add successfully");
-    });
-
-    // try {
-    //   const response = await fetch(
-    //     `http://localhost:5000/api/categories?location=${selectedsection}`,
-    //     {
-    //       method: "PUT",
-    //       body: formData, // Pass the FormData object directly
-    //     }
-    //   );
-
-    //   if (!response.ok) {
-    //     throw new Error("Network response was not ok");
-    //   }
-
-    //   const responseData = await response.json();
-    //   console.log("Data sent successfully:", responseData);
+    // let newres = await ApiCalls(`categories/${id}`, "PUT", formData).then(() => {
     //   alert("data add successfully");
-    //   // navigate('/top-links')
-    // } catch (error) {
-    //   console.error("Error sending data:", error);
-    // }
+    // });
+
+    try {
+      const response = await fetch(
+        `https://api.techdeveloper.in/api/categories/${id}`,
+        {
+          method: "PUT",
+          body: formData, // Pass the FormData object directly
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const responseData = await response.json();
+      console.log("Data sent successfully:", responseData);
+      alert("data add successfully");
+      // navigate('/top-links')
+    } catch (error) {
+      console.error("Error sending data:", error);
+    }
   }
 
   const showsection = (e) => {
@@ -128,12 +113,12 @@ const EditHome = () => {
                         <div class="form-group">
                           <label>Section Name</label>
                           <input
-                            name="SectionName"
+                            name="category"
                             type="text"
                             class="form-control"
                             placeholder="Enter Your Section Name"
                             onChange={handleChange}
-                            value={inputs.SectionName}
+                            value={inputs.category}
                           />
                         </div>
                       </div>
@@ -143,10 +128,10 @@ const EditHome = () => {
                         </label>
                         <input
                           onChange={handleChange}
-                          name="background1"
+                          name="categorybackground"
                           type="color"
                           style={{ maxWidth: "99px" }}
-                          value={inputs.background1}
+                          value={inputs.categorybackground}
                           class="form-control"
                           placeholder="Enter Your Name"
                         />
@@ -169,65 +154,7 @@ const EditHome = () => {
                       </div>
                     </div>
                     <div>
-                      {/* <div className="row">
-                                                        <div className="col-md-12">
-                                                            <div class="form-group">
-                                                                <label for="exampleSelectRounded0">First Link's Name</label>
-                                                                <select class="custom-select rounded-0" name="FirstLink" value={inputs.FirstLink} id="exampleSelectRounded0" onChange={handleChange}>
-                                                                    <option selected disabled>Please Select</option>
-                                                                    {
-                                                                        selectedValue.map((item) => <option value={item._id}>{item.Heading}</option>)
-                                                                    }
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-md-12">
-                                                            <div class="form-group">
-                                                                <label for="exampleSelectRounded0">Second Link's Name</label>
-                                                                <select class="custom-select rounded-0" name="SecondLink" value={inputs.SecondLink} id="exampleSelectRounded0" onChange={handleChange}>
-                                                                    <option selected disabled>Please Select</option>
-                                                                    {
-                                                                        selectedValue.map((item) => <option value={item._id}>{item.Heading}</option>)
-                                                                    }
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-md-12">
-
-                                                            <div class="form-group">
-                                                                <label for="exampleSelectRounded0">Third Link's Name</label>
-                                                                <select class="custom-select rounded-0" name="ThirdLink" value={inputs.ThirdLink} id="exampleSelectRounded0" onChange={handleChange}>
-                                                                    <option selected disabled>Please Select</option>
-                                                                    {
-                                                                        selectedValue.map((item) => <option value={item._id}>{item.Heading}</option>)
-                                                                    }
-                                                                </select>
-                                                            </div>
-
-                                                        </div>
-                                                        <div className="col-md-12">
-                                                            <div class="form-group">
-                                                                <label for="exampleSelectRounded0">Forth Link's Name</label>
-                                                                <select class="custom-select rounded-0" name="ForthLink" value={inputs.ForthLink} id="exampleSelectRounded0" onChange={handleChange}>
-                                                                    <option selected disabled>Please Select</option>
-                                                                    {
-                                                                        selectedValue.map((item) => <option value={item._id}>{item.Heading}</option>)
-                                                                    }
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-md-12">
-                                                            <div class="form-group">
-                                                                <label for="exampleSelectRounded0">Five Link's Name</label>
-                                                                <select class="custom-select rounded-0" name="FiveLink" value={inputs.FiveLink} id="exampleSelectRounded0" onChange={handleChange}>
-                                                                    <option selected disabled>Please Select</option>
-                                                                    {
-                                                                        selectedValue.map((item) => <option value={item._id}>{item.Heading}</option>)
-                                                                    }
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div> */}
+                    
                       <div className="row">
                         <div className="col-md-12">
                           <h5>other</h5>
@@ -238,16 +165,17 @@ const EditHome = () => {
                               Section Name
                             </label>
                             <input
-                              name="SecondSection"
+                              name="heading"
                               type="text"
                               class="form-control"
                               placeholder="Enter Your Section Name"
                               onChange={handleChange}
-                              value={inputs.SecondSection}
+                              value={inputs.heading}
                             />
                           </div>
                         </div>
-                        <div className="col-md-12">
+                        {inputs.location == 'block' ? (
+                          <div className="col-md-12">
                           <div class="form-check">
                             <input
                               type="checkbox"
@@ -261,16 +189,19 @@ const EditHome = () => {
                             <label for="exampleCheck1">Menu</label>
                           </div>
                         </div>
+                        ) : <></>
+                        }
+                        
                         <div className="form-group">
                           <label htmlFor="exampleInputEmail1">
                             Background Color
                           </label>
                           <input
                             onChange={handleChange}
-                            name="background2"
+                            name="headingbackground"
                             type="color"
                             style={{ maxWidth: "99px" }}
-                            value={inputs.background2}
+                            value={inputs.headingbackground}
                             class="form-control"
                             placeholder="Enter Your Name"
                           />

@@ -106,7 +106,7 @@ const Home = () => {
 
     if (isConfirmed) {
       try {
-        const response = await fetch("${API}/api/multicategories", {
+        const response = await fetch(`${API}/api/multicategories`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",

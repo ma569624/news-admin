@@ -26,18 +26,25 @@ const EditBlogs = () => {
   });
   const [image1, setimage1] = useState({});
   const [image2, setimage2] = useState({});
-  const [top, setTop] = useState([]);
 
   // Run the effect whenever 'muti' changes
 
   const getdata = () => {
-    
+    ApiCalls(`blogs?_id=${id}`)
+    .then((response) => {
+     setInputs(response.data[0])
+     setContent(response.data[0].Matter)
+     console.warn(response)
+    })
+    .catch((error) => {
+      // Handle error
+    });
+
     ApiCalls("categories")
       .then((response) => {
-        
         setSelectedValue((prevSelectedValue) => [
           ...prevSelectedValue, // Previous state values
-          ...response.data.map((item) => ({
+          ...response.map((item) => ({
             value: item.category,
             label: item.category,
           })), // New state values
@@ -108,7 +115,7 @@ const EditBlogs = () => {
 
     let newres = await ApiCalls(`blogs/${id}`, "PUT", formData).then(() => {
       alert("data add successfully");
-      navigate(`/blogs/${category}?nfsn`);
+      navigate(`/blogs/${category}`);
     });
 
     console.log("FormData:", formData);

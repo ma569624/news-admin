@@ -324,7 +324,7 @@ const Blogs = () => {
                         <></>
                       ) : (
                         <NavLink
-                          to={`/edit-blogs/${item._id}/${PositionName}?dgd`}
+                          to={`/edit-blogs/${item._id}`}
                           className=" fw-bold btn btn-info btn-sm"
                         >
                           Edit

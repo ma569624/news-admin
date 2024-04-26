@@ -54,7 +54,7 @@ const Router = () => {
                 <Route path="/blogs" element={<Blogs />} />
                 <Route path="/add-blogs" element={<AddBlogs />} />
                 <Route
-                  path="/edit-blogs/:id/:category"
+                  path="/edit-blogs/:id"
                   element={<EditBlogs />}
                 />
 
