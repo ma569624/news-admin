@@ -17,7 +17,9 @@ const AddHome = () => {
         formData.append(key, inputs[key]);
       }
     }
-
+    if (image1.length > 0) {
+      formData.append("location", selectedsection);
+    }
     if (image1.length > 0) {
       formData.append("categorylogo", image1[0]);
     }
