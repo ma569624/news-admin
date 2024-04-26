@@ -21,7 +21,7 @@ const Home = () => {
     console.warn(status);
     console.warn(isVisible);
     formData.append("Status", isVisible);
-    let newres = await ApiCalls(`blogdisplay/${id}`, "PUT", formData).then(
+    let newres = await ApiCalls(`categories/${id}`, "PUT", formData).then(
       () => {
         alert("data add successfully");
         getdata();
@@ -44,7 +44,7 @@ const Home = () => {
     const confirmDelete = window.confirm("Are you sure you want to delete?");
 
     if (confirmDelete) {
-      ApiCalls(`blogdisplay/${id}`, "DELETE")
+      ApiCalls(`categories/${id}`, "DELETE")
         .then((response) => {
           window.location.reload();
           alert("Successfully deleted");
@@ -55,6 +55,7 @@ const Home = () => {
         });
     }
   };
+
   const [selectedItems, setSelectedItems] = useState([]);
 
   const handleCheckboxChange = (itemId) => {
@@ -75,7 +76,7 @@ const Home = () => {
     // Check if user confirmed the deletion
     if (isConfirmed) {
       try {
-        const response = await fetch(`${API}/api/categories`, {
+        const response = await fetch(`${API}/api/multicategories`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -105,7 +106,7 @@ const Home = () => {
 
     if (isConfirmed) {
       try {
-        const response = await fetch("${API}/api/categories", {
+        const response = await fetch("${API}/api/multicategories", {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -161,7 +162,9 @@ const Home = () => {
                   <option value="state">State</option>
                 </select>
               </div>
-
+              {selectedsection === "title" ? 
+                        <></> :
+              <>
               <NavLink
                 to={""}
                 className={`btn ms-2 me-2 fw-bold btn-sm btn-success`}
@@ -169,6 +172,7 @@ const Home = () => {
               >
                 show
               </NavLink>
+              
               <NavLink
                 to={""}
                 className={`btn ms-2 me-2 fw-bold btn-sm btn-primary`}
@@ -184,6 +188,9 @@ const Home = () => {
                   Delete
                 </NavLink>
               ) : null}
+              </>
+
+              }
             </div>
           </div>
           <div className="card-body p-0">
@@ -252,6 +259,9 @@ const Home = () => {
                     </td>
 
                     <td className="project-actions text-right">
+                    {selectedsection === "title" ? 
+                        <></>
+                       :
                       <NavLink
                         to={""}
                         className={`btn me-3 fw-bold btn-sm ${
@@ -264,6 +274,7 @@ const Home = () => {
                         {/* {isVisible ? 'Hide' : 'Show'} */}
                         {item.Status == "active" ? "Hide" : "Show"}
                       </NavLink>
+                    }
 
                       <NavLink
                         to={`/home/${item._id}`}

@@ -99,18 +99,40 @@ const AddHome = () => {
                         </select>
                       </div>
                       <div className="col-md-12">
-                        <div class="form-group">
-                          <label>{selectedsection} Name</label>
+                          <div class="form-group">
+                            <label>{selectedsection} Name</label>
+                            <input
+                              name="category"
+                              type="text"
+                              class="form-control"
+                              placeholder="Enter Your Section Name"
+                              onChange={handleChange}
+                              value={inputs.category}
+                              disabled={!selectedsection}
+                            />
+                          </div>
+                        </div>
+                      {selectedsection == "block" ? (
+                        <div className="col-md-12">
+                        <div class="form-check">
                           <input
-                            name="category"
-                            type="text"
-                            class="form-control"
-                            placeholder="Enter Your Section Name"
+                            type="checkbox"
+                            name="isHeader"
                             onChange={handleChange}
-                            value={inputs.category}
+                            value={inputs.isHeader}
+                            checked={inputs.isHeader}
+                            class="form-check-input"
+                            id="exampleCheck1"
+                            disabled={!selectedsection}
                           />
+                          <label for="exampleCheck1">Menu</label>
                         </div>
                       </div>
+                      ) : (
+                        <></>
+                      )}
+
+                      
                       <div className="form-group">
                         <label htmlFor="exampleInputEmail1">
                           Background Color change
@@ -123,6 +145,7 @@ const AddHome = () => {
                           value={inputs.categorybackground}
                           class="form-control"
                           placeholder="Enter Your Name"
+                          disabled={!selectedsection}
                         />
                       </div>
                       <div className="form-group">
@@ -139,6 +162,7 @@ const AddHome = () => {
                           id="reporterimage"
                           size={60}
                           maxLength={70}
+                          disabled={!selectedsection}
                         />
                       </div>
                     </div>
@@ -159,23 +183,11 @@ const AddHome = () => {
                               placeholder="Enter Your Section Name"
                               onChange={handleChange}
                               value={inputs.heading}
+                              disabled={!selectedsection}
                             />
                           </div>
                         </div>
-                        <div className="col-md-12">
-                          <div class="form-check">
-                            <input
-                              type="checkbox"
-                              name="isHeader"
-                              onChange={handleChange}
-                              value={inputs.isHeader}
-                              checked={inputs.isHeader}
-                              class="form-check-input"
-                              id="exampleCheck1"
-                            />
-                            <label for="exampleCheck1">Menu</label>
-                          </div>
-                        </div>
+
                         <div className="form-group">
                           <label htmlFor="exampleInputEmail1">
                             Background Color change
@@ -188,6 +200,7 @@ const AddHome = () => {
                             value={inputs.headingbackground}
                             class="form-control"
                             placeholder="Enter Your Name"
+                            disabled={!selectedsection}
                           />
                         </div>
                         <div className="form-group">
@@ -204,6 +217,7 @@ const AddHome = () => {
                             id="reporterimage"
                             size={60}
                             maxLength={70}
+                            disabled={!selectedsection}
                           />
                         </div>
                       </div>
@@ -214,6 +228,7 @@ const AddHome = () => {
                       type="submit"
                       onClick={FormSubmit}
                       className="btn btn-primary"
+                      disabled={!selectedsection}
                     >
                       Submit
                     </button>
