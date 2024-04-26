@@ -9,32 +9,13 @@ const AddHome = () => {
 
   async function FormSubmit(event) {
     event.preventDefault();
-    console.log(inputs);
 
     const formData = await new FormData();
 
-    
-    if (inputs.SectionName) {
-      formData.append("category", inputs.SectionName);
-    }
-    
-    if (inputs.isHeader) {
-      formData.append("isHeader", inputs.isHeader);
-    }
-    if(selectedsection){
-      formData.append("location", selectedsection);
-    }
-
-    if (inputs.SecondSection) {
-      formData.append("heading", inputs.SecondSection);
-    }
-
-    if (inputs.background1) {
-      formData.append("categorybackground", inputs.background1);
-    }
-
-    if (inputs.background2) {
-      formData.append("headingbackground", inputs.background2);
+    for (const key in inputs) {
+      if (inputs.hasOwnProperty(key)) {
+        formData.append(key, inputs[key]);
+      }
     }
 
     if (image1.length > 0) {
@@ -50,29 +31,31 @@ const AddHome = () => {
     // });
 
     try {
-        const response = await fetch(`https://api.techdeveloper.in/api/categories?location=${selectedsection}`, {
-            method: 'POST',
-            body: formData // Pass the FormData object directly
-        });
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+      const response = await fetch(
+        `https://api.techdeveloper.in/api/categories`,
+        {
+          method: "POST",
+          body: formData, // Pass the FormData object directly
         }
+      );
 
-        const responseData = await response.json();
-        console.log('Data sent successfully:', responseData);
-        alert("data add successfully")
-        // navigate('/top-links')
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+        console.warn(response);
+      }
+
+      const responseData = await response.json();
+      console.warn("Data sent successfully:", responseData);
+      alert("data add successfully");
+      // navigate('/top-links')
     } catch (error) {
-        console.error('Error sending data:', error);
+      console.error("Error sending data:", error);
     }
-
-   
   }
 
   const showsection = (e) => {
     const section = e.target.value;
-    console.warn(section)
+    console.warn(section);
     SetSelctedsection(section);
   };
 
@@ -101,7 +84,7 @@ const AddHome = () => {
                   <div className="card-body">
                     <div className="row">
                       <div className="col-md-12">
-                      <label htmlFor="" className="fs-4">
+                        <label htmlFor="" className="fs-4">
                           Select Section
                         </label>
                         <select
@@ -119,12 +102,12 @@ const AddHome = () => {
                         <div class="form-group">
                           <label>{selectedsection} Name</label>
                           <input
-                            name="SectionName"
+                            name="category"
                             type="text"
                             class="form-control"
                             placeholder="Enter Your Section Name"
                             onChange={handleChange}
-                            value={inputs.SectionName}
+                            value={inputs.category}
                           />
                         </div>
                       </div>
@@ -134,10 +117,10 @@ const AddHome = () => {
                         </label>
                         <input
                           onChange={handleChange}
-                          name="background1"
+                          name="categorybackground"
                           type="color"
                           style={{ maxWidth: "99px" }}
-                          value={inputs.background1}
+                          value={inputs.categorybackground}
                           class="form-control"
                           placeholder="Enter Your Name"
                         />
@@ -170,12 +153,12 @@ const AddHome = () => {
                               {selectedsection} Name
                             </label>
                             <input
-                              name="SecondSection"
+                              name="heading"
                               type="text"
                               class="form-control"
                               placeholder="Enter Your Section Name"
                               onChange={handleChange}
-                              value={inputs.SecondSection}
+                              value={inputs.heading}
                             />
                           </div>
                         </div>
@@ -199,10 +182,10 @@ const AddHome = () => {
                           </label>
                           <input
                             onChange={handleChange}
-                            name="background2"
+                            name="headingbackground"
                             type="color"
                             style={{ maxWidth: "99px" }}
-                            value={inputs.background2}
+                            value={inputs.headingbackground}
                             class="form-control"
                             placeholder="Enter Your Name"
                           />

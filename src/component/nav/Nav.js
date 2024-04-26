@@ -2,8 +2,20 @@ import { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import "./style.css";
 import { ApiContext } from "../../Context/ApiContext";
+import ApiCalls from "../../ApiCalls/ApiCalls";
 
 const Nav = () => {
+  const [location, setLocation] = useState([]);
+
+  useEffect(() => {
+    ApiCalls(`categories?location=title`)
+      .then((response) => {
+        setLocation(response);
+      })
+      .catch((error) => {
+        // Handle error
+      });
+  }, []);
   const { logout, userinfo, type } = useContext(ApiContext);
 
   return (
@@ -152,7 +164,7 @@ const Nav = () => {
                 </li>
               </ul>
             </li>
-           
+
             <li className="nav-item">
               <NavLink to={`/add-blogs`} className="nav-link">
                 Add News
@@ -180,58 +192,20 @@ const Nav = () => {
                     </NavLink>
                   </li>
                 ) : null}
-                {/* <li>
-                  <NavLink to={`/blogs`} className="dropdown-item">
-                    Scroll News Manager
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to={`/blogs`} className="dropdown-item">
-                    Jara Idharbhi
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to={`/blogs/mainnews`} className="dropdown-item">
-                    Badi Khabar
-                  </NavLink>
-                </li> */}
+
+               
+                
+                
               </ul>
             </li>
-            {/* <li className="nav-item dropdown">
-              <NavLink className="nav-link dropdown-toggle">State News</NavLink>
-              <ul className="dropdown-menu">
-                <li>
-                  <NavLink to={`/blogs/rajiya`} className="dropdown-item">
-                    State News Manager
-                  </NavLink>
-                </li>
-                {type === "admin" ? (
-                  <>
-                    <li>
-                      <NavLink to={`/addrajiya`} className="dropdown-item">
-                        Add State Block
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink to={`/rajiya`} className="dropdown-item">
-                        State News Block Manger
-                      </NavLink>
-                    </li>
-                  </>
-                ) : null}
-              </ul>
-            </li> */}
+            
 
             <li className="nav-item dropdown">
               <NavLink className="nav-link dropdown-toggle">
                 News Section
               </NavLink>
               <ul className="dropdown-menu">
-                <li>
-                  <NavLink to={`/blogs/block`} className="dropdown-item">
-                    Block News Manger
-                  </NavLink>
-                </li>
+                
                 {type === "admin" ? (
                   <>
                     <li>
@@ -244,6 +218,22 @@ const Nav = () => {
                         Section Manger
                       </NavLink>
                     </li>
+                    {location.map((item, key) => (
+                  <li>
+                    <NavLink
+                      to={`/blogs/${item.category}`}
+                      className="dropdown-item"
+                    >
+                      {item.category}
+                    </NavLink>
+                  </li>
+                ))}
+                <NavLink to={`/blogs/state`} className="dropdown-item">
+                  ख़बरें राज्यों से
+                </NavLink>
+                <NavLink to={`/blogs/block`} className="dropdown-item">
+                  Block News
+                </NavLink>
                   </>
                 ) : null}
               </ul>

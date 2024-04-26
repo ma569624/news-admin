@@ -8,7 +8,7 @@ const Home = () => {
   const params = useParams();
   const { API, access, type } = useContext(ApiContext);
   const [bannerdata, setbannerdata] = useState([]);
-const [selectedsection, SetSelctedsection] = useState('')
+  const [selectedsection, SetSelctedsection] = useState("");
   const [isVisible, setIsVisible] = useState({});
 
   const toggleVisibility = async (id, status) => {
@@ -39,8 +39,6 @@ const [selectedsection, SetSelctedsection] = useState('')
       })
       .catch((error) => {});
   };
-
- 
 
   const Delethandler = (id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete?");
@@ -130,15 +128,14 @@ const [selectedsection, SetSelctedsection] = useState('')
   };
 
   const showsection = (e) => {
-    
-    const section = e.target.value
+    const section = e.target.value;
     ApiCalls(`categories?location=${section}`)
       .then((response) => {
         setbannerdata(response);
         console.warn(response);
       })
       .catch((error) => {});
-      SetSelctedsection(section)
+    SetSelctedsection(section);
   };
 
   return (
@@ -147,19 +144,23 @@ const [selectedsection, SetSelctedsection] = useState('')
         <div className="card">
           <div className="card-header">
             <div className="card-title w-100 text-center">
-            <h4 className="text-center">Section Manager</h4>
+              <h4 className="text-center">Section Manager</h4>
               <div className="d-grid mb-3">
                 <label htmlFor="" className="fs-4">
                   Please Select Section
                 </label>
-                <select class="custom-select w-25 mx-auto"  onChange={showsection}>
-                <option disabled selected>Select</option>
+                <select
+                  class="custom-select w-25 mx-auto"
+                  onChange={showsection}
+                >
+                  <option disabled selected>
+                    Select
+                  </option>
                   <option value="title">Top Section</option>
                   <option value="block">Block</option>
                   <option value="state">State</option>
                 </select>
               </div>
-             
 
               <NavLink
                 to={""}
@@ -270,7 +271,9 @@ const [selectedsection, SetSelctedsection] = useState('')
                       >
                         Edit
                       </NavLink>
-                      {access === true || type === "admin" ? (
+                      {selectedsection === "title" ? 
+                        <></>
+                       : access === true || type === "admin" ? (
                         <NavLink
                           className="btn btn-danger btn-sm ms-2 fw-bold"
                           onClick={() => Delethandler(item._id)}

@@ -11,9 +11,7 @@ const Blogs = () => {
   const PositionName = params.categories;
 
   const [categories, setcategories] = useState("");
-
   const [isVisible, setIsVisible] = useState({});
-
   const toggleVisibility = async (id, status) => {
     if (status == "active") {
       setIsVisible("inactive");
@@ -60,28 +58,16 @@ const Blogs = () => {
   }, [PositionName, params]);
 
   useEffect(() => {
-    setbannerdata([]);
-    if (PositionName == "block") {
-      ApiCalls("blogdisplay")
+    if (PositionName == "block" || PositionName == "state") {
+      ApiCalls(`categories?location=${PositionName}`)
         .then((response) => {
           setBlockdata(response);
-          // console.log(response)
         })
         .catch((error) => {
-          // Handle error
-        });
-    } else if (PositionName == "rajiya") {
-      // setbannerdata([])
-      ApiCalls("rajiya")
-        .then((response) => {
-          setBlockdata(response);
-          // console.warn(blockdata)
-        })
-        .catch((error) => {
-          // Handle error
+          console.warn(error);
         });
     }
-  }, [PositionName]);
+  }, [params]);
 
   const Delethandler = (id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete?");
@@ -100,6 +86,7 @@ const Blogs = () => {
   };
 
   const filterhandleChange = (event) => {
+    setbannerdata([])
     const value = event.target.value;
     ApiCalls(`blogs?page=1&limit=25&Category=${value}`)
       .then((response) => {
@@ -183,22 +170,12 @@ const Blogs = () => {
 
   return (
     <div className="content-wrapper">
-      <section className="content-header">
-        <div className="container-fluid">
-          <div className="row mb-2">
-            <div className="col-sm-6">
-              {/* <h1>SHUBHKAMNA / Scroll News</h1> */}
-            </div>
-          </div>
-        </div>
-      </section>
       <section className="content">
         <div className="card">
           <div className="card-header">
             <div className="card-header">
               <div className="card-title w-100 text-center">
-              {/* <h4 className="text-center">News</h4> */}
-              
+                <h4 className="text-center">{PositionName == 'state' ? 'ख़बरें राज्यों से': PositionName  }</h4>
                 <NavLink
                   to={""}
                   className={`btn ms-2 me-2 fw-bold btn-sm btn-success`}
@@ -214,63 +191,39 @@ const Blogs = () => {
                   Hide
                 </NavLink>
                 {access === true || type === "admin" ? (
-                <NavLink
-                  className="fw-bold btn btn-danger btn-sm ms-2"
-                  onClick={handleDeleteSelected}
-                >
-                  Delete
-                </NavLink>):null}
+                  <NavLink
+                    className="fw-bold btn btn-danger btn-sm ms-2"
+                    onClick={handleDeleteSelected}
+                  >
+                    Delete
+                  </NavLink>
+                ) : null}
               </div>
             </div>
 
-            <div className="col-lg-3">
-              {PositionName == "block" ? (
-                <select
-                  class="custom-select rounded-0"
-                  name="CategoryName"
-                  id="exampleSelectRounded0"
-                  onChange={filterhandleChange}
-                >
-                  <option className="fw-bold" selected disabled>
-                    Please Select Block
+            <div className="col-lg-3 mx-auto">
+              {
+                PositionName == 'block' || PositionName == 'state' ?
+                  (<select
+                class="custom-select rounded-0"
+                name="CategoryName"
+                id="exampleSelectRounded0"
+                onChange={filterhandleChange}
+              >
+                <option className="fw-bold" selected disabled>
+                  Please Select 
+                </option>
+                {blockdata.map((item, key) => (
+                  <option
+                    className="fw-bold"
+                    key={key}
+                    value={item.category}
+                  >
+                    {item.category}
                   </option>
-                  {blockdata.map((state) => (
-                    <option
-                      className="fw-bold"
-                      key={state}
-                      value={state.SectionName}
-                    >
-                      {state.SectionName}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <></>
-              )}
-
-              {PositionName == "rajiya" ? (
-                <select
-                  class="custom-select rounded-0"
-                  name="CategoryName"
-                  id="exampleSelectRounded0"
-                  onChange={filterhandleChange}
-                >
-                  <option className="fw-bold" selected disabled>
-                    Please Select State
-                  </option>
-                  {blockdata.map((state) => (
-                    <option
-                      className="fw-bold"
-                      key={state}
-                      value={state.StateName}
-                    >
-                      {state.StateName}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <></>
-              )}
+                ))}
+              </select>):<></>
+              }
             </div>
           </div>
           <div className="card-body p-0">
