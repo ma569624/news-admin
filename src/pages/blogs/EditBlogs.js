@@ -10,7 +10,7 @@ const EditBlogs = () => {
   // const params = useParams()
   const params = useParams();
   const id = params.id;
-  const {API} = useContext(ApiContext)
+  const { API } = useContext(ApiContext);
   const category = params.category;
   const navigate = useNavigate();
   const editor = useRef(null);
@@ -31,14 +31,14 @@ const EditBlogs = () => {
 
   const getdata = () => {
     ApiCalls(`blogs?_id=${id}`)
-    .then((response) => {
-     setInputs(response.data[0])
-     setContent(response.data[0].Matter)
-     console.warn(response)
-    })
-    .catch((error) => {
-      // Handle error
-    });
+      .then((response) => {
+        setInputs(response.data[0]);
+        setContent(response.data[0].Matter);
+        console.warn(response);
+      })
+      .catch((error) => {
+        // Handle error
+      });
 
     ApiCalls("categories")
       .then((response) => {
@@ -49,14 +49,11 @@ const EditBlogs = () => {
             label: item.category,
           })), // New state values
         ]);
-
       })
       .catch((error) => {
         // Handle error
       });
   };
-
-  
 
   useEffect(() => {
     getdata();
@@ -66,17 +63,6 @@ const EditBlogs = () => {
     event.preventDefault();
     const formData = await new FormData();
 
-    if (inputs.ReporterName && inputs.ReporterName.length > 0) {
-      formData.append("ReporterName", inputs.ReporterName);
-    }
-
-    if (inputs.Designation && inputs.Designation.length > 0) {
-      formData.append("Designation", inputs.Designation);
-    }
-    if (inputs.DatePlace && inputs.DatePlace.length > 0) {
-      formData.append("DatePlace", inputs.DatePlace);
-    }
-
     if (inputs.Heading && inputs.Heading.length > 0) {
       formData.append("Heading", inputs.Heading);
     }
@@ -84,15 +70,17 @@ const EditBlogs = () => {
     if (inputs.Capton && inputs.Capton.length > 0) {
       formData.append("Capton", inputs.Capton);
     }
-   
+
     if (inputs.heading && inputs.heading.length > 0) {
       formData.append("Heading", inputs.heading);
     }
-    
 
     if (inputs.Subheading && inputs.Subheading.length > 0) {
       formData.append("Subheading", inputs.Subheading);
     }
+    
+    const currentDate = new Date().toISOString();
+    formData.append('CreationDate', currentDate);
 
     if (Array.isArray(selectedOption)) {
       const positionValues = selectedOption.map((option) => option.value);
@@ -107,7 +95,6 @@ const EditBlogs = () => {
       // console.warn(selectedValue);
     }
 
-    formData.append("Image1", image1[0]);
     formData.append("Image2", image2[0]);
     formData.append("Video", video[0]);
     formData.append("Audio", audio[0]);
@@ -170,110 +157,30 @@ const EditBlogs = () => {
                           />
                         </div>
                       </div>
-
-                      <div className="col-md-12">
-                        <div class="form-group">
-                          <label for="exampleInputFile">Reporter Image</label>
-                          <div>
-                            <input
-                              onChange={(e) => setimage1(e.target.files)}
-                              name="file"
-                              type="file"
-                              className="TextArea"
-                              id="reporterimage"
-                              size={60}
-                              maxLength={70}
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="col-md-12">
-                        <div className="form-group">
-                          <label htmlFor="exampleInputEmail1">
-                            Reporter's Name
-                          </label>
-                          <input
-                            onChange={handleChange}
-                            name="ReporterName"
-                            // value={inputs.ReporterName }
-                            value={
-                              inputs && inputs.ReporterName
-                                ? inputs.ReporterName
-                                : ""
-                            }
-                            type="text"
-                            class="form-control"
-                            placeholder="Enter Your Name"
-                          />
-                        </div>
-                      </div>
                     </div>
                     <div className="row">
                       <div className="col-md-12">
                         <div className="form-group">
-                          <label htmlFor="exampleInputPassword1">
-                            Designation
-                          </label>
-                          <input
-                            onChange={handleChange}
-                            name="Designation"
-                            // value={inputs.Designation}
-                            value={
-                              inputs && inputs.Designation
-                                ? inputs.Designation
-                                : ""
-                            }
-                            type="text"
-                            class="form-control"
-                            placeholder="Enter Your Designation"
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-12">
-                        <div className="form-group">
-                          <label htmlFor="exampleInputPassword1">
-                            Date/Place
-                          </label>
-                          <input
-                            onChange={handleChange}
-                            name="DatePlace"
-                            // value={inputs.DatePlace}
-                            value={
-                              inputs && inputs.DatePlace ? inputs.DatePlace : ""
-                            }
-                            type="text"
-                            class="form-control"
-                            placeholder="Enter Your Date/Place"
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-12">
-                        <div className="form-group">
-                        <div className="taja-space">
-                                  <label htmlFor="exampleInputPassword1">
-                                    Heading
-                                  </label>
-                                  <div className="col-md-12">
-                                    <div class="form-check">
-                                      <input
-                                        type="checkbox"
-                                        name="Headline"
-                                        onChange={handleChange}
-                                        value={inputs.Headline}
-                                        checked={inputs.Headline}
-                                        class="form-check-input mt-2 border-3  border-danger"
-                                        id="exampleCheck1"
-                                      />
-                                      <label for="exampleCheck1">
-                                        Taja Smachar
-                                      </label>
-                                    </div>
-                                  </div>
-                                </div>
-                          <label htmlFor="exampleInputPassword1">Heading</label>
+                          <div className="taja-space">
+                            <label htmlFor="exampleInputPassword1">
+                              Heading
+                            </label>
+                            <div className="col-md-12">
+                              <div class="form-check">
+                                <input
+                                  type="checkbox"
+                                  name="Headline"
+                                  onChange={handleChange}
+                                  value={inputs.Headline}
+                                  checked={inputs.Headline}
+                                  class="form-check-input mt-2 border-3  border-danger"
+                                  id="exampleCheck1"
+                                />
+                                <label for="exampleCheck1">Taja Smachar</label>
+                              </div>
+                            </div>
+                          </div>
+                          
                           <input
                             onChange={handleChange}
                             name="Heading"
@@ -309,7 +216,12 @@ const EditBlogs = () => {
                         </div>
                       </div>
                       <div className="col-md-12">
-                        <img className="mt-2" style={{width: '100px', height: '80px'}} src={`${API}${inputs.Image}`} alt="" />
+                        <img
+                          className="mt-2"
+                          style={{ width: "100px", height: "80px" }}
+                          src={`${API}${inputs.Image}`}
+                          alt=""
+                        />
                       </div>
 
                       <div className="col-md-4">

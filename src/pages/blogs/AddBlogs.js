@@ -1,13 +1,23 @@
 import SideNavBar from "../../component/sidenav/SideNavBar";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import Nav from "../../component/nav/Nav";
 import ApiCalls from "../../ApiCalls/ApiCalls";
 import { useRef, useMemo } from "react";
 import JoditEditor from "jodit-react";
 import Select from "react-select";
+import { ApiContext } from "../../Context/ApiContext";
+import DateTimePicker from 'react-datetime-picker';
 
 const AddBlogs = () => {
+  const [date, setDate] = useState(new Date());
+
+  // Function to handle changes in the date value
+  const onChange = (newDate) => {
+    setDate(newDate);
+  };
+
+  const {userinfo} = useContext(ApiContext)
   const params = useParams();
   const position = params.position;
   const [image1, setimage1] = useState({});
@@ -19,24 +29,11 @@ const AddBlogs = () => {
   const [selectedcategories, setSelectedcategories] = useState(null);
   const [muti, setMult] = useState([]);
 
-  const options = [
-    ...muti.map((item) => ({
-      value: item.SectionName,
-      label: item.SectionName,
-    })),
-  ];
-
-  const categoriesoptions = [
-    ...selectedValue.map((item) => ({
-      value: item.StateName,
-      label: item.StateName,
-    })),
-  ];
+  console.warn(userinfo)
 
   const editor = useRef(null);
   const [content, setContent] = useState("");
   const [inputs, setInputs] = useState({});
-  const [top, setTop] = useState([]);
 
   const getdata = () => {
     ApiCalls("categories").then((response) => {
@@ -54,9 +51,7 @@ const AddBlogs = () => {
     getdata();
   }, []);
 
-  // Add this useEffect to update the input fields when inputs state changes
   useEffect(() => {
-    // Update input fields with current inputs state
     document.querySelectorAll("input").forEach((input) => {
       input.value = inputs[input.name] || "";
     });
@@ -70,20 +65,28 @@ const AddBlogs = () => {
   async function FormSubmit(event) {
     event.preventDefault();
 
-    console.warn(inputs);
 
     const formData = await new FormData();
+
+    if (userinfo.name && userinfo.name.length > 0) {
+      formData.append("ReporterName", userinfo.name);
+    }
+    if (userinfo.profile && userinfo.profile.length > 0) {
+      formData.append("ReporterProfile", userinfo.profile);
+    }
+    
+    if (userinfo.Destination && userinfo.Destination.length > 0) {
+      formData.append("Designation", userinfo.Destination);
+    }
+
+    if (userinfo.Place && userinfo.Place.length > 0) {
+      formData.append("DatePlace", userinfo.Place);
+    }
+
+    const currentDate = new Date().toISOString();
+    formData.append('CreationDate', currentDate);
     
 
-    if (inputs.reportername && inputs.reportername.length > 0) {
-      formData.append("ReporterName", inputs.reportername);
-    }
-    if (inputs.designation && inputs.designation.length > 0) {
-      formData.append("Designation", inputs.designation);
-    }
-    if (inputs.place && inputs.place.length > 0) {
-      formData.append("DatePlace", inputs.place);
-    }
 
     if (inputs.heading && inputs.heading.length > 0) {
       formData.append("Heading", inputs.heading);
@@ -101,7 +104,6 @@ const AddBlogs = () => {
       formData.append("Headline", inputs.Headline);
     }
 
-    formData.append("Image1", image1[0]);
     formData.append("Image2", image2[0]);
     formData.append("Video", video[0]);
     formData.append("Audio", audio[0]);
@@ -111,23 +113,7 @@ const AddBlogs = () => {
     }
     console.log("FormData:", formData);
 
-    if (position === "rajiya") {
-      // console.warn()
-      // formData.append('Category', inputs.CategoryName);
-      if (selectedcategories) {
-        const categoryValues = selectedcategories.map((option) => option.value);
-        console.warn(categoryValues);
-        formData.append("Category", JSON.stringify(categoryValues));
-      }
-
-      if (selectedcategories.length > 0) {
-        selectedcategories.forEach((option) => {
-          formData.append("selectedValue[]", option.value);
-          // console.warn(categoryValues);
-        });
-        // console.warn(selectedcategories);
-      }
-    }
+    
     if (Array.isArray(selectedOption)) {
       const positionValues = selectedOption.map((option) => option.value);
       console.warn(positionValues);
@@ -189,7 +175,6 @@ const AddBlogs = () => {
                       >
                         <div className="card-body">
                           <div className="row">
-                            
                             <div className="col-md-12">
                               <div class="form-group">
                                 <label for="exampleSelectRounded0">
@@ -205,12 +190,12 @@ const AddBlogs = () => {
                                 />
                               </div>
                             </div>
-                            <div className="col-md-12">
+                              
+                            {/* <div className="col-md-12">
                               <div class="form-group">
                                 <label for="exampleInputFile">
                                   Reporter Image
                                 </label>
-
                                 <div>
                                   <input
                                     onChange={(e) =>
@@ -225,9 +210,9 @@ const AddBlogs = () => {
                                   />
                                 </div>
                               </div>
-                            </div>
+                            </div> */}
 
-                            <div className="col-md-12">
+                            {/* <div className="col-md-12">
                               <div className="form-group">
                                 <label htmlFor="exampleInputEmail1">
                                   Reporter's Name
@@ -241,10 +226,11 @@ const AddBlogs = () => {
                                   placeholder="Enter Your Name"
                                 />
                               </div>
-                            </div>
+                            </div> */}
                           </div>
                           <div className="row">
-                            <div className="col-md-12">
+                          
+                            {/* <div className="col-md-12">
                               <div className="form-group">
                                 <label htmlFor="exampleInputPassword1">
                                   Designation
@@ -258,8 +244,8 @@ const AddBlogs = () => {
                                   required
                                 />
                               </div>
-                            </div>
-                            <div className="col-md-12">
+                            </div> */}
+                            {/* <div className="col-md-12">
                               <div className="form-group">
                                 <label htmlFor="exampleInputPassword1">
                                   Date/Place
@@ -273,7 +259,7 @@ const AddBlogs = () => {
                                   required
                                 />
                               </div>
-                            </div>
+                            </div> */}
                             <div className="col-md-12">
                               <div className="form-group">
                                 <div className="taja-space">
@@ -297,6 +283,7 @@ const AddBlogs = () => {
                                     </div>
                                   </div>
                                 </div>
+
                                 <input
                                   onChange={handleChange}
                                   name="heading"

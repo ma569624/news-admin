@@ -3,13 +3,15 @@ import { ApiContext } from "../../Context/ApiContext";
 
 const Sign = () => {
   const [user, setUser] = useState({});
+  const [profile, setProfile] = useState({});
   const [imageSrc, setImageSrc] = useState("");
   const { API } = useContext(ApiContext);
 
   const changefileHandle = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
-
+    setProfile(e.target.files[0])
+    
     reader.onloadend = () => {
       setImageSrc(reader.result);
     };
@@ -39,20 +41,28 @@ const Sign = () => {
     console.warn(user);
     event.preventDefault();
 
+    const formData = await new FormData();
+
+    
     if (user.password !== user.confirm_password) {
       alert("Passwords do not match");
       return;
     }
 
-    console.warn(user);
+    
+    for (const key in user) {
+      if (user.hasOwnProperty(key)) {
+        formData.append(key, user[key]);
+      }
+    }
 
+   
+    formData.append("profile", profile);
+    console.warn(user);
     try {
       const response = await fetch(`${API}/api/signup`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
+        body: formData,
       });
 
       if (!response.ok) {
@@ -91,6 +101,7 @@ const Sign = () => {
                   />
                 )}
               </div>
+
               <div className="row">
                 <div className="input-group mb-3 col">
                   <label
@@ -123,7 +134,33 @@ const Sign = () => {
                     placeholder="Employee Name"
                   />
                 </div>
+
+                <div class="mb-3">
+                  <label htmlFor="">Destination</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="Destination"
+                    onChange={(e) => ChangeHandle(e)}
+                    required
+                    value={user.Destination || ""}
+                    placeholder="Employee Name"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label htmlFor="">Place</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="Place"
+                    onChange={(e) => ChangeHandle(e)}
+                    required
+                    value={user.Place || ""}
+                    placeholder="Employee Name"
+                  />
+                </div>
               </div>
+
               <div className="row">
                 <div class="mb-3 col">
                   <label htmlFor="">Mobile Number</label>

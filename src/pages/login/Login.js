@@ -1,8 +1,6 @@
 import React, { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import Api from "../../Api/Api";
 import { ApiContext } from "../../Context/ApiContext";
-// import EmailContext from '../../components/context/Context'
 const Login = () => {
   const {API, setUserInfo} = useContext(ApiContext)
   const [user, setUser] = useState({});
