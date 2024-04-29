@@ -10,8 +10,8 @@ const Sign = () => {
   const changefileHandle = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
-    setProfile(e.target.files[0])
-    
+    setProfile(e.target.files[0]);
+
     reader.onloadend = () => {
       setImageSrc(reader.result);
     };
@@ -43,20 +43,17 @@ const Sign = () => {
 
     const formData = await new FormData();
 
-    
     if (user.password !== user.confirm_password) {
       alert("Passwords do not match");
       return;
     }
 
-    
     for (const key in user) {
       if (user.hasOwnProperty(key)) {
         formData.append(key, user[key]);
       }
     }
 
-   
     formData.append("profile", profile);
     console.warn(user);
     try {
@@ -103,11 +100,15 @@ const Sign = () => {
               </div>
 
               <div className="row">
-                <div className="input-group mb-3 col">
+                <div className="input-group mb-3 col-lg-4 mx-auto">
                   <label
                     className="rounded"
                     htmlFor="filePicker"
-                    style={{ color: '#ffff', background: "info", padding: "5px 10px" }}
+                    style={{
+                      color: "#ffff",
+                      background: "#000",
+                      padding: "5px 10px",
+                    }}
                   >
                     Upload Image
                   </label>
@@ -122,7 +123,10 @@ const Sign = () => {
                     placeholder="Employee profile"
                   />
                 </div>
-                <div class="mb-3">
+              </div>
+
+              <div className="row">
+                <div class="mb-3 col-lg-4">
                   <label htmlFor="">Employee Name</label>
                   <input
                     type="text"
@@ -135,7 +139,7 @@ const Sign = () => {
                   />
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3 col-lg-4">
                   <label htmlFor="">Destination</label>
                   <input
                     type="text"
@@ -147,7 +151,7 @@ const Sign = () => {
                     placeholder="Employee Name"
                   />
                 </div>
-                <div class="mb-3">
+                <div class="mb-3 col-lg-4">
                   <label htmlFor="">Place</label>
                   <input
                     type="text"
@@ -159,10 +163,7 @@ const Sign = () => {
                     placeholder="Employee Name"
                   />
                 </div>
-              </div>
-
-              <div className="row">
-                <div class="mb-3 col">
+                <div class="mb-3 col-lg-4">
                   <label htmlFor="">Mobile Number</label>
                   <input
                     type="number"
@@ -175,7 +176,7 @@ const Sign = () => {
                   />
                 </div>
 
-                <div class="mb-3 col">
+                <div class="mb-3 col-lg-4">
                   <label htmlFor="">Email</label>
                   <input
                     type="text"
@@ -187,9 +188,8 @@ const Sign = () => {
                     placeholder="Enter Email Address"
                   />
                 </div>
-              </div>
-              <div className="row">
-                <div class="mb-3 col">
+
+                <div class="mb-3 col-lg-4">
                   <label htmlFor="">User Name</label>
                   <input
                     type="text"
@@ -202,7 +202,7 @@ const Sign = () => {
                   />
                 </div>
 
-                <div class="mb-3 col">
+                <div class="mb-3 col-lg-4">
                   <label htmlFor="">Password</label>
                   <input
                     name="password"
@@ -214,48 +214,21 @@ const Sign = () => {
                     placeholder="Password"
                   />
                 </div>
-              </div>
-
-              <div class="mb-3">
-                <label htmlFor="">Confirm Password</label>
-                <input
-                  name="confirm_password"
-                  type="password"
-                  required
-                  value={user.confirm_password || ""}
-                  onChange={(e) => ChangeHandle(e)}
-                  className="form-control"
-                  placeholder="Confirm Password"
-                />
-              </div>
-              {/* <div className="input-group mb-3">
-                <input
-                  name="password_delete"
-                  type="password"
-                  value={user.password_delete || ""}
-                  onChange={(e) => ChangeHandle(e)}
-                  className="form-control"
-                  placeholder="Password to Delete News"
-                />
-              </div>
-
-              <div className="input-group mb-3">
-                <input
-                  name="Confirm_password_delete"
-                  type="password"
-                  required={
-                    user.password_delete && user.password_delete.length > 3
-                      ? "required"
-                      : ""
-                  }
-                  value={user.Confirm_password_delete || ""}
-                  onChange={(e) => ChangeHandle(e)}
-                  className="form-control"
-                  placeholder="Confirm Password to Delete News"
-                />
-              </div> */}
-              <div className="row">
-                <div className="col">
+                <div class="mb-3 col-lg-4">
+                  <label htmlFor="">Confirm Password</label>
+                  <input
+                    name="confirm_password"
+                    type="password"
+                    required
+                    value={user.confirm_password || ""}
+                    onChange={(e) => ChangeHandle(e)}
+                    className="form-control"
+                    placeholder="Confirm Password"
+                  />
+                </div>
+                <div className="col-lg-4">
+                <div className="row">
+                <div className="col-lg-12">
                   <div class="form-check">
                     <input
                       type="checkbox"
@@ -280,6 +253,11 @@ const Sign = () => {
                   </div>
                 </div>
               </div>
+                </div>
+              </div>
+
+              
+              
 
               <div className="row">
                 <div className="col-12">

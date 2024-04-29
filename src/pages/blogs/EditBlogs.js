@@ -63,6 +63,17 @@ const EditBlogs = () => {
     event.preventDefault();
     const formData = await new FormData();
 
+    if (inputs.ReporterName && inputs.ReporterName.length > 0) {
+      formData.append("ReporterName", inputs.ReporterName);
+    }
+
+    if (inputs.Designation && inputs.Designation.length > 0) {
+      formData.append("Designation", inputs.Designation);
+    }
+    if (inputs.DatePlace && inputs.DatePlace.length > 0) {
+      formData.append("DatePlace", inputs.DatePlace);
+    }
+
     if (inputs.Heading && inputs.Heading.length > 0) {
       formData.append("Heading", inputs.Heading);
     }
@@ -94,7 +105,7 @@ const EditBlogs = () => {
       });
       // console.warn(selectedValue);
     }
-
+    formData.append("Image1", image1[0]);
     formData.append("Image2", image2[0]);
     formData.append("Video", video[0]);
     formData.append("Audio", audio[0]);
@@ -159,8 +170,86 @@ const EditBlogs = () => {
                       </div>
                     </div>
                     <div className="row">
+                    <div className="col-md-12">
+                        <div class="form-group">
+                          <label for="exampleInputFile">Reporter Image</label>
+                          <div>
+                            <input
+                              onChange={(e) => setimage1(e.target.files)}
+                              name="file"
+                              type="file"
+                              className="TextArea"
+                              id="reporterimage"
+                              size={60}
+                              maxLength={70}
+                            />
+                          </div>
+                        </div>
+                      </div>
+
                       <div className="col-md-12">
                         <div className="form-group">
+                          <label htmlFor="exampleInputEmail1">
+                            Reporter's Name
+                          </label>
+                          <input
+                            onChange={handleChange}
+                            name="ReporterName"
+                            // value={inputs.ReporterName }
+                            value={
+                              inputs && inputs.ReporterName
+                                ? inputs.ReporterName
+                                : ""
+                            }
+                            type="text"
+                            class="form-control"
+                            placeholder="Enter Your Name"
+                          />
+                        </div>
+                      </div>
+                      <div className="col-md-12">
+                        <div className="form-group">
+                          <label htmlFor="exampleInputPassword1">
+                            Designation
+                          </label>
+                          <input
+                            onChange={handleChange}
+                            name="Designation"
+                            // value={inputs.Designation}
+                            value={
+                              inputs && inputs.Designation
+                                ? inputs.Designation
+                                : ""
+                            }
+                            type="text"
+                            class="form-control"
+                            placeholder="Enter Your Designation"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div className="col-md-12">
+                        <div className="form-group">
+                          <label htmlFor="exampleInputPassword1">
+                            Place
+                          </label>
+                          <input
+                            onChange={handleChange}
+                            name="DatePlace"
+                            // value={inputs.DatePlace}
+                            value={
+                              inputs && inputs.DatePlace ? inputs.DatePlace : ""
+                            }
+                            type="text"
+                            class="form-control"
+                            placeholder="Enter Your Date/Place"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div className="col-md-12">
+                        <div className="form-group">
+
                           <div className="taja-space">
                             <label htmlFor="exampleInputPassword1">
                               Heading

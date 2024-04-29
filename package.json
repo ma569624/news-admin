@@ -19,9 +19,7 @@
     "react-select": "^5.8.0",
     "web-vitals": "^2.1.4"
   },
-  "overrides": {
-    "@svgr/webpack": "$@svgr/webpack"
-  },
+  "overrides": {},
   "scripts": {
     "start": "react-scripts start --host 0.0.0.0",
     "build": "react-scripts build",
