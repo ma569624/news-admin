@@ -1,11 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
 import ApiCalls from "./../../ApiCalls/ApiCalls";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useParams, useLocation } from "react-router-dom";
 import { ApiContext } from "../../Context/ApiContext";
 
 const Blogs = () => {
   const { API, type, access } = useContext(ApiContext);
   const params = useParams();
+  const location = useLocation();
+
+  // Extract query parameters using URLSearchParams
+  const queryParams = new URLSearchParams(location.search);
+
+  // Get the value of a specific query parameter
+  const yourParamValue = queryParams.get("value");
+  console.warn("Query Parameter Value:", yourParamValue);
+  console.warn(yourParamValue);
   const [bannerdata, setbannerdata] = useState([]);
   const [blockdata, setBlockdata] = useState([]);
   const PositionName = params.categories;
@@ -66,6 +75,16 @@ const Blogs = () => {
         .catch((error) => {
           console.warn(error);
         });
+        if (queryParams) {
+          ApiCalls(`blogs?page=1&limit=25&Category=${yourParamValue}`)
+            .then((response) => {
+              setbannerdata(response.data);
+              console.warn(bannerdata);
+            })
+            .catch((error) => {
+              // Handle error
+            });
+        }
     }
   }, [params]);
 
@@ -86,7 +105,7 @@ const Blogs = () => {
   };
 
   const filterhandleChange = (event) => {
-    setbannerdata([])
+    setbannerdata([]);
     const value = event.target.value;
     ApiCalls(`blogs?page=1&limit=25&Category=${value}`)
       .then((response) => {
@@ -175,7 +194,9 @@ const Blogs = () => {
           <div className="card-header">
             <div className="card-header">
               <div className="card-title w-100 text-center">
-                <h4 className="text-center">{PositionName == 'state' ? 'ख़बरें राज्यों से': PositionName  }</h4>
+                <h4 className="text-center">
+                  {PositionName == "state" ? "ख़बरें राज्यों से" : PositionName}
+                </h4>
                 <NavLink
                   to={""}
                   className={`btn ms-2 me-2 fw-bold btn-sm btn-success`}
@@ -202,28 +223,25 @@ const Blogs = () => {
             </div>
 
             <div className="col-lg-3 mx-auto">
-              {
-                PositionName == 'block' || PositionName == 'state' ?
-                  (<select
-                class="custom-select rounded-0"
-                name="CategoryName"
-                id="exampleSelectRounded0"
-                onChange={filterhandleChange}
-              >
-                <option className="fw-bold" selected disabled>
-                  Please Select 
-                </option>
-                {blockdata.map((item, key) => (
-                  <option
-                    className="fw-bold"
-                    key={key}
-                    value={item.category}
-                  >
-                    {item.category}
+              {PositionName == "block" || PositionName == "state" ? (
+                <select
+                  class="custom-select rounded-0"
+                  name="CategoryName"
+                  id="exampleSelectRounded0"
+                  onChange={filterhandleChange}
+                >
+                  <option className="fw-bold" selected disabled>
+                    Please Select
                   </option>
-                ))}
-              </select>):<></>
-              }
+                  {blockdata.map((item, key) => (
+                    <option className="fw-bold" key={key} value={item.category}>
+                      {item.category}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
           <div className="card-body p-0">
@@ -324,7 +342,7 @@ const Blogs = () => {
                         <></>
                       ) : (
                         <NavLink
-                          to={`/edit-blogs/${item._id}`}
+                          to={`/edit-blogs/${item._id}/${PositionName}`}
                           className=" fw-bold btn btn-info btn-sm"
                         >
                           Edit

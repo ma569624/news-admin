@@ -9,9 +9,11 @@ import { ApiContext } from "../../Context/ApiContext";
 const EditBlogs = () => {
   // const params = useParams()
   const params = useParams();
-  const id = params.id;
+  const {categorie, id} = params; 
+  console.warn(params)
+
+  
   const { API } = useContext(ApiContext);
-  const category = params.category;
   const navigate = useNavigate();
   const editor = useRef(null);
   const [content, setContent] = useState("");
@@ -113,7 +115,13 @@ const EditBlogs = () => {
 
     let newres = await ApiCalls(`blogs/${id}`, "PUT", formData).then(() => {
       alert("data add successfully");
-      navigate(`/blogs/${category}`);
+      if (categorie == 'state' || categorie == 'block') {
+        const encodedCategory = encodeURIComponent(inputs.Category);
+        navigate(`/blogs/${categorie}?value=${encodedCategory}`);
+      }
+      else{
+        navigate(`/blogs/${categorie}`);
+      }
     });
 
     console.log("FormData:", formData);
