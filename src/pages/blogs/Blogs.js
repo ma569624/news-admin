@@ -46,7 +46,7 @@ const Blogs = () => {
 
   useEffect(() => {
     if (PositionName == "tajasamachar") {
-      ApiCalls(`blogs?page=1&limit=17&tajasamachar=true`)
+      ApiCalls(`blogs?page=1&limit=17&Headline=true`)
         .then((response) => {
           setbannerdata(response.data);
           console.warn(response.data);
@@ -75,16 +75,16 @@ const Blogs = () => {
         .catch((error) => {
           console.warn(error);
         });
-        if (queryParams) {
-          ApiCalls(`blogs?page=1&limit=25&Category=${yourParamValue}`)
-            .then((response) => {
-              setbannerdata(response.data);
-              console.warn(bannerdata);
-            })
-            .catch((error) => {
-              // Handle error
-            });
-        }
+      if (queryParams) {
+        ApiCalls(`blogs?page=1&limit=25&Category=${yourParamValue}`)
+          .then((response) => {
+            setbannerdata(response.data);
+            console.warn(bannerdata);
+          })
+          .catch((error) => {
+            // Handle error
+          });
+      }
     }
   }, [params]);
 
@@ -279,6 +279,9 @@ const Blogs = () => {
                     <th style={{ width: "8%" }} className="text-center">
                       Image
                     </th>
+                    <th  className="">
+                      Action
+                    </th>
                   </tr>
                 </thead>
               ) : (
@@ -338,25 +341,24 @@ const Blogs = () => {
                         </NavLink>
                       )}
 
-                      {PositionName == "tajasamachar" ? (
-                        <></>
-                      ) : (
+                      
                         <NavLink
                           to={`/edit-blogs/${item._id}/${PositionName}`}
                           className=" fw-bold btn btn-info btn-sm"
                         >
                           Edit
                         </NavLink>
-                      )}
+                      
 
-                      {access === true || type === "admin" ? (
-                        <NavLink
-                          className="btn btn-danger btn-sm ms-2 fw-bold"
-                          onClick={() => Delethandler(item._id)}
-                        >
-                          Delete
-                        </NavLink>
-                      ) : null}
+                      {PositionName !== "tajasamachar" &&
+                        (access === true || type === "admin") && (
+                          <NavLink
+                            className="btn btn-danger btn-sm ms-2 fw-bold"
+                            onClick={() => Delethandler(item._id)}
+                          >
+                            Delete
+                          </NavLink>
+                        )}
                     </td>
                   </tr>
                 ))}

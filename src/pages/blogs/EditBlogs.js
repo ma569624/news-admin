@@ -62,6 +62,7 @@ const EditBlogs = () => {
   }, []);
 
   async function FormSubmit(event) {
+    console.warn(inputs.Headline)
     event.preventDefault();
     const formData = await new FormData();
 
@@ -84,9 +85,8 @@ const EditBlogs = () => {
       formData.append("Capton", inputs.Capton);
     }
 
-    if (inputs.heading && inputs.heading.length > 0) {
-      formData.append("Heading", inputs.heading);
-    }
+      formData.append("Headline", inputs.Headline);
+
 
     if (inputs.Subheading && inputs.Subheading.length > 0) {
       formData.append("Subheading", inputs.Subheading);

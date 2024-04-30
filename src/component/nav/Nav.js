@@ -192,20 +192,14 @@ const Nav = () => {
                     </NavLink>
                   </li>
                 ) : null}
-
-               
-                
-                
               </ul>
             </li>
-            
 
             <li className="nav-item dropdown">
               <NavLink className="nav-link dropdown-toggle">
                 News Section
               </NavLink>
               <ul className="dropdown-menu">
-                
                 {type === "admin" ? (
                   <>
                     <li>
@@ -213,27 +207,31 @@ const Nav = () => {
                         Add Section Block
                       </NavLink>
                     </li>
+
                     <li>
                       <NavLink to={`/home`} className="dropdown-item">
                         Section Manger
                       </NavLink>
                     </li>
                     {location.map((item, key) => (
-                  <li>
-                    <NavLink
-                      to={`/blogs/${item.category}`}
-                      className="dropdown-item"
-                    >
-                      {item.category}
+                      <li>
+                        <NavLink
+                          to={`/blogs/${item.category}`}
+                          className="dropdown-item"
+                        >
+                          {item.category}
+                        </NavLink>
+                      </li>
+                    ))}
+                    <NavLink to={`/blogs/tajasamachar`} className="dropdown-item">
+                    Tajasamachar
                     </NavLink>
-                  </li>
-                ))}
-                <NavLink to={`/blogs/state`} className="dropdown-item">
-                  ख़बरें राज्यों से
-                </NavLink>
-                <NavLink to={`/blogs/block`} className="dropdown-item">
-                  Block News
-                </NavLink>
+                    <NavLink to={`/blogs/state`} className="dropdown-item">
+                      ख़बरें राज्यों से
+                    </NavLink>
+                    <NavLink to={`/blogs/block`} className="dropdown-item">
+                      Block News
+                    </NavLink>
                   </>
                 ) : null}
               </ul>
