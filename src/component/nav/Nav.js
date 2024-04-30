@@ -74,15 +74,15 @@ const Nav = () => {
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to={`/add-founder`} className="dropdown-item">
+                    <NavLink to={`/edit-founder`} className="dropdown-item">
                       Founder Details
                     </NavLink>
                   </li>
-                  <li>
+                  {/* <li>
                     <NavLink to={`/founder`} className="dropdown-item">
                       Founder Details Manager
                     </NavLink>
-                  </li>
+                  </li> */}
                   <li>
                     <NavLink to={`/document`} className="dropdown-item">
                       Document Manger

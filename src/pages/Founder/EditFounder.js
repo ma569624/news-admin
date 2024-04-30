@@ -4,10 +4,11 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 
 const EditFounder = () => {
-    const params = useParams()
+const API = process.env.REACT_APP_API_URL;
 
     const [inputs, setInputs] = useState({})
     const [image1, setimage1] = useState({})
+    const [imgsrc, setImgsrc] = useState({})
 
 
     const getdata = async () => {
@@ -15,11 +16,11 @@ const EditFounder = () => {
         ApiCalls(`founder`).then((response) => {
             console.warn(response)
             setInputs(response[0]);
+            setImgsrc(response[0].EmployeeImage)
         })
             .catch((error) => {
                 // Handle error
             });
-
     }
     
     useEffect(() => {
@@ -30,17 +31,17 @@ const EditFounder = () => {
 
     async function FormSubmit(event) {
         event.preventDefault();
-
+        console.warn(image1)
         const formData = await new FormData();
         formData.append('EmployeeName', inputs.EmployeeName);
         formData.append('EmployeeDesignation', inputs.EmployeeDesignation);
         formData.append('EmailAddress', inputs.EmailAddress);
-        formData.append('heading', inputs.heading);
+        // formData.append('heading', inputs.heading);
         formData.append('ContactNumber', inputs.ContactNumber);
-        formData.append('Image1', image1[0]);
+        formData.append('Image1', image1);
 
 
-        let newres = await ApiCalls(`founder/65f927e820f9d2761a82aaeb`, 'PUT', formData).then(() => {
+        let newres = await ApiCalls(`founder/65f927e820f9d2761a82aaed`, 'PUT', formData).then(() => {
             alert("data add successfully")
         })
 
@@ -54,6 +55,18 @@ const EditFounder = () => {
         setInputs({ ...inputs, [name]: value })
         console.log(inputs)
     }
+    const handleImage = (e) => {
+        const file = e.target.files[0]; // Get the file from the input
+        setimage1(e.target.files[0]); // Set the file directly
+    
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                setImgsrc(reader.result); // Update imgsrc with the image data URL
+            };
+            reader.readAsDataURL(file); // Read the file as a data URL
+        }
+    };
 
 
 
@@ -65,12 +78,12 @@ const EditFounder = () => {
                             <div className="col-md-12">
                                 <div className="card card-primary">
                                     <div className="card-header">
-                                        <h3 className="card-title">founder</h3>
+                                        <h3 className="card-title">Founder</h3>
                                     </div>
                                     <form onSubmit={() => FormSubmit} action="/post" method="POST" encType="multipart/form-data">
                                         <div className="card-body">
                                             <div className="row">
-                                                <div className="col-md-12">
+                                                {/* <div className="col-md-12">
                                                     <div className="form-group">
                                                         <label htmlFor="exampleInputEmail1">Heading</label>
                                                         <input
@@ -82,13 +95,20 @@ const EditFounder = () => {
                                                             placeholder="Enter Your Name"
                                                         />
                                                     </div>
-                                                </div>
+                                                </div> */}
+                                                <div className="col-lg-12">
+                                                        <img
+                                                            style={{width: '120px'}}
+                                                            className="table-avatar"
+                                                            src={imgsrc? `${API}${imgsrc}` : ``}
+                                                        />
+                                                        </div>
                                                 <div className="col-md-12">
                                                     <div class="form-group">
-                                                        <label for="exampleInputFile">Employee Image</label>
+                                                        <label for="exampleInputFile">Founder Image</label>
                                                         <div>
                                                             <input
-                                                                onChange={(e) => setimage1(e.target.files)}
+                                                                onChange={handleImage}
                                                                 name="file"
                                                                 type="file"
                                                                 className="TextArea"
@@ -105,7 +125,7 @@ const EditFounder = () => {
                                             <div className="row">
                                                 <div className="col-md-12">
                                                     <div className="form-group">
-                                                        <label htmlFor="exampleInputPassword1">Employee Name</label>
+                                                        <label htmlFor="exampleInputPassword1">Founder Name</label>
                                                         <input
                                                             onChange={handleChange}
                                                             name="EmployeeName"
@@ -119,7 +139,7 @@ const EditFounder = () => {
                                                 </div>
                                                 <div className="col-md-12">
                                                     <div className="form-group">
-                                                        <label htmlFor="exampleInputPassword1">Employee Designation</label>
+                                                        <label htmlFor="exampleInputPassword1">Founder Designation</label>
                                                         <input
                                                             onChange={handleChange}
                                                             name="EmployeeDesignation"

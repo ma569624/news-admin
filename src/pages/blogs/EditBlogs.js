@@ -143,7 +143,7 @@ const EditBlogs = () => {
             <div className="col-md-12">
               <div className="card card-primary">
                 <div className="card-header">
-                  <h3 className="card-title">Edit Khabar</h3>
+                  <h3 className="card-title">Edit News</h3>
                 </div>
                 <form
                   onSubmit={() => FormSubmit}

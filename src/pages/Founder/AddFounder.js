@@ -6,31 +6,11 @@ import ApiCalls from "../../ApiCalls/ApiCalls"
 import { useRef, useMemo } from 'react';
 
 const AddFounder = () => {
-    const navigate = useNavigate()
     const [image1, setimage1] = useState({})
-    const [image2, setimage2] = useState({})
-    const [video, setVideo] = useState([])
-    const [audio, setAudio] = useState([])
+    
     const [selectedValue, setSelectedValue] = useState([]);
     const [isChecked, setIsChecked] = useState(false);
-    const [blogsSelect, setBlogsSelect] = useState([])
-    const [selectedOption, setSelectedOption] = useState(null);
-    const [selectedcategories, setSelectedcategories] = useState(null);
-    const [muti, setMult] = useState([])
-
-    const options = [
-        ...muti.map((item) => ({ value: item.link, label: item.name })),
-        // Add more options as needed
-    ];
-    const categoriesoptions = [
-        ...selectedValue.map((item) => ({ value: item.CategoryName, label: item.CategoryName })),
-        // Add more options as needed
-    ];
-
-    const editor = useRef(null);
-    const [content, setContent] = useState('');
-    const [IsHomevalue, setIsHomevalue] = useState('')
-    console.log(IsHomevalue)
+   
     const [inputs, setInputs] = useState({})
 
 
@@ -39,7 +19,6 @@ const AddFounder = () => {
     };
 
 
-    console.log(selectedValue)
     const SelecthandleChange = (event) => {
         setSelectedValue(event.target.value);
         console.log(selectedValue);
@@ -57,12 +36,12 @@ const AddFounder = () => {
         formData.append('Subheading', inputs.subheading);
         formData.append('Image1', image1[0]);
 
-        formData.append('Matter', content);
+        // formData.append('Matter', content);
 
         
 
 
-        let newres = await ApiCalls('rashifal', 'POST', formData).then(() => {
+        let newres = await ApiCalls('founder', 'POST', formData).then(() => {
             alert("data add successfully")
             // navigate('/');
         })
@@ -88,13 +67,13 @@ const AddFounder = () => {
                                     <div className="col-md-12">
                                         <div className="card card-primary">
                                             <div className="card-header">
-                                                <h3 className="card-title">HAMAIN JANE</h3>
+                                                <h3 className="card-title">Founder</h3>
                                             </div>
                                             <form onSubmit={() => FormSubmit} action="/post" method="POST" encType="multipart/form-data">
                                                 <div className="card-body">
 
                                                     <div className="row">
-
+                                                        
                                                         <div className="col-md-12">
                                                             <div className="form-group">
                                                                 <label htmlFor="exampleInputEmail1">Heading</label>

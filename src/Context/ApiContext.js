@@ -3,7 +3,9 @@ import secureLocalStorage from "react-secure-storage";
 
 export const ApiContext = createContext();
 export const AppProvider = ({ children }) => {
-  const API = "https://api.thirdeyeworldnews.com";
+  // const API = "https://api.thirdeyeworldnews.com";
+  const API = process.env.REACT_APP_API_URL;
+
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userinfo, setUserInfo] = useState({});

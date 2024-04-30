@@ -9,13 +9,11 @@ import Api from "../Api/Api";
 
 
 const EditAddress = () => {
-    const navigate = useNavigate()
-    const [image1, setimage1] = useState({})
+const API = process.env.REACT_APP_API_URL;
+
 
     const editor = useRef(null);
-    const editor2 = useRef(null);
     const [content, setContent] = useState('');
-    const [content2, setContent2] = useState('');
     const [inputs, setInputs] = useState({})
 
     const getdata = async () => {
@@ -24,7 +22,6 @@ const EditAddress = () => {
             setInputs(response[0]);
             // console.warn(response[0])
             setContent(response[0].CompleteAddress);
-            setContent2(response[0].OtherDetails);
         })
             .catch((error) => {
                 // Handle error
@@ -40,16 +37,21 @@ const EditAddress = () => {
     async function FormSubmit(event) {
         event.preventDefault();
         setInputs({ ...inputs, ['CompleteAddress']: content })
-        console.warn(inputs);
         
-        let newres = await Api(`/api/address/65f921ca41c0560e07a10771`, 'PUT', inputs).then(() => {
-            alert("data add successfully")
-            // navigate('/');
-        })
-        // let newres = await ApiCalls('address/65f921ca41c0560e07a10771', 'PUT', inputs).then(() => {
+        // let newres = await ApiCalls(`/address/65f921ca41c0560e07a10771`, 'PUT', inputs).then(() => {
         //     alert("data add successfully")
         //     // navigate('/');
         // })
+        let res = await fetch(`${API}/api/address/65f921ca41c0560e07a10771`,{
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({CompleteAddress: content })
+        })
+        if (res.ok) {
+            alert('data updated')
+        }
 
     }
 
@@ -66,19 +68,19 @@ const EditAddress = () => {
             
                     <div className="content-wrapper">
                         <section className="content mt-4">
-                            <div className="container-fluid">
+                            <div className="container ">
                                 <div className="row">
                                     <div className="col-md-12">
                                         <div className="card card-primary">
                                             <div className="card-header">
-                                                <h3 className="card-title">EDIT HAMARA PATA</h3>
+                                                <h3 className="card-title">HAMARA PATA</h3>
                                             </div>
                                             <form onSubmit={() => FormSubmit} action="/post" method="POST" encType="multipart/form-data">
                                                 <div className="card-body">
 
                                                     <div className="row">
 
-                                                        <div className="col-md-12">
+                                                        {/* <div className="col-md-12">
                                                             <div className="form-group">
                                                                 <label htmlFor="exampleInputEmail1">Heading1</label>
                                                                 <input
@@ -90,7 +92,7 @@ const EditAddress = () => {
                                                                     placeholder="Enter Your Name"
                                                                 />
                                                             </div>
-                                                        </div>
+                                                        </div> */}
                                                         <div className="col-md-12">
                                                             <div class="form-group">
                                                                 <label for="exampleInputFile">Complete Address</label>

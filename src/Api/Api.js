@@ -3,8 +3,8 @@ import { ApiContext } from "../Context/ApiContext";
 
 const Api = async (params = "", methods = 'GET', value = null) => {
   // const API = useContext(ApiContext);
-  const API = 'https://api.thirdeyeworldnews.com'
-
+  // const API = 'https://api.thirdeyeworldnews.com'
+  const API = process.env.REACT_APP_API_URL;
   try {
 
     const url = `${API} ${params}`;

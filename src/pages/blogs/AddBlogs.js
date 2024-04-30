@@ -10,29 +10,17 @@ import { ApiContext } from "../../Context/ApiContext";
 import DateTimePicker from 'react-datetime-picker';
 
 const AddBlogs = () => {
-  const [date, setDate] = useState(new Date());
-
-  // Function to handle changes in the date value
-  const onChange = (newDate) => {
-    setDate(newDate);
-  };
-
+  
+  const editor = useRef(null);
+  const [content, setContent] = useState('');
   const {userinfo} = useContext(ApiContext)
-  const params = useParams();
-  const position = params.position;
-  const [image1, setimage1] = useState({});
   const [image2, setimage2] = useState({});
   const [video, setVideo] = useState([]);
   const [audio, setAudio] = useState([]);
   const [selectedValue, setSelectedValue] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [selectedcategories, setSelectedcategories] = useState(null);
-  const [muti, setMult] = useState([]);
 
-  console.warn(userinfo)
 
-  const editor = useRef(null);
-  const [content, setContent] = useState("");
   const [inputs, setInputs] = useState({});
 
   const getdata = () => {
@@ -149,10 +137,7 @@ const AddBlogs = () => {
     setSelectedOption(selectedOption);
     console.warn(selectedOption);
   };
-  const categorieshandleChange = (selectedOption) => {
-    setSelectedcategories(selectedOption);
-    // console.warn(selectedOption)
-  };
+
 
   return (
     <>

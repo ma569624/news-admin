@@ -10,12 +10,9 @@ import Blogs from "../pages/blogs/Blogs";
 import AddBlogs from "../pages/blogs/AddBlogs";
 import EditBlogs from "../pages/blogs/EditBlogs";
 import Page from "../pages/page/Page";
-import AddHome from "../pages/block/AddHome";
-import Home from "../pages/block/Home";
-import EditHome from "../pages/block/EditHome";
-import Rajiya from "../pages/rajiya/Rajiya";
-import AddRajiya from "../pages/rajiya/AddRajiya";
-import EditRajiya from "../pages/rajiya/EditRajiya";
+import AddHome from "../pages/categories/AddHome";
+import Home from "../pages/categories/Home";
+import EditHome from "../pages/categories/EditHome";
 import Poll from "../pages/votpoll/Poll";
 import AddPoll from "../pages/votpoll/AddPoll";
 import EditPoll from "../pages/votpoll/EditPoll";
@@ -63,14 +60,13 @@ const Router = () => {
                   <Route path="/rules" element={<Rules />} />
                   <Route path="/homeview" element={<AddHome />} />
                   <Route path="/home" element={<Home />} />
-                  <Route path="/addrajiya" element={<AddRajiya />} />
-                  <Route path="/rajiya" element={<Rajiya />} />
+                 
                   <Route path="/poll" element={<Poll />} />
                   <Route path="/add-poll" element={<AddPoll />} />
                   <Route path="/edit-poll/:id" element={<EditPoll />} />
                   <Route path="/founder" element={<Founder />} />
                   <Route path="/add-founder" element={<AddFounder />} />
-                  <Route path="/edit-founder/:id" element={<EditFounder />} />
+                  <Route path="/edit-founder" element={<EditFounder />} />
 
                   <Route path="/team" element={<RashiFal />} />
                   <Route path="/add-team" element={<AddRashiFal />} />
@@ -87,7 +83,6 @@ const Router = () => {
 
                 <Route path="/home/:id" element={<EditHome />} />
 
-                <Route path="/rajiya/:id" element={<EditRajiya />} />
 
                 <Route path="/advert" element={<Adverd />} />
                 <Route path="/add-advert" element={<AddAdverd />} />
