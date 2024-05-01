@@ -213,6 +213,9 @@ const Nav = () => {
                         Section Manger
                       </NavLink>
                     </li>
+                    <NavLink to={`/blogs/block`} className="dropdown-item">
+                      Block News
+                    </NavLink>
                     {location.map((item, key) => (
                       <li>
                         <NavLink
@@ -224,14 +227,12 @@ const Nav = () => {
                       </li>
                     ))}
                     <NavLink to={`/blogs/tajasamachar`} className="dropdown-item">
-                    Tajasamachar
+                    ताजा समाचार मैनेजर
                     </NavLink>
                     <NavLink to={`/blogs/state`} className="dropdown-item">
                       ख़बरें राज्यों से
                     </NavLink>
-                    <NavLink to={`/blogs/block`} className="dropdown-item">
-                      Block News
-                    </NavLink>
+                   
                   </>
                 ) : null}
               </ul>

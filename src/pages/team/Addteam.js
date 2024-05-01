@@ -68,7 +68,7 @@ const AddRashiFal = () => {
                   >
                     <div className="card-body">
                       <div className="row">
-                        <div className="col-md-12">
+                        {/* <div className="col-md-12">
                           <div className="form-group">
                             <label htmlFor="exampleInputEmail1">Heading</label>
                             <input
@@ -79,7 +79,7 @@ const AddRashiFal = () => {
                               placeholder="Enter Your Name"
                             />
                           </div>
-                        </div>
+                        </div> */}
                         <div className="col-md-12">
                           <div class="form-group">
                             <label for="exampleInputFile">Employee Image</label>
