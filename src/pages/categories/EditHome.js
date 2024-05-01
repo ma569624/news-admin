@@ -7,9 +7,8 @@ const EditHome = () => {
   const [inputs, setInputs] = useState({});
   const [image1, setimage1] = useState({});
   const [image2, setimage2] = useState({});
-  const navigate = useNavigate();
-  const [selectedsection, SetSelctedsection] = useState("");
-
+  const API = process.env.REACT_APP_API_URL;
+  
   const params = useParams();
   const { id } = params;
   console.log(id);
@@ -59,7 +58,7 @@ const EditHome = () => {
 
     try {
       const response = await fetch(
-        `https://api.techdeveloper.in/api/categories/${id}`,
+        `${API}/api/categories/${id}`,
         {
           method: "PUT",
           body: formData, // Pass the FormData object directly
@@ -79,11 +78,7 @@ const EditHome = () => {
     }
   }
 
-  const showsection = (e) => {
-    const section = e.target.value;
-    console.warn(section);
-    SetSelctedsection(section);
-  };
+  
 
   const handleChange = (event) => {
     const name = event.target.name;

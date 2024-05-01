@@ -6,6 +6,8 @@ const AddHome = () => {
   const [image1, setimage1] = useState({});
   const [image2, setimage2] = useState({});
   const [selectedsection, SetSelctedsection] = useState("");
+  const API = process.env.REACT_APP_API_URL;
+
 
   async function FormSubmit(event) {
     event.preventDefault();
@@ -34,7 +36,7 @@ const AddHome = () => {
 
     try {
       const response = await fetch(
-        `https://api.techdeveloper.in/api/categories`,
+        `${API}/api/categories`,
         {
           method: "POST",
           body: formData, // Pass the FormData object directly
