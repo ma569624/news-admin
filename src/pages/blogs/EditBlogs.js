@@ -85,8 +85,9 @@ const EditBlogs = () => {
       formData.append("Capton", inputs.Capton);
     }
 
-      formData.append("Headline", inputs.Headline);
-
+      if (inputs.Headline !== undefined) {
+        formData.append("Headline", inputs.Headline);
+      }
 
     if (inputs.Subheading && inputs.Subheading.length > 0) {
       formData.append("Subheading", inputs.Subheading);
