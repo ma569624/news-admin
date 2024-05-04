@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom";
 const RashiFal = () => {
   const [bannerdata, setbannerdata] = useState([]);
   const [isVisible, setIsVisible] = useState('active');
+  const API = process.env.REACT_APP_API_URL;
 
   const toggleVisibility = async (id, status) => {
     if (status == "active") {
@@ -58,7 +59,7 @@ const RashiFal = () => {
               <thead>
                 <tr>
                   <th style={{ width: "1%" }}>#</th>
-                  <th style={{ width: "10%" }}>Heading</th>
+                 
                   <th style={{ width: "7%" }}>Image</th>
                   <th style={{ width: "10%" }}>Name</th>
 
@@ -74,17 +75,18 @@ const RashiFal = () => {
                       item.Status == "active" ? "table-light" : "table-primary"
                     }>
                     <td>{key + 1}</td>
-                    <td>
-                      <small>{item.heading}</small>
-                    </td>
+                    
                     <td>
                       <ul className="list-inline">
                         <li className="list-inline-item">
-                          <img
-                            alt="Avatar"
+                         {
+                          item.EmployeeImage ? <img
+                            
                             className="table-avatar"
-                            src={item.Image1}
-                          />
+                            width={65}
+                            src={`${API}${item.EmployeeImage}`}
+                          /> : <></>
+                         } 
                         </li>
                       </ul>
                     </td>

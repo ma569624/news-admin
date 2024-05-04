@@ -10,9 +10,9 @@ import Blogs from "../pages/blogs/Blogs";
 import AddBlogs from "../pages/blogs/AddBlogs";
 import EditBlogs from "../pages/blogs/EditBlogs";
 import Page from "../pages/page/Page";
-import AddHome from "../pages/categories/AddHome";
-import Home from "../pages/categories/Home";
-import EditHome from "../pages/categories/EditHome";
+import AddCategorie from "../pages/categories/AddCategorie";
+import Categorie from "../pages/categories/Categorie";
+import EditCategorie from "../pages/categories/EditCategorie";
 import Poll from "../pages/votpoll/Poll";
 import AddPoll from "../pages/votpoll/AddPoll";
 import EditPoll from "../pages/votpoll/EditPoll";
@@ -33,6 +33,7 @@ import { ApiContext } from "../Context/ApiContext";
 import { Welcome } from "../pages/Welcome";
 import Working from "../pages/Working";
 import AdminRoutes from "./AdminRoutes";
+import TajaSamachar from "../pages/Tagline/TajaSamachar";
 
 const Router = () => {
   const { isAuthenticated } = useContext(ApiContext);
@@ -58,8 +59,8 @@ const Router = () => {
                 <Route element={<AdminRoutes />}>
                   <Route path="/address" element={<EditAddress />} />
                   <Route path="/rules" element={<Rules />} />
-                  <Route path="/homeview" element={<AddHome />} />
-                  <Route path="/home" element={<Home />} />
+                  <Route path="/add-categorie" element={<AddCategorie />} />
+                  <Route path="/categorie" element={<Categorie />} />
                  
                   <Route path="/poll" element={<Poll />} />
                   <Route path="/add-poll" element={<AddPoll />} />
@@ -81,7 +82,7 @@ const Router = () => {
                   <Route path="/create-user" element={<Sign />} />
                 </Route>
 
-                <Route path="/home/:id" element={<EditHome />} />
+                <Route path="/edit-categorie/:id" element={<EditCategorie />} />
 
 
                 <Route path="/advert" element={<Adverd />} />
@@ -89,6 +90,7 @@ const Router = () => {
                 <Route path="/edit-advert/:id" element={<EditAdverd />} />
 
                 <Route path="/tagline" element={<EditTagline />} />
+                <Route path="/tajasamachar" element={<TajaSamachar />} />
               </Route>
               {!isAuthenticated && <Route path="/login" element={<Login />} />}
             </Routes>

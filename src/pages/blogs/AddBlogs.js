@@ -92,7 +92,10 @@ const AddBlogs = () => {
       formData.append("Headline", inputs.Headline);
     }
 
-    formData.append("Image2", image2[0]);
+    if (image2 instanceof File) {
+      formData.append("Image2", image2);
+    }
+
     formData.append("Video", video[0]);
     formData.append("Audio", audio[0]);
     if (content) {

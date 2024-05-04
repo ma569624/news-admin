@@ -34,7 +34,8 @@ const Blogs = () => {
     formData.append("Status", isVisible);
     let newres = await ApiCalls(`blogs/${id}`, "PUT", formData).then(() => {
       alert("data add successfully");
-      window.location.reload();
+      // window.location.reload();
+      
     });
   };
 
@@ -323,9 +324,7 @@ const Blogs = () => {
                     </td>
 
                     <td className="project-actions text-right">
-                      {PositionName == "tajasamachar" ? (
-                        <></>
-                      ) : (
+                      
                         <NavLink
                           to={""}
                           className={`btn me-3 fw-bold btn-sm ${
@@ -339,7 +338,7 @@ const Blogs = () => {
                         >
                           {item.Status == "active" ? "Hide" : "Show"}
                         </NavLink>
-                      )}
+                    
 
                       
                         <NavLink

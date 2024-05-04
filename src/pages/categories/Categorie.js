@@ -1,15 +1,23 @@
 import React, { useContext, useEffect, useState } from "react";
 import ApiCalls from "../../ApiCalls/ApiCalls";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { ApiContext } from "../../Context/ApiContext";
 
-const Home = () => {
+const Categorie = () => {
   const params = useParams();
   const { API, access, type } = useContext(ApiContext);
   const [bannerdata, setbannerdata] = useState([]);
   const [selectedsection, SetSelctedsection] = useState("");
   const [isVisible, setIsVisible] = useState({});
+  const location = useLocation();
+
+  const queryParams = new URLSearchParams(location.search);
+
+  // Get the value of a specific query parameter
+  const yourParamValue = queryParams.get("value");
+  console.warn("Query Parameter Value:", yourParamValue);
+  console.warn(yourParamValue);
 
   const toggleVisibility = async (id, status) => {
     if (status == "active") {
@@ -29,7 +37,6 @@ const Home = () => {
     );
   };
 
-  const [parent, setParent] = useState(null);
 
   const getdata = () => {
     ApiCalls(`categories?location=${selectedsection}`)
@@ -39,6 +46,26 @@ const Home = () => {
       })
       .catch((error) => {});
   };
+  useEffect(() => {
+    if (yourParamValue) {
+      if (yourParamValue == 'title1' || yourParamValue == 'title2' || yourParamValue == 'title3'|| yourParamValue == 'title4' ) {
+        ApiCalls(`categories?location=title`)
+        .then((response) => {
+          setbannerdata(response);
+          console.warn(response);
+        })
+        .catch((error) => {});
+      }
+      else{
+        ApiCalls(`categories?location=${yourParamValue}`)
+        .then((response) => {
+          setbannerdata(response);
+          console.warn(response);
+        })
+        .catch((error) => {});
+      }
+    }
+  }, [yourParamValue]);
 
   const Delethandler = (id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete?");
@@ -137,6 +164,7 @@ const Home = () => {
       })
       .catch((error) => {});
     SetSelctedsection(section);
+    
   };
 
   return (
@@ -162,35 +190,35 @@ const Home = () => {
                   <option value="state">State</option>
                 </select>
               </div>
-              {selectedsection === "title" ? 
-                        <></> :
-              <>
-              <NavLink
-                to={""}
-                className={`btn ms-2 me-2 fw-bold btn-sm btn-success`}
-                onClick={() => handleUpdateStatusSelected("active")}
-              >
-                show
-              </NavLink>
-              
-              <NavLink
-                to={""}
-                className={`btn ms-2 me-2 fw-bold btn-sm btn-primary`}
-                onClick={() => handleUpdateStatusSelected("inactive")}
-              >
-                Hide
-              </NavLink>
-              {access === true || type === "admin" ? (
-                <NavLink
-                  className="fw-bold btn btn-danger btn-sm ms-2"
-                  onClick={handleDeleteSelected}
-                >
-                  Delete
-                </NavLink>
-              ) : null}
-              </>
+              {selectedsection === "title" ? (
+                <></>
+              ) : (
+                <>
+                  <NavLink
+                    to={""}
+                    className={`btn ms-2 me-2 fw-bold btn-sm btn-success`}
+                    onClick={() => handleUpdateStatusSelected("active")}
+                  >
+                    show
+                  </NavLink>
 
-              }
+                  <NavLink
+                    to={""}
+                    className={`btn ms-2 me-2 fw-bold btn-sm btn-primary`}
+                    onClick={() => handleUpdateStatusSelected("inactive")}
+                  >
+                    Hide
+                  </NavLink>
+                  {access === true || type === "admin" ? (
+                    <NavLink
+                      className="fw-bold btn btn-danger btn-sm ms-2"
+                      onClick={handleDeleteSelected}
+                    >
+                      Delete
+                    </NavLink>
+                  ) : null}
+                </>
+              )}
             </div>
           </div>
           <div className="card-body p-0">
@@ -259,32 +287,34 @@ const Home = () => {
                     </td>
 
                     <td className="project-actions text-right">
-                    {selectedsection === "title" ? 
+                      {selectedsection === "title" ? (
                         <></>
-                       :
-                      <NavLink
-                        to={""}
-                        className={`btn me-3 fw-bold btn-sm ${
-                          item.Status == "active"
-                            ? "btn-primary"
-                            : "btn-success"
-                        }`}
-                        onClick={() => toggleVisibility(item._id, item.Status)}
-                      >
-                        {/* {isVisible ? 'Hide' : 'Show'} */}
-                        {item.Status == "active" ? "Hide" : "Show"}
-                      </NavLink>
-                    }
+                      ) : (
+                        <NavLink
+                          to={""}
+                          className={`btn me-3 fw-bold btn-sm ${
+                            item.Status == "active"
+                              ? "btn-primary"
+                              : "btn-success"
+                          }`}
+                          onClick={() =>
+                            toggleVisibility(item._id, item.Status)
+                          }
+                        >
+                          {/* {isVisible ? 'Hide' : 'Show'} */}
+                          {item.Status == "active" ? "Hide" : "Show"}
+                        </NavLink>
+                      )}
 
                       <NavLink
-                        to={`/home/${item._id}`}
+                        to={`/edit-categorie/${item._id}`}
                         className="btn btn-info btn-sm fw-bold"
                       >
                         Edit
                       </NavLink>
-                      {selectedsection === "title" ? 
+                      {selectedsection === "title" ? (
                         <></>
-                       : access === true || type === "admin" ? (
+                      ) : access === true || type === "admin" ? (
                         <NavLink
                           className="btn btn-danger btn-sm ms-2 fw-bold"
                           onClick={() => Delethandler(item._id)}
@@ -303,13 +333,6 @@ const Home = () => {
       </section>
     </div>
   );
-  function handleDragEnd(event) {
-    const { over } = event;
-
-    // If the item is dropped over a container, set it as the parent
-    // otherwise reset the parent to `null`
-    setParent(over ? over.id : null);
-  }
 };
 
-export default Home;
+export default Categorie;

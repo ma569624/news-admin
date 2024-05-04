@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import "./style.css";
 import { ApiContext } from "../../Context/ApiContext";
 import ApiCalls from "../../ApiCalls/ApiCalls";
@@ -180,11 +180,11 @@ const Nav = () => {
                     Header Tagline
                   </NavLink>
                 </li>
-                {/* <li>
-                  <NavLink to={`/blogs/primenews`} className="dropdown-item">
-                    Home News Manager
-                  </NavLink>
-                </li> */}
+                <li>
+                  <Link className="dropdown-item">
+                    Youtube
+                  </Link>
+                </li>
                 {type === "admin" ? (
                   <li>
                     <NavLink to={`/top-links`} className="dropdown-item">
@@ -203,13 +203,13 @@ const Nav = () => {
                 {type === "admin" ? (
                   <>
                     <li>
-                      <NavLink to={`/homeview`} className="dropdown-item">
+                      <NavLink to={`/add-categorie`} className="dropdown-item">
                         Add Section Block
                       </NavLink>
                     </li>
 
                     <li>
-                      <NavLink to={`/home`} className="dropdown-item">
+                      <NavLink to={`/categorie`} className="dropdown-item">
                         Section Manger
                       </NavLink>
                     </li>
@@ -226,13 +226,12 @@ const Nav = () => {
                         </NavLink>
                       </li>
                     ))}
-                    <NavLink to={`/blogs/tajasamachar`} className="dropdown-item">
+                    <NavLink to={`/tajasamachar`} className="dropdown-item">
                     ताजा समाचार मैनेजर
                     </NavLink>
                     <NavLink to={`/blogs/state`} className="dropdown-item">
                       ख़बरें राज्यों से
                     </NavLink>
-                   
                   </>
                 ) : null}
               </ul>
