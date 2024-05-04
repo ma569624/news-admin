@@ -46,23 +46,20 @@ const Categorie = () => {
       })
       .catch((error) => {});
   };
+
+  useEffect(() => {
+    if (selectedsection) {
+      getdata()
+    }
+  },[selectedsection])
+
   useEffect(() => {
     if (yourParamValue) {
       if (yourParamValue == 'title1' || yourParamValue == 'title2' || yourParamValue == 'title3'|| yourParamValue == 'title4' ) {
-        ApiCalls(`categories?location=title`)
-        .then((response) => {
-          setbannerdata(response);
-          console.warn(response);
-        })
-        .catch((error) => {});
+        SetSelctedsection('title')
       }
       else{
-        ApiCalls(`categories?location=${yourParamValue}`)
-        .then((response) => {
-          setbannerdata(response);
-          console.warn(response);
-        })
-        .catch((error) => {});
+        SetSelctedsection(yourParamValue)
       }
     }
   }, [yourParamValue]);
@@ -73,7 +70,8 @@ const Categorie = () => {
     if (confirmDelete) {
       ApiCalls(`categories/${id}`, "DELETE")
         .then((response) => {
-          window.location.reload();
+          // window.location.reload();
+          getdata()
           alert("Successfully deleted");
         })
         .catch((error) => {
@@ -157,12 +155,6 @@ const Categorie = () => {
 
   const showsection = (e) => {
     const section = e.target.value;
-    ApiCalls(`categories?location=${section}`)
-      .then((response) => {
-        setbannerdata(response);
-        console.warn(response);
-      })
-      .catch((error) => {});
     SetSelctedsection(section);
     
   };
@@ -181,6 +173,7 @@ const Categorie = () => {
                 <select
                   class="custom-select w-25 mx-auto"
                   onChange={showsection}
+                  value={selectedsection}
                 >
                   <option disabled selected>
                     Select
