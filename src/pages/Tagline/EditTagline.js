@@ -9,12 +9,8 @@ import { ApiContext } from "../../Context/ApiContext";
 
 const EditTagline = () => {
     const {API} = useContext(ApiContext)
-    const navigate = useNavigate()
-    const [image1, setimage1] = useState({})
 
 
-    const editor = useRef(null);
-    const editor2 = useRef(null);
     const [content, setContent] = useState('');
     const [inputs, setInputs] = useState({})
 

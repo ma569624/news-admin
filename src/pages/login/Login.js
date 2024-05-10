@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ApiContext } from "../../Context/ApiContext";
 const Login = () => {
   const {API, setUserInfo} = useContext(ApiContext)
@@ -98,6 +98,9 @@ const Login = () => {
                     className="form-control"
                   />
                 </div>
+              </div>
+              <div className="mb-3">
+                {/* <Link to={'/forget-password'} className="text-white fw-bold ">Forget Password</Link> */}
               </div>
               <div className="row">
                 <div className="col-12">

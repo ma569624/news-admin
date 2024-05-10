@@ -7,12 +7,12 @@ import Select from "react-select";
 
 const EditRashiFal = () => {
   const params = useParams();
+  const navigation = useNavigate();
   const [content, setContent] = useState("");
   const [inputs, setInputs] = useState({});
   const [image1, setimage1] = useState({});
   const editor = useRef(null);
 
-  // Run the effect whenever 'muti' changes
 
   const getdata = async () => {
     ApiCalls(`team?_id=${params.id}`)
@@ -45,6 +45,7 @@ const EditRashiFal = () => {
     let newres = await ApiCalls(`team/${params.id}`, "PUT", formData).then(
       () => {
         alert("data add successfully");
+        navigation('/team')
       }
     );
   }
@@ -74,19 +75,7 @@ const EditRashiFal = () => {
                 >
                   <div className="card-body">
                     <div className="row">
-                      {/* <div className="col-md-12">
-                        <div className="form-group">
-                          <label htmlFor="exampleInputEmail1">Heading</label>
-                          <input
-                            onChange={handleChange}
-                            name="heading"
-                            value={inputs.heading}
-                            type="text"
-                            class="form-control"
-                            placeholder="Enter Your Name"
-                          />
-                        </div>
-                      </div> */}
+                      
                       <div className="col-md-12">
                         <div class="form-group">
                           <label for="exampleInputFile">Employee Image</label>

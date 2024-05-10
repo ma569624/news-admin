@@ -9,10 +9,9 @@ import { ApiContext } from "../../Context/ApiContext";
 const EditBlogs = () => {
   // const params = useParams()
   const params = useParams();
-  const {categorie, id} = params; 
-  console.warn(params)
+  const { categorie, id } = params;
+  console.warn(params);
 
-  
   const { API } = useContext(ApiContext);
   const navigate = useNavigate();
   const editor = useRef(null);
@@ -62,7 +61,7 @@ const EditBlogs = () => {
   }, []);
 
   async function FormSubmit(event) {
-    console.warn(inputs.Headline)
+    console.warn(inputs.Headline);
     event.preventDefault();
     const formData = await new FormData();
 
@@ -85,16 +84,16 @@ const EditBlogs = () => {
       formData.append("Capton", inputs.Capton);
     }
 
-      if (inputs.Headline !== undefined) {
-        formData.append("Headline", inputs.Headline);
-      }
+    if (inputs.Headline !== undefined) {
+      formData.append("Headline", inputs.Headline);
+    }
 
     if (inputs.Subheading && inputs.Subheading.length > 0) {
       formData.append("Subheading", inputs.Subheading);
     }
-    
+
     const currentDate = new Date().toISOString();
-    formData.append('CreationDate', currentDate);
+    formData.append("CreationDate", currentDate);
 
     if (Array.isArray(selectedOption)) {
       const positionValues = selectedOption.map((option) => option.value);
@@ -102,30 +101,32 @@ const EditBlogs = () => {
       formData.append("Category", JSON.stringify(positionValues));
     }
 
-    if (Array.isArray(selectedValue) && selectedValue.length > 0) {
-      selectedValue.forEach((option) => {
-        formData.append("selectedValue[]", option.value);
-      });
-      // console.warn(selectedValue);
+    if (image1 instanceof File) {
+      formData.append("Image1", image1);
     }
-    formData.append("Image1", image1[0]);
-    formData.append("Image2", image2[0]);
-    formData.append("Video", video[0]);
-    formData.append("Audio", audio[0]);
+
+    if (image2 instanceof File) {
+      formData.append("Image2", image2);
+    }
+
+    if (video.length > 0) {
+      formData.append("Video", video[0]);
+    }
+    if (audio.length > 0) {
+      formData.append("Audio", audio[0]);
+    }
     formData.append("Matter", content);
 
     let newres = await ApiCalls(`blogs/${id}`, "PUT", formData).then(() => {
       alert("data add successfully");
-      if (categorie == 'state' || categorie == 'block') {
+      if (categorie == "state" || categorie == "block") {
         const encodedCategory = encodeURIComponent(inputs.Category);
         navigate(`/blogs/${categorie}?value=${encodedCategory}`);
-      }
-      else{
+      } else {
         navigate(`/blogs/${categorie}`);
       }
     });
 
-    console.log("FormData:", formData);
   }
 
   const handleChange = (event) => {
@@ -179,12 +180,33 @@ const EditBlogs = () => {
                       </div>
                     </div>
                     <div className="row">
-                    <div className="col-md-12">
+                      <div className="col-md-12">
+                        {image1 && image1 instanceof Blob ? (
+                          <img
+                            className="mt-2"
+                            style={{ width: "100px", height: "80px" }}
+                            src={URL.createObjectURL(image1)}
+                            alt=""
+                          />
+                        ) : (
+                          <img
+                            className="mt-2"
+                            style={{ width: "100px", height: "80px" }}
+                            src={
+                              inputs.ReporterImage
+                                ? `${API}${inputs.ReporterImage}`
+                                : ""
+                            }
+                            alt=""
+                          />
+                        )}
+                      </div>
+                      <div className="col-md-12">
                         <div class="form-group">
                           <label for="exampleInputFile">Reporter Image</label>
                           <div>
                             <input
-                              onChange={(e) => setimage1(e.target.files)}
+                              onChange={(e) => setimage1(e.target.files[0])}
                               name="file"
                               type="file"
                               className="TextArea"
@@ -239,9 +261,7 @@ const EditBlogs = () => {
                       </div>
                       <div className="col-md-12">
                         <div className="form-group">
-                          <label htmlFor="exampleInputPassword1">
-                            Place
-                          </label>
+                          <label htmlFor="exampleInputPassword1">Place</label>
                           <input
                             onChange={handleChange}
                             name="DatePlace"
@@ -258,7 +278,6 @@ const EditBlogs = () => {
                       </div>
                       <div className="col-md-12">
                         <div className="form-group">
-
                           <div className="taja-space">
                             <label htmlFor="exampleInputPassword1">
                               Heading
@@ -278,7 +297,7 @@ const EditBlogs = () => {
                               </div>
                             </div>
                           </div>
-                          
+
                           <input
                             onChange={handleChange}
                             name="Heading"
@@ -314,12 +333,21 @@ const EditBlogs = () => {
                         </div>
                       </div>
                       <div className="col-md-12">
-                        <img
-                          className="mt-2"
-                          style={{ width: "100px", height: "80px" }}
-                          src={`${API}${inputs.Image}`}
-                          alt=""
-                        />
+                        {image2 && image2 instanceof Blob ? (
+                          <img
+                            className="mt-2"
+                            style={{ width: "100px", height: "80px" }}
+                            src={URL.createObjectURL(image2)}
+                            alt=""
+                          />
+                        ) : (
+                          <img
+                            className="mt-2"
+                            style={{ width: "100px", height: "80px" }}
+                            src={inputs.Image ? `${API}${inputs.Image}` : ""}
+                            alt=""
+                          />
+                        )}
                       </div>
 
                       <div className="col-md-4">
@@ -327,7 +355,7 @@ const EditBlogs = () => {
                           <label htmlFor="exampleInputFile">Image</label>
                           <div className="input-group">
                             <input
-                              onChange={(e) => setimage2(e.target.files)}
+                              onChange={(e) => setimage2(e.target.files[0])}
                               name="file"
                               type="file"
                               className="TextField"

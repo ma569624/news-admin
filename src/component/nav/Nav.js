@@ -49,6 +49,12 @@ const Nav = () => {
                     </NavLink>
                   </li>
                   <li>
+                    <NavLink to={`/usermanager`} className="dropdown-item">
+                       User Manager
+                    </NavLink>
+                  </li>
+                  
+                  <li>
                     <NavLink to={`/logs`} className="dropdown-item">
                       Views Login logs
                     </NavLink>
@@ -181,9 +187,9 @@ const Nav = () => {
                   </NavLink>
                 </li>
                 <li>
-                  <Link className="dropdown-item">
+                  <NavLink to={'/youtube'} className="dropdown-item">
                     Youtube
-                  </Link>
+                  </NavLink>
                 </li>
                 {type === "admin" ? (
                   <li>

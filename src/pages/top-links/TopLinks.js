@@ -79,9 +79,9 @@ const TopLinks = () => {
                                                 <NavLink to={`/edit-top-links/${item._id}`} className="btn btn-info btn-sm">
                                                     Edit
                                                 </NavLink>
-                                                <NavLink className="btn btn-danger btn-sm ms-2" onClick={() => Delethandler(item._id)}>
+                                                {/* <NavLink className="btn btn-danger btn-sm ms-2" onClick={() => Delethandler(item._id)}>
                                                     Delete
-                                                </NavLink>
+                                                </NavLink> */}
                                             </td>
                                         </tr>
                                     )

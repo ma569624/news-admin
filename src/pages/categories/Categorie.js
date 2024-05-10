@@ -7,7 +7,7 @@ import { ApiContext } from "../../Context/ApiContext";
 const Categorie = () => {
   const params = useParams();
   const { API, access, type } = useContext(ApiContext);
-  const [bannerdata, setbannerdata] = useState([]);
+  const [data, setdata] = useState([]);
   const [selectedsection, SetSelctedsection] = useState("");
   const [isVisible, setIsVisible] = useState({});
   const location = useLocation();
@@ -16,19 +16,12 @@ const Categorie = () => {
 
   // Get the value of a specific query parameter
   const yourParamValue = queryParams.get("value");
-  console.warn("Query Parameter Value:", yourParamValue);
-  console.warn(yourParamValue);
 
   const toggleVisibility = async (id, status) => {
-    if (status == "active") {
-      setIsVisible("inactive");
-    } else {
-      setIsVisible("active");
-    }
+    
     const formData = await new FormData();
-    console.warn(status);
-    console.warn(isVisible);
-    formData.append("Status", isVisible);
+    
+    formData.append("Status", !status);
     let newres = await ApiCalls(`categories/${id}`, "PUT", formData).then(
       () => {
         alert("data add successfully");
@@ -37,12 +30,10 @@ const Categorie = () => {
     );
   };
 
-
   const getdata = () => {
     ApiCalls(`categories?location=${selectedsection}`)
       .then((response) => {
-        setbannerdata(response);
-        console.warn(response);
+        setdata(response);
       })
       .catch((error) => {});
   };
@@ -116,7 +107,7 @@ const Categorie = () => {
 
         getdata();
         const data = await response.json();
-        console.log(data); // Log success message or handle response data
+
       } catch (error) {
         console.error("Error deleting products:", error.message);
         // Handle error, show error message to user, etc.
@@ -145,7 +136,6 @@ const Categorie = () => {
 
         getdata();
         const data = await response.json();
-        console.log(data); // Log success message or handle response data
       } catch (error) {
         console.error("Error updating status:", error.message);
         // Handle error, show error message to user, etc.
@@ -155,8 +145,9 @@ const Categorie = () => {
 
   const showsection = (e) => {
     const section = e.target.value;
-    SetSelctedsection(section);
-    
+    if (section) {
+      SetSelctedsection(section);
+    }
   };
 
   return (
@@ -173,7 +164,7 @@ const Categorie = () => {
                 <select
                   class="custom-select w-25 mx-auto"
                   onChange={showsection}
-                  value={selectedsection}
+                  value={selectedsection ? selectedsection : null}
                 >
                   <option disabled selected>
                     Select
@@ -190,7 +181,7 @@ const Categorie = () => {
                   <NavLink
                     to={""}
                     className={`btn ms-2 me-2 fw-bold btn-sm btn-success`}
-                    onClick={() => handleUpdateStatusSelected("active")}
+                    onClick={() => handleUpdateStatusSelected(true)}
                   >
                     show
                   </NavLink>
@@ -198,7 +189,7 @@ const Categorie = () => {
                   <NavLink
                     to={""}
                     className={`btn ms-2 me-2 fw-bold btn-sm btn-primary`}
-                    onClick={() => handleUpdateStatusSelected("inactive")}
+                    onClick={() => handleUpdateStatusSelected(false)}
                   >
                     Hide
                   </NavLink>
@@ -225,16 +216,8 @@ const Categorie = () => {
                         name="tajasamachar"
                         style={{ border: "2px solid red" }}
                         class="form-check-input me-1"
-                        onChange={() => {
-                          if (selectedItems.length === bannerdata.length) {
-                            setSelectedItems([]);
-                          } else {
-                            setSelectedItems(
-                              bannerdata.map((item) => item._id)
-                            );
-                          }
-                        }}
-                        checked={selectedItems.length === bannerdata.length}
+                        onChange={() => setSelectedItems(selectedItems.length === data.length ? [] : data.map(item => item._id))}
+                        checked={selectedItems.length === data.length}
                         id="exampleCheck1"
                       />
                       <label for="exampleCheck1" className="mb-0">
@@ -252,11 +235,11 @@ const Categorie = () => {
                 </tr>
               </thead>
               <tbody>
-                {bannerdata.map((item, key) => (
+                {data.map((item, key) => (
                   <tr
                     key={key}
                     className={
-                      item.Status == "active" ? "table-light" : "table-primary"
+                      item.Status? "table-light" : "table-primary"
                     }
                   >
                     <td>
@@ -286,16 +269,14 @@ const Categorie = () => {
                         <NavLink
                           to={""}
                           className={`btn me-3 fw-bold btn-sm ${
-                            item.Status == "active"
-                              ? "btn-primary"
+                            item.Status? "btn-primary"
                               : "btn-success"
                           }`}
                           onClick={() =>
                             toggleVisibility(item._id, item.Status)
                           }
                         >
-                          {/* {isVisible ? 'Hide' : 'Show'} */}
-                          {item.Status == "active" ? "Hide" : "Show"}
+                          {item.Status? "Hide" : "Show"}
                         </NavLink>
                       )}
 

@@ -1,27 +1,45 @@
-import SideNavBar from "../../component/sidenav/SideNavBar";
 import React, { useContext, useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
 
 import ApiCalls from "../../ApiCalls/ApiCalls";
-import { useRef, useMemo } from "react";
 import { ApiContext } from "../../Context/ApiContext";
+import { NavLink } from "react-router-dom";
 
 const TajaSamachar = () => {
   const { API } = useContext(ApiContext);
-  const navigate = useNavigate();
-  const [image1, setimage1] = useState({});
-
-  const [content, setContent] = useState("");
+  
   const [inputs, setInputs] = useState({});
+  const [data, setData] = useState([])
 
   const getdata = async () => {
-    ApiCalls(`tagline?_id=6602a87711e47f88c9059347`)
+    ApiCalls(`tajasamachar`)
       .then((response) => {
-        setInputs(response[0]);
+        setData(response)
       })
       .catch((error) => {
         // Handle error
       });
+  };
+
+  const toggleVisibility = async (id, status) => {
+    let data = {Status: !status}
+    const result = await fetch(`${API}/api/tajasamachar/${id}`,{
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+    alert("data add successfully");
+    getdata()
+  };
+  
+  const Delethandler = (id) => {
+    ApiCalls(`tajasamachar/${id}`, "DELETE")
+      .then((response) => {
+          alert("sucessfully delete");
+        getdata();
+      })
+      .catch((error) => {});
   };
 
   useEffect(() => {
@@ -30,32 +48,31 @@ const TajaSamachar = () => {
 
   async function FormSubmit(event) {
     event.preventDefault();
-    setInputs({ ...inputs, ["CompleteAddress"]: content });
-    console.warn(inputs);
 
-    // fetch(`${API}/api/tagline/6602a87711e47f88c9059347`, {
-    //   method: "PUT",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(inputs),
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     alert("data add successfully");
-    //     console.log("Data received:", data);
-    //     // Do something with the data
-    //   })
-    //   .catch((error) => {
-    //     console.error("There was a problem with the fetch operation:", error);
-    //   });
+    fetch(`${API}/api/tajasamachar`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ Heading: inputs.Heading }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        alert("data add successfully");
+        console.log("Data received:", data);
+        getdata();
+        // Do something with the data
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
   }
 
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
     setInputs({ ...inputs, [name]: value });
-    console.log(inputs);
+    console.warn(inputs);
   };
 
   return (
@@ -67,7 +84,7 @@ const TajaSamachar = () => {
               <div className="col-md-12">
                 <div className="card card-primary">
                   <div className="card-header">
-                    <h3 className="card-title">Taja Samchar</h3>
+                    <h3 className="card-title">Add Taja Samchar</h3>
                   </div>
                   <form
                     onSubmit={() => FormSubmit}
@@ -79,11 +96,12 @@ const TajaSamachar = () => {
                       <div className="row">
                         <div className="col-md-12">
                           <div className="form-group">
-                            <label htmlFor="exampleInputEmail1">Taja Samchar</label>
+                            <label htmlFor="exampleInputEmail1">
+                              Taja Samchar
+                            </label>
                             <input
                               onChange={handleChange}
                               name="Heading"
-                              value={inputs.Heading}
                               type="text"
                               class="form-control"
                               placeholder="Enter Your Name"
@@ -103,6 +121,75 @@ const TajaSamachar = () => {
                       </button>
                     </div>
                   </form>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+          <div className="container-fluid mt-5">
+            <div className="row">
+              <div className="col-md-12">
+                <div className="card card-primary">
+                  <div className="card-body p-0">
+                    <table className="table table-striped projects">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th >Title</th>
+                          <th>Staus</th>
+
+                         
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {data.map((item, key) => (
+                          <tr
+                            key={key}
+                            className={
+                              item.Status == true
+                                ? "table-light"
+                                : "table-primary"
+                            }
+                          >
+                            <td>{key + 1}</td>
+
+                            
+                            <td className="project_progress" style={{maxWidth: '200px'}}>
+                              {item.Heading}
+                            </td>
+
+                            <td className="project-actions text-right">
+                              <NavLink
+                                to={""}
+                                className={`btn me-3 fw-bold btn-sm ${
+                                  item.Status == true
+                                    ? "btn-primary"
+                                    : "btn-success"
+                                }`}
+                                onClick={() =>
+                                  toggleVisibility(item._id, item.Status)
+                                }
+                              >
+                                {item.Status == "active" ? "Hide" : "Show"}
+                              </NavLink>
+                              <NavLink
+                                to={`/edittajasamachar/${item._id}`}
+                                className="btn btn-info btn-sm fw-bold"
+                              >
+                                Edit
+                              </NavLink>
+                              <NavLink
+                                className="btn btn-danger btn-sm ms-2 fw-bold"
+                                onClick={() => Delethandler(item._id)}
+                              >
+                                Delete
+                              </NavLink>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>

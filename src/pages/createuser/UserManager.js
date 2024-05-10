@@ -1,42 +1,39 @@
 import React, { useEffect, useState } from "react";
 import ApiCalls from "./../../ApiCalls/ApiCalls";
 import { NavLink } from "react-router-dom";
-
-const RashiFal = () => {
-  const [bannerdata, setbannerdata] = useState([]);
+const UserManager = () => {
+  const [data, setdata] = useState([]);
   const API = process.env.REACT_APP_API_URL;
 
   const toggleVisibility = async (id, status) => {
-   
     const formData = await new FormData();
-   
-    formData.append("Status", !status);
-    let newres = await ApiCalls(`team/${id}`, "PUT", formData).then(
-      () => {
-        alert("data add successfully");
-        getdata();
-      }
-    );
+
+    formData.append("user_block", !status);
+    let newres = await ApiCalls(`user/${id}`, "PUT", formData).then(() => {
+      alert("data add successfully");
+      getdata();
+    });
   };
 
   const getdata = () => {
-    ApiCalls(`team`)
+    ApiCalls(`user`)
       .then((response) => {
-        setbannerdata(response);
+        setdata(response);
       })
       .catch((error) => {
         // Handle error
       });
   };
+  console.warn(data)
 
   useEffect(() => {
     getdata();
   }, []);
 
   const Delethandler = (id) => {
-    ApiCalls(`team/${id}`, "DELETE")
+    ApiCalls(`user/${id}`, "DELETE")
       .then((response) => {
-          alert("sucessfully delete");
+        alert("sucessfully delete");
         getdata();
       })
       .catch((error) => {});
@@ -47,63 +44,62 @@ const RashiFal = () => {
       <section className="content">
         <div className="card">
           <div className="card-header">
-            <h3 className="card-title">Hame Jane Manager</h3>
+            <h3 className="card-title">User Manager</h3>
           </div>
           <div className="card-body p-0">
             <table className="table table-striped projects">
               <thead>
                 <tr>
                   <th style={{ width: "1%" }}>#</th>
-                 
-                  <th style={{ width: "7%" }}>Image</th>
-                  <th style={{ width: "10%" }}>Name</th>
 
-                  <th style={{ width: "5%" }} className="text-center">
-                    Status
-                  </th>
+                  <th style={{ width: "7%" }}>Profile</th>
+                  <th style={{ width: "10%" }}>Name</th>
+                  <th style={{ width: "10%" }}>User Name</th>
+                  <th style={{ width: "10%" }}>Password</th>
+                  <th style={{ width: "15%" }}>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {bannerdata.map((item, key) => (
-                  <tr key={key}
-                  className={
-                      item.Status == true ? "table-light" : "table-primary"
-                    }>
+                {data.map((item, key) => (
+                  <tr
+                    key={key}
+                    className={
+                      item.user_block ? "table-light" : "table-primary"
+                    }
+                  >
                     <td>{key + 1}</td>
-                    
+
                     <td>
-                      <ul className="list-inline">
-                        <li className="list-inline-item">
-                         {
-                          item.EmployeeImage ? <img
-                            
-                            className="table-avatar"
-                            width={65}
-                            src={`${API}${item.EmployeeImage}`}
-                          /> : <></>
-                         } 
-                        </li>
-                      </ul>
+                      {item.profile ? (
+                        <img
+                          className="table-avatar rounded-5"
+                          width={45}
+                          height={45}
+                          src={`${API}${item.profile}`}
+                        />
+                      ) : (
+                        <></>
+                      )}
                     </td>
-                    <td className="project_progress">
-                      <small>{item.EmployeeName}</small>
-                    </td>
+                    <td className="project_progress">{item.name}</td>
+                    <td className="project_progress">{item.User_name}</td>
+                    <td className="project_progress">{item.password}</td>
 
                     <td className="project-actions text-right">
                       <NavLink
                         to={""}
                         className={`btn me-3 fw-bold btn-sm ${
-                          item.Status == true
-                            ? "btn-primary"
-                            : "btn-success"
+                          item.user_block? 
+                            "btn-success": "btn-primary"
                         }`}
-                        onClick={() => toggleVisibility(item._id, item.Status)}
+                        onClick={() =>
+                          toggleVisibility(item._id, item.user_block)
+                        }
                       >
-                        {/* {isVisible ? 'Hide' : 'Show'} */}
-                        {item.Status == true ? "Hide" : "Show"}
+                        {!item.user_block ? "UnBlock" : "Block"}
                       </NavLink>
                       <NavLink
-                        to={`/edit-team/${item._id}`}
+                        to={`/edituser/${item._id}`}
                         className="btn btn-info btn-sm fw-bold"
                       >
                         Edit
@@ -126,4 +122,4 @@ const RashiFal = () => {
   );
 };
 
-export default RashiFal;
+export default UserManager;

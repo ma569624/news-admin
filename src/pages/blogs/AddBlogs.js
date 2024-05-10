@@ -7,19 +7,17 @@ import { useRef, useMemo } from "react";
 import JoditEditor from "jodit-react";
 import Select from "react-select";
 import { ApiContext } from "../../Context/ApiContext";
-import DateTimePicker from 'react-datetime-picker';
+import DateTimePicker from "react-datetime-picker";
 
 const AddBlogs = () => {
-  
   const editor = useRef(null);
-  const [content, setContent] = useState('');
-  const {userinfo} = useContext(ApiContext)
+  const [content, setContent] = useState("");
+  const { userinfo } = useContext(ApiContext);
   const [image2, setimage2] = useState({});
   const [video, setVideo] = useState([]);
   const [audio, setAudio] = useState([]);
   const [selectedValue, setSelectedValue] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
-
 
   const [inputs, setInputs] = useState({});
 
@@ -53,16 +51,15 @@ const AddBlogs = () => {
   async function FormSubmit(event) {
     event.preventDefault();
 
-
     const formData = await new FormData();
 
     if (userinfo.name && userinfo.name.length > 0) {
       formData.append("ReporterName", userinfo.name);
     }
     if (userinfo.profile && userinfo.profile.length > 0) {
-      formData.append("ReporterProfile", userinfo.profile);
+      formData.append("ReporterImage", userinfo.profile);
     }
-    
+
     if (userinfo.Destination && userinfo.Destination.length > 0) {
       formData.append("Designation", userinfo.Destination);
     }
@@ -72,9 +69,7 @@ const AddBlogs = () => {
     }
 
     const currentDate = new Date().toISOString();
-    formData.append('CreationDate', currentDate);
-    
-
+    formData.append("CreationDate", currentDate);
 
     if (inputs.heading && inputs.heading.length > 0) {
       formData.append("Heading", inputs.heading);
@@ -96,28 +91,24 @@ const AddBlogs = () => {
       formData.append("Image2", image2);
     }
 
-    formData.append("Video", video[0]);
-    formData.append("Audio", audio[0]);
+    if (video.length > 0) {
+      formData.append("Video", video[0]);
+    }
+    if (audio.length > 0) {
+      formData.append("Audio", audio[0]);
+    }
     if (content) {
       // formData.append('Subheading', inputs.subheading);
       formData.append("Matter", content);
     }
     console.log("FormData:", formData);
 
-    
     if (Array.isArray(selectedOption)) {
       const positionValues = selectedOption.map((option) => option.value);
       console.warn(positionValues);
       formData.append("Category", JSON.stringify(positionValues));
     }
 
-    if (Array.isArray(selectedValue) && selectedValue.length > 0) {
-      selectedValue.forEach((option) => {
-        formData.append("selectedValue[]", option.value);
-      });
-      // console.warn(selectedValue);
-    }
-    // }
     let newres = await ApiCalls("blogs", "POST", formData).then(() => {
       alert("data add successfully");
       // navigate('/');
@@ -140,7 +131,6 @@ const AddBlogs = () => {
     setSelectedOption(selectedOption);
     console.warn(selectedOption);
   };
-
 
   return (
     <>
@@ -178,7 +168,7 @@ const AddBlogs = () => {
                                 />
                               </div>
                             </div>
-                              
+
                             {/* <div className="col-md-12">
                               <div class="form-group">
                                 <label for="exampleInputFile">
@@ -217,7 +207,6 @@ const AddBlogs = () => {
                             </div> */}
                           </div>
                           <div className="row">
-                          
                             {/* <div className="col-md-12">
                               <div className="form-group">
                                 <label htmlFor="exampleInputPassword1">

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { ApiContext } from "../../Context/ApiContext";
 
-const Sign = () => {
+const CreateUser = () => {
   const [user, setUser] = useState({});
   const [profile, setProfile] = useState({});
   const [imageSrc, setImageSrc] = useState("");
@@ -274,4 +274,4 @@ const Sign = () => {
   );
 };
 
-export default Sign;
+export default CreateUser;

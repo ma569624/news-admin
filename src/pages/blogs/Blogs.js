@@ -13,61 +13,18 @@ const Blogs = () => {
 
   // Get the value of a specific query parameter
   const yourParamValue = queryParams.get("value");
-  console.warn("Query Parameter Value:", yourParamValue);
-  console.warn(yourParamValue);
-  const [bannerdata, setbannerdata] = useState([]);
+  // console.warn("Query Parameter Value:", yourParamValue);
+  // console.warn(yourParamValue);
+  const [data, setdata] = useState([]);
   const [blockdata, setBlockdata] = useState([]);
   const PositionName = params.categories;
 
   const [categories, setcategories] = useState("");
-  const [isVisible, setIsVisible] = useState({});
-  const toggleVisibility = async (id, status) => {
-    if (status == "active") {
-      setIsVisible("inactive");
-    } else {
-      setIsVisible("active");
-    }
-    const formData = await new FormData();
-    console.warn(status);
+  const [isVisible, setIsVisible] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
-    console.warn(isVisible);
-    formData.append("Status", isVisible);
-    let newres = await ApiCalls(`blogs/${id}`, "PUT", formData).then(() => {
-      alert("data add successfully");
-      // window.location.reload();
-      
-    });
-  };
-
-  useEffect(() => {
-    setcategories(params.categories);
-  }, [params]);
-
-  console.warn(bannerdata);
-
-  useEffect(() => {
-    if (PositionName == "tajasamachar") {
-      ApiCalls(`blogs?page=1&limit=17&Headline=true`)
-        .then((response) => {
-          setbannerdata(response.data);
-          console.warn(response.data);
-        })
-        .catch((error) => {
-          // Handle error
-        });
-    } else {
-      ApiCalls(`blogs?page=1&limit=17&Category=${PositionName}`)
-        .then((response) => {
-          setbannerdata(response.data);
-          console.warn(response);
-        })
-        .catch((error) => {
-          // Handle error
-        });
-    }
-  }, [PositionName, params]);
-
-  useEffect(() => {
+  const getcategories = () => {
     if (PositionName == "block" || PositionName == "state") {
       ApiCalls(`categories?location=${PositionName}`)
         .then((response) => {
@@ -76,18 +33,67 @@ const Blogs = () => {
         .catch((error) => {
           console.warn(error);
         });
-      if (queryParams) {
-        ApiCalls(`blogs?page=1&limit=25&Category=${yourParamValue}`)
+    }
+  };
+
+  const getdata = async () => {
+    if (PositionName == "block" || PositionName == "state") {
+      if (categories) {
+        ApiCalls(`blogs?page=${currentPage}&limit=10&Category=${categories}`)
           .then((response) => {
-            setbannerdata(response.data);
-            console.warn(bannerdata);
+            setdata(response.data);
+            setTotalPages(response.totalPages);
           })
           .catch((error) => {
             // Handle error
           });
       }
+    } else {
+      ApiCalls(`blogs?page=${currentPage}&limit=10&Category=${PositionName}`)
+        .then((response) => {
+          setdata(response.data);
+          setTotalPages(response.totalPages);
+        })
+        .catch((error) => {
+          // Handle error
+        });
     }
-  }, [params]);
+  };
+
+  useEffect(() => {
+    setdata([]);
+    setCurrentPage(1);
+    setcategories("");
+    getcategories();
+    getdata();
+  }, [PositionName]);
+
+  useEffect(() => {
+    getdata();
+  }, [PositionName, currentPage]);
+
+  useEffect(() => {
+    getdata();
+  }, [categories]);
+
+  useEffect(() => {
+    if (PositionName == "block" || PositionName == "state") {
+      if (yourParamValue) {
+        setcategories(yourParamValue);
+      }
+    }
+  }, [yourParamValue]);
+
+  const toggleVisibility = async (id, status) => {
+   
+    const formData = await new FormData();
+
+    formData.append("Status", !status);
+    let newres = await ApiCalls(`blogs/${id}`, "PUT", formData).then(() => {
+      alert("data add successfully");
+      getdata();
+    });
+  };
 
   const Delethandler = (id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete?");
@@ -95,7 +101,7 @@ const Blogs = () => {
     if (confirmDelete) {
       ApiCalls(`blogs/${id}`, "DELETE")
         .then((response) => {
-          window.location.reload();
+          getdata();
           alert("Successfully deleted");
         })
         .catch((error) => {
@@ -106,16 +112,9 @@ const Blogs = () => {
   };
 
   const filterhandleChange = (event) => {
-    setbannerdata([]);
+    setdata([]);
     const value = event.target.value;
-    ApiCalls(`blogs?page=1&limit=25&Category=${value}`)
-      .then((response) => {
-        setbannerdata(response.data);
-        console.warn(bannerdata);
-      })
-      .catch((error) => {
-        // Handle error
-      });
+    setcategories(value);
   };
 
   const [selectedItems, setSelectedItems] = useState([]);
@@ -152,7 +151,7 @@ const Blogs = () => {
         }
 
         const data = await response.json();
-        console.log(data); // Log success message or handle response data
+        getdata();
       } catch (error) {
         console.error("Error deleting products:", error.message);
         // Handle error, show error message to user, etc.
@@ -180,12 +179,15 @@ const Blogs = () => {
         }
 
         const data = await response.json();
-        console.log(data); // Log success message or handle response data
+        getdata();
       } catch (error) {
         console.error("Error updating status:", error.message);
         // Handle error, show error message to user, etc.
       }
     }
+  };
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -198,17 +200,22 @@ const Blogs = () => {
                 <h4 className="text-center">
                   {PositionName == "state" ? "ख़बरें राज्यों से" : PositionName}
                 </h4>
+                <h5>
+                  {PositionName == "state" || PositionName == "block"
+                    ? categories
+                    : null}
+                </h5>
                 <NavLink
                   to={""}
                   className={`btn ms-2 me-2 fw-bold btn-sm btn-success`}
-                  onClick={() => handleUpdateStatusSelected("active")}
+                  onClick={() => handleUpdateStatusSelected(true)}
                 >
                   Show
                 </NavLink>
                 <NavLink
                   to={""}
                   className={`btn ms-2 me-2 fw-bold btn-sm btn-primary`}
-                  onClick={() => handleUpdateStatusSelected("inactive")}
+                  onClick={() => handleUpdateStatusSelected(false)}
                 >
                   Hide
                 </NavLink>
@@ -230,8 +237,9 @@ const Blogs = () => {
                   name="CategoryName"
                   id="exampleSelectRounded0"
                   onChange={filterhandleChange}
+                  value={categories ? categories : null}
                 >
-                  <option className="fw-bold" selected disabled>
+                  <option className="fw-bold" disabled selected>
                     Please Select
                   </option>
                   {blockdata.map((item, key) => (
@@ -247,7 +255,7 @@ const Blogs = () => {
           </div>
           <div className="card-body p-0">
             <table className="table projects">
-              {bannerdata.length > 0 ? (
+              {data.length > 0 ? (
                 <thead>
                   <tr>
                     <th style={{ width: "15%" }}>
@@ -258,15 +266,13 @@ const Blogs = () => {
                           style={{ border: "2px solid red" }}
                           class="form-check-input me-1"
                           onChange={() => {
-                            if (selectedItems.length === bannerdata.length) {
+                            if (selectedItems.length === data.length) {
                               setSelectedItems([]);
                             } else {
-                              setSelectedItems(
-                                bannerdata.map((item) => item._id)
-                              );
+                              setSelectedItems(data.map((item) => item._id));
                             }
                           }}
-                          checked={selectedItems.length === bannerdata.length}
+                          checked={selectedItems.length === data.length}
                           id="exampleCheck1"
                         />
                         <label for="exampleCheck1" className="mb-0">
@@ -280,20 +286,18 @@ const Blogs = () => {
                     <th style={{ width: "8%" }} className="text-center">
                       Image
                     </th>
-                    <th  className="">
-                      Action
-                    </th>
+                    <th className="">Action</th>
                   </tr>
                 </thead>
               ) : (
                 <></>
               )}
               <tbody>
-                {bannerdata.map((item, key) => (
+                {data.map((item, key) => (
                   <tr
                     key={key}
                     className={
-                      item.Status == "active" ? "table-light" : "table-primary"
+                      item.Status ? "table-light" : "table-primary"
                     }
                   >
                     <td>
@@ -310,7 +314,8 @@ const Blogs = () => {
                       </div>
                     </td>
                     <td>
-                      <strong>{key + 1}</strong>
+                    <strong>{(currentPage - 1) * 10 + key + 1}</strong>
+                      {/* <strong>{key + 1}</strong>  */}
                     </td>
                     <td>
                       <strong>{item.ReporterName}</strong>
@@ -324,30 +329,23 @@ const Blogs = () => {
                     </td>
 
                     <td className="project-actions text-right">
-                      
-                        <NavLink
-                          to={""}
-                          className={`btn me-3 fw-bold btn-sm ${
-                            item.Status == "active"
-                              ? "btn-primary"
-                              : "btn-success"
-                          }`}
-                          onClick={() =>
-                            toggleVisibility(item._id, item.Status)
-                          }
-                        >
-                          {item.Status == "active" ? "Hide" : "Show"}
-                        </NavLink>
-                    
+                      <NavLink
+                        to={""}
+                        className={`btn me-3 fw-bold btn-sm ${
+                          item.Status? "btn-primary"
+                            : "btn-success"
+                        }`}
+                        onClick={() => toggleVisibility(item._id, item.Status)}
+                      >
+                        {item.Status? "Hide" : "Show"}
+                      </NavLink>
 
-                      
-                        <NavLink
-                          to={`/edit-blogs/${item._id}/${PositionName}`}
-                          className=" fw-bold btn btn-info btn-sm"
-                        >
-                          Edit
-                        </NavLink>
-                      
+                      <NavLink
+                        to={`/edit-blogs/${item._id}/${PositionName}`}
+                        className=" fw-bold btn btn-info btn-sm"
+                      >
+                        Edit
+                      </NavLink>
 
                       {PositionName !== "tajasamachar" &&
                         (access === true || type === "admin") && (
@@ -363,6 +361,49 @@ const Blogs = () => {
                 ))}
               </tbody>
             </table>
+            {data && (
+              <nav aria-label="Pagination">
+                <ul className="pagination justify-content-center">
+                  <li
+                    className={`page-item ${currentPage === 1 && "disabled"}`}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() => handlePageChange(currentPage - 1)}
+                    >
+                      Previous
+                    </button>
+                  </li>
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <li
+                      key={i + 1}
+                      className={`page-item ${
+                        currentPage === i + 1 && "active"
+                      }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => handlePageChange(i + 1)}
+                      >
+                        {i + 1}
+                      </button>
+                    </li>
+                  ))}
+                  <li
+                    className={`page-item ${
+                      currentPage === totalPages && "disabled"
+                    }`}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() => handlePageChange(currentPage + 1)}
+                    >
+                      Next
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+            )}
           </div>
         </div>
       </section>
