@@ -47,6 +47,11 @@ body>div {
     border-radius: 10px;
 }
 
+.dropdown-item{
+  font-size: 18px;
+  font-weight: 700 !important;
+}
+
 .login-box .card-body img {
   background-color: rgb(224, 61, 88);
   border-radius: 12px;

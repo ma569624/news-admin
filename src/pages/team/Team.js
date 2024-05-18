@@ -50,7 +50,7 @@ const RashiFal = () => {
             <h3 className="card-title">Hame Jane Manager</h3>
           </div>
           <div className="card-body p-0">
-            <table className="table table-striped projects">
+            <table className="table projects">
               <thead>
                 <tr>
                   <th style={{ width: "1%" }}>#</th>

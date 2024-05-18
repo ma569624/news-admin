@@ -7,22 +7,16 @@ const Blogs = () => {
   const { API, type, access } = useContext(ApiContext);
   const params = useParams();
   const location = useLocation();
-
-  // Extract query parameters using URLSearchParams
   const queryParams = new URLSearchParams(location.search);
-
-  // Get the value of a specific query parameter
   const yourParamValue = queryParams.get("value");
-  // console.warn("Query Parameter Value:", yourParamValue);
-  // console.warn(yourParamValue);
   const [data, setdata] = useState([]);
   const [blockdata, setBlockdata] = useState([]);
   const PositionName = params.categories;
 
   const [categories, setcategories] = useState("");
-  const [isVisible, setIsVisible] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [totalCount, settotalCount] = useState(0)
 
   const getcategories = () => {
     if (PositionName == "block" || PositionName == "state") {
@@ -31,7 +25,7 @@ const Blogs = () => {
           setBlockdata(response);
         })
         .catch((error) => {
-          console.warn(error);
+          console.error(error);
         });
     }
   };
@@ -42,6 +36,7 @@ const Blogs = () => {
         ApiCalls(`blogs?page=${currentPage}&limit=10&Category=${categories}`)
           .then((response) => {
             setdata(response.data);
+            settotalCount(response.nbHits)
             setTotalPages(response.totalPages);
           })
           .catch((error) => {
@@ -54,9 +49,7 @@ const Blogs = () => {
           setdata(response.data);
           setTotalPages(response.totalPages);
         })
-        .catch((error) => {
-          // Handle error
-        });
+        .catch((error) => {});
     }
   };
 
@@ -85,9 +78,7 @@ const Blogs = () => {
   }, [yourParamValue]);
 
   const toggleVisibility = async (id, status) => {
-   
     const formData = await new FormData();
-
     formData.append("Status", !status);
     let newres = await ApiCalls(`blogs/${id}`, "PUT", formData).then(() => {
       alert("data add successfully");
@@ -97,7 +88,6 @@ const Blogs = () => {
 
   const Delethandler = (id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete?");
-
     if (confirmDelete) {
       ApiCalls(`blogs/${id}`, "DELETE")
         .then((response) => {
@@ -149,7 +139,6 @@ const Blogs = () => {
         if (!response.ok) {
           throw new Error("Failed to delete products");
         }
-
         const data = await response.json();
         getdata();
       } catch (error) {
@@ -198,7 +187,7 @@ const Blogs = () => {
             <div className="card-header">
               <div className="card-title w-100 text-center">
                 <h4 className="text-center">
-                  {PositionName == "state" ? "ख़बरें राज्यों से" : PositionName}
+                {PositionName === "state" ? "ख़बरें राज्यों से" : PositionName === 'block' ? "Block" : PositionName}
                 </h4>
                 <h5>
                   {PositionName == "state" || PositionName == "block"
@@ -296,9 +285,7 @@ const Blogs = () => {
                 {data.map((item, key) => (
                   <tr
                     key={key}
-                    className={
-                      item.Status ? "table-light" : "table-primary"
-                    }
+                    className={item.Status ? "table-light" : "table-primary"}
                   >
                     <td>
                       <div class="form-check">
@@ -314,7 +301,7 @@ const Blogs = () => {
                       </div>
                     </td>
                     <td>
-                    <strong>{(currentPage - 1) * 10 + key + 1}</strong>
+                      <strong>{(currentPage - 1) * 10 + key + 1}</strong>
                       {/* <strong>{key + 1}</strong>  */}
                     </td>
                     <td>
@@ -332,12 +319,11 @@ const Blogs = () => {
                       <NavLink
                         to={""}
                         className={`btn me-3 fw-bold btn-sm ${
-                          item.Status? "btn-primary"
-                            : "btn-success"
+                          item.Status ? "btn-primary" : "btn-success"
                         }`}
                         onClick={() => toggleVisibility(item._id, item.Status)}
                       >
-                        {item.Status? "Hide" : "Show"}
+                        {item.Status ? "Hide" : "Show"}
                       </NavLink>
 
                       <NavLink
@@ -361,6 +347,11 @@ const Blogs = () => {
                 ))}
               </tbody>
             </table>
+            <div className="row justify-content-center ">
+              <div className="col-lg-2 text-center mb-2">
+              <strong className="bg-primary text-white py-1 px-3">कुल खबरें: {totalCount}</strong>
+              </div>
+            </div>
             {data && (
               <nav aria-label="Pagination">
                 <ul className="pagination justify-content-center">
@@ -374,6 +365,7 @@ const Blogs = () => {
                       Previous
                     </button>
                   </li>
+
                   {Array.from({ length: totalPages }, (_, i) => (
                     <li
                       key={i + 1}

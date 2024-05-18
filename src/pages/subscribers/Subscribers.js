@@ -14,16 +14,16 @@ const Subscribers = () => {
     //   alert("data add successfully");
     //   getdata();
     // });
-    const res = await fetch(`${API}/api/Subscribers/${id}`,{
-      method: 'PUT',
+    const res = await fetch(`${API}/api/Subscribers/${id}`, {
+      method: "PUT",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({blocked: !status})
-    })
+      body: JSON.stringify({ blocked: !status }),
+    });
     if (res.ok) {
-      alert("update succesfully")
-      getdata()
+      alert("update succesfully");
+      getdata();
     }
   };
 
@@ -81,16 +81,14 @@ const Subscribers = () => {
             <h3 className="card-title">Subscribers</h3>
           </div>
           <div className="card-body p-0">
-            <table className="table table-striped projects">
+            <table className="table projects">
               <thead>
                 <tr>
                   <th style={{ width: "1%" }}>#</th>
-
                   <th style={{ width: "7%" }}>Name</th>
                   <th style={{ width: "10%" }}>Email</th>
                   <th style={{ width: "10%" }}>Phone</th>
                   <th style={{ width: "10%" }}>Time</th>
-
                   <th style={{ width: "5%" }} className="text-center">
                     Action
                   </th>
@@ -105,9 +103,7 @@ const Subscribers = () => {
                     }
                   >
                     <td>{key + 1}</td>
-
                     {/* <td>
-                        
                            {
                             item.EmployeeImage ? <img
                               
@@ -118,15 +114,9 @@ const Subscribers = () => {
                            } 
                           
                       </td> */}
-                    <td className="project_progress">
-                      {item.name}
-                    </td>
-                    <td className="project_progress">
-                      {item.email}
-                    </td>
-                    <td className="project_progress">
-                      {item.Number}
-                    </td>
+                    <td className="project_progress">{item.name}</td>
+                    <td className="project_progress">{item.email}</td>
+                    <td className="project_progress">{item.Number}</td>
                     <td className="project_progress">
                       {time(item.SubscriberDate)}
                     </td>

@@ -18,6 +18,7 @@ const EditBlogs = () => {
   const [content, setContent] = useState("");
   const [video, setVideo] = useState([]);
   const [audio, setAudio] = useState([]);
+  const [categori, setcategories] = useState('')
 
   const [selectedValue, setSelectedValue] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -25,8 +26,8 @@ const EditBlogs = () => {
   const [inputs, setInputs] = useState({
     ReporterName: "",
   });
-  const [image1, setimage1] = useState({});
-  const [image2, setimage2] = useState({});
+  const [profileimage, setprofileimage] = useState({});
+  const [image, setimage] = useState({});
 
   // Run the effect whenever 'muti' changes
 
@@ -35,10 +36,10 @@ const EditBlogs = () => {
       .then((response) => {
         setInputs(response.data[0]);
         setContent(response.data[0].Matter);
-        console.warn(response);
+        setcategories((response.data[0].Category));
       })
       .catch((error) => {
-        // Handle error
+        console.error(error);
       });
 
     ApiCalls("categories")
@@ -50,18 +51,23 @@ const EditBlogs = () => {
             label: item.category,
           })), // New state values
         ]);
+        
       })
       .catch((error) => {
-        // Handle error
+        console.error(error);
       });
   };
 
   useEffect(() => {
     getdata();
+    
   }, []);
+  // useEffect(() => {
+  //   nhandleChange(
+  //     {value: 'मेरा गांव - मेरा देश', label: 'मेरा गांव - मेरा देश'}) 
+  // }, [params]);
 
   async function FormSubmit(event) {
-    console.warn(inputs.Headline);
     event.preventDefault();
     const formData = await new FormData();
 
@@ -72,6 +78,7 @@ const EditBlogs = () => {
     if (inputs.Designation && inputs.Designation.length > 0) {
       formData.append("Designation", inputs.Designation);
     }
+
     if (inputs.DatePlace && inputs.DatePlace.length > 0) {
       formData.append("DatePlace", inputs.DatePlace);
     }
@@ -101,12 +108,12 @@ const EditBlogs = () => {
       formData.append("Category", JSON.stringify(positionValues));
     }
 
-    if (image1 instanceof File) {
-      formData.append("Image1", image1);
+    if (profileimage instanceof File) {
+      formData.append("profile", profileimage);
     }
 
-    if (image2 instanceof File) {
-      formData.append("Image2", image2);
+    if (image instanceof File) {
+      formData.append("image", image);
     }
 
     if (video.length > 0) {
@@ -126,7 +133,6 @@ const EditBlogs = () => {
         navigate(`/blogs/${categorie}`);
       }
     });
-
   }
 
   const handleChange = (event) => {
@@ -145,6 +151,7 @@ const EditBlogs = () => {
     setSelectedOption(selectedOption);
     console.warn(selectedOption);
   };
+
   return (
     <div className="content-wrapper">
       <section className="content mt-4">
@@ -153,7 +160,8 @@ const EditBlogs = () => {
             <div className="col-md-12">
               <div className="card card-primary">
                 <div className="card-header">
-                  <h3 className="card-title">Edit News</h3>
+                  <h3 className="card-title">Edit News </h3>
+                  <h4 className="card-title">{categori}</h4>
                 </div>
                 <form
                   onSubmit={() => FormSubmit}
@@ -181,11 +189,11 @@ const EditBlogs = () => {
                     </div>
                     <div className="row">
                       <div className="col-md-12">
-                        {image1 && image1 instanceof Blob ? (
+                        {profileimage && profileimage instanceof Blob ? (
                           <img
                             className="mt-2"
                             style={{ width: "100px", height: "80px" }}
-                            src={URL.createObjectURL(image1)}
+                            src={URL.createObjectURL(profileimage)}
                             alt=""
                           />
                         ) : (
@@ -206,7 +214,7 @@ const EditBlogs = () => {
                           <label for="exampleInputFile">Reporter Image</label>
                           <div>
                             <input
-                              onChange={(e) => setimage1(e.target.files[0])}
+                              onChange={(e) => setprofileimage(e.target.files[0])}
                               name="file"
                               type="file"
                               className="TextArea"
@@ -333,11 +341,11 @@ const EditBlogs = () => {
                         </div>
                       </div>
                       <div className="col-md-12">
-                        {image2 && image2 instanceof Blob ? (
+                        {image && image instanceof Blob ? (
                           <img
                             className="mt-2"
                             style={{ width: "100px", height: "80px" }}
-                            src={URL.createObjectURL(image2)}
+                            src={URL.createObjectURL(image)}
                             alt=""
                           />
                         ) : (
@@ -355,7 +363,7 @@ const EditBlogs = () => {
                           <label htmlFor="exampleInputFile">Image</label>
                           <div className="input-group">
                             <input
-                              onChange={(e) => setimage2(e.target.files[0])}
+                              onChange={(e) => setimage(e.target.files[0])}
                               name="file"
                               type="file"
                               className="TextField"

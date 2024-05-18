@@ -37,8 +37,9 @@ const LoginLogs = () => {
     // Convert the time to a readable format in Hindi
     const readableTime = timeObject
       .toLocaleDateString("hi-IN", options)
-      .replace("pm", "")
-      .replace("am", "");
+      .replace("बजे", "")
+      .replace("pm", "PM")
+      .replace("am", "AM")
 
     return readableTime;
   };

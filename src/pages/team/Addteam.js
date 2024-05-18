@@ -11,6 +11,7 @@ const AddRashiFal = () => {
 
   const [inputs, setInputs] = useState({});
   const editor = useRef(null);
+  const navigate = useNavigate();
 
   async function FormSubmit(event) {
     event.preventDefault();
@@ -38,7 +39,7 @@ const AddRashiFal = () => {
 
     let newres = await ApiCalls("team", "POST", formData).then(() => {
       alert("data add successfully");
-      // navigate('/');
+      navigate('/team');
     });
   }
 

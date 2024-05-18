@@ -45,15 +45,15 @@ const Nav = () => {
                 <ul className={`dropdown-menu`}>
                   <li>
                     <NavLink to={`/create-user`} className="dropdown-item">
-                      Team / Edit User
+                      Create User
                     </NavLink>
                   </li>
                   <li>
                     <NavLink to={`/usermanager`} className="dropdown-item">
-                       User Manager
+                      User Manager
                     </NavLink>
                   </li>
-                  
+
                   <li>
                     <NavLink to={`/logs`} className="dropdown-item">
                       Views Login logs
@@ -187,7 +187,7 @@ const Nav = () => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to={'/youtube'} className="dropdown-item">
+                  <NavLink to={"/youtube"} className="dropdown-item">
                     Youtube
                   </NavLink>
                 </li>
@@ -206,6 +206,9 @@ const Nav = () => {
                 News Section
               </NavLink>
               <ul className="dropdown-menu">
+                <NavLink to={`/blogs/block`} className="dropdown-item">
+                  Block News
+                </NavLink>
                 {type === "admin" ? (
                   <>
                     <li>
@@ -219,27 +222,24 @@ const Nav = () => {
                         Section Manger
                       </NavLink>
                     </li>
-                    <NavLink to={`/blogs/block`} className="dropdown-item">
-                      Block News
-                    </NavLink>
-                    {location.map((item, key) => (
-                      <li>
-                        <NavLink
-                          to={`/blogs/${item.category}`}
-                          className="dropdown-item"
-                        >
-                          {item.category}
-                        </NavLink>
-                      </li>
-                    ))}
-                    <NavLink to={`/tajasamachar`} className="dropdown-item">
-                    ताजा समाचार मैनेजर
-                    </NavLink>
-                    <NavLink to={`/blogs/state`} className="dropdown-item">
-                      ख़बरें राज्यों से
-                    </NavLink>
                   </>
                 ) : null}
+                {location.map((item, key) => (
+                  <li>
+                    <NavLink
+                      to={`/blogs/${item.category}`}
+                      className="dropdown-item"
+                    >
+                      {item.category}
+                    </NavLink>
+                  </li>
+                ))}
+                <NavLink to={`/tajasamachar`} className="dropdown-item">
+                  ताजा समाचार मैनेजर
+                </NavLink>
+                <NavLink to={`/blogs/state`} className="dropdown-item">
+                  ख़बरें राज्यों से
+                </NavLink>
               </ul>
             </li>
 

@@ -44,6 +44,7 @@ const AddBlogs = () => {
   }, [inputs]);
 
   const resetInputs = () => {
+    setSelectedOption(null);
     setInputs({});
     setContent("");
   };
@@ -75,8 +76,8 @@ const AddBlogs = () => {
       formData.append("Heading", inputs.heading);
     }
 
-    if (inputs.capton) {
-      formData.append("Capton", inputs.capton);
+    if (inputs.Capton && inputs.Capton.length > 0) {
+      formData.append("Capton", inputs.Capton);
     }
 
     if (inputs.subheading) {
@@ -111,6 +112,7 @@ const AddBlogs = () => {
 
     let newres = await ApiCalls("blogs", "POST", formData).then(() => {
       alert("data add successfully");
+      setSelectedOption([]);
       // navigate('/');
       resetInputs();
     });
@@ -129,7 +131,6 @@ const AddBlogs = () => {
 
   const nhandleChange = (selectedOption) => {
     setSelectedOption(selectedOption);
-    console.warn(selectedOption);
   };
 
   return (

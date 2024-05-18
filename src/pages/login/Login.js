@@ -17,6 +17,7 @@ const Login = () => {
   };
 
   const SubmitHandler = async (event) => {
+    user.logindate = new Date().toISOString();
     event.preventDefault();
     console.log("submit handler trigger", user);
     try {

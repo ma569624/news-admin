@@ -178,7 +178,7 @@ const EditUser = () => {
                     placeholder="Employee Name"
                   />
                 </div>
-                <div class="mb-3 col-lg-4">
+                {/* <div class="mb-3 col-lg-4">
                   <label htmlFor="">Mobile Number</label>
                   <input
                     type="number"
@@ -202,7 +202,7 @@ const EditUser = () => {
                     value={user.email || ""}
                     placeholder="Enter Email Address"
                   />
-                </div>
+                </div> */}
 
                 <div class="mb-3 col-lg-4">
                   <label htmlFor="">User Name</label>

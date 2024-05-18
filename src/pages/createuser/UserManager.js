@@ -47,7 +47,7 @@ const UserManager = () => {
             <h3 className="card-title">User Manager</h3>
           </div>
           <div className="card-body p-0">
-            <table className="table table-striped projects">
+            <table className="table  projects">
               <thead>
                 <tr>
                   <th style={{ width: "1%" }}>#</th>
@@ -64,7 +64,7 @@ const UserManager = () => {
                   <tr
                     key={key}
                     className={
-                      item.user_block ? "table-light" : "table-primary"
+                      !item.user_block ? "table-light" : "table-primary"
                     }
                   >
                     <td>{key + 1}</td>
@@ -86,30 +86,40 @@ const UserManager = () => {
                     <td className="project_progress">{item.password}</td>
 
                     <td className="project-actions text-right">
-                      <NavLink
+                    {
+                        item.type === "admin" ? <></> : (
+                          <NavLink
                         to={""}
                         className={`btn me-3 fw-bold btn-sm ${
-                          item.user_block? 
+                          !item.user_block? 
                             "btn-success": "btn-primary"
                         }`}
                         onClick={() =>
                           toggleVisibility(item._id, item.user_block)
                         }
                       >
-                        {!item.user_block ? "UnBlock" : "Block"}
+                        {item.user_block ? "UnBlock" : "Block"}
                       </NavLink>
+                        )
+                      }
+                      
                       <NavLink
                         to={`/edituser/${item._id}`}
                         className="btn btn-info btn-sm fw-bold"
                       >
                         Edit
                       </NavLink>
-                      <NavLink
+                      {
+                        item.type === "admin" ? <></> : (
+                          <NavLink
                         className="btn btn-danger btn-sm ms-2 fw-bold"
                         onClick={() => Delethandler(item._id)}
                       >
                         Delete
                       </NavLink>
+                        )
+                      }
+                      
                     </td>
                   </tr>
                 ))}
