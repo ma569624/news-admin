@@ -66,12 +66,12 @@ const Nav = () => {
                   </li>
                   <li>
                     <NavLink to={`/add-team`} className="dropdown-item">
-                      Hame Jane
+                      Add Team
                     </NavLink>
                   </li>
                   <li>
                     <NavLink to={`/team`} className="dropdown-item">
-                      Hame Jane Manager
+                    Team Manager
                     </NavLink>
                   </li>
                   <li>

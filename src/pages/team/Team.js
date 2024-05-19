@@ -47,7 +47,7 @@ const RashiFal = () => {
       <section className="content">
         <div className="card">
           <div className="card-header">
-            <h3 className="card-title">Hame Jane Manager</h3>
+            <h3 className="card-title">Team Manager</h3>
           </div>
           <div className="card-body p-0">
             <table className="table projects">

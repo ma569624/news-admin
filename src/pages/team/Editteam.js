@@ -65,7 +65,7 @@ const EditRashiFal = () => {
             <div className="col-md-12">
               <div className="card card-primary">
                 <div className="card-header">
-                  <h3 className="card-title">HAMAIN JANE</h3>
+                  <h3 className="card-title">Edit Team Manager</h3>
                 </div>
                 <form
                   onSubmit={() => FormSubmit}
