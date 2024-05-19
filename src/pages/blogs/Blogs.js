@@ -46,6 +46,7 @@ const Blogs = () => {
     } else {
       ApiCalls(`blogs?page=${currentPage}&limit=10&Category=${PositionName}`)
         .then((response) => {
+          settotalCount(response.nbHits)
           setdata(response.data);
           setTotalPages(response.totalPages);
         })
@@ -247,7 +248,7 @@ const Blogs = () => {
               {data.length > 0 ? (
                 <thead>
                   <tr>
-                    <th style={{ width: "15%" }}>
+                    <th style={{ width: "10%" }}>
                       <div class="form-check mb-0">
                         <input
                           type="checkbox"
@@ -269,9 +270,9 @@ const Blogs = () => {
                         </label>
                       </div>
                     </th>
-                    <th style={{ width: "10%" }}>Sr no.</th>
+                    <th style={{ width: "5%" }}>Sr no.</th>
                     <th style={{ width: "15%" }}>Reporter Name</th>
-                    <th style={{ width: "20%" }}>Heading</th>
+                    <th style={{ width: "45%" }}>Heading</th>
                     <th style={{ width: "8%" }} className="text-center">
                       Image
                     </th>
