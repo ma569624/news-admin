@@ -44,7 +44,7 @@ const AddBlogs = () => {
   }, [inputs]);
 
   const resetInputs = () => {
-    setSelectedOption(null);
+    // setSelectedOption(null);
     setInputs({});
     setContent("");
   };
@@ -89,7 +89,7 @@ const AddBlogs = () => {
     }
 
     if (image2 instanceof File) {
-      formData.append("Image2", image2);
+      formData.append("image", image2);
     }
 
     if (video.length > 0) {
@@ -112,7 +112,7 @@ const AddBlogs = () => {
 
     let newres = await ApiCalls("blogs", "POST", formData).then(() => {
       alert("data add successfully");
-      setSelectedOption([]);
+      // setSelectedOption([]);
       // navigate('/');
       resetInputs();
     });
