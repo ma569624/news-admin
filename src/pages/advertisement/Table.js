@@ -13,15 +13,10 @@ const Table = ({ categories }) => {
   const [isVisible, setIsVisible] = useState({});
 
   const toggleVisibility = async (id, status) => {
-    if (status == "active") {
-      setIsVisible("inactive");
-    } else {
-      setIsVisible("active");
-    }
+    
     const formData = await new FormData();
-    console.warn(status);
-    console.warn(isVisible);
-    formData.append("Status", isVisible);
+  
+    formData.append("Status", !status);
     let newres = await ApiCalls(`advert/${id}`, "PUT", formData).then(() => {
       alert("data add successfully");
       getdata();
@@ -97,7 +92,7 @@ const Table = ({ categories }) => {
                   <tr
                     key={key}
                     className={
-                      item.Status == "active" ? "table-light" : "table-primary"
+                      item.Status == true ? "table-light" : "table-primary"
                     }
                   >
                     <td>
@@ -148,14 +143,14 @@ const Table = ({ categories }) => {
                       <NavLink
                         to={""}
                         className={`btn me-3 fw-bold btn-sm ${
-                          item.Status == "active"
+                          item.Status == true
                             ? "btn-primary"
                             : "btn-success"
                         }`}
                         onClick={() => toggleVisibility(item._id, item.Status)}
                       >
                         {/* {isVisible ? 'Hide' : 'Show'} */}
-                        {item.Status == "active" ? "Hide" : "Show"}
+                        {item.Status == true ? "Hide" : "Show"}
                       </NavLink>
 
                       <NavLink
